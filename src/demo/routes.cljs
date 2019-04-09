@@ -8,7 +8,7 @@
 (def ^:dynamic *dispatch*
   (fn [event] (prn :dispatch event)))
 
-(defroute home "/"  [query-params]
+(defroute home "/" [query-params]
   (*dispatch* [:routes/home query-params]))
 
 (defroute about "/about" []

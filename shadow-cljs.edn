@@ -9,7 +9,7 @@
 
  ; :deps {:aliases [:dev :test]}
 
- :source-paths ["src/dev" "src/main" "src/test"]
+ :source-paths ["src" "test"]
 
  :nrepl        {:port 8230}
 
