@@ -1,15 +1,106 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-    <body>
-        <h1>Denis Isidoro</h1>
-        <h2>Software developer</h2>
-        <br>
-        <p>This website still is WIP but here are the most important links that showcase my trajectory:</p>
-        <br>
+
+<head>
+    <script src="https://kit.fontawesome.com/756ed1fcfc.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+    
+    <style>
+        body,
+        html {
+            background: #1D1E22;
+            color: white;
+            text-align: center;
+            height: 100%;
+          font-family: 'ubuntu', sans-serif;
+        }
+
+        .lower-contrast {
+            color: gray;
+        }
+
+        #summary {
+            width: 60%;
+            margin: auto;
+            margin-top: 45px;
+          margin-bottom: 15px;
+            text-align: left;
+        }
+
+        #sidenote {
+            font-style: oblique;
+            margin-top: 60px;
+            margin-bottom: 45px;
+        }
+
+        #links {
+            width: 80%;
+            font-size: 0.5em;
+            margin: auto;
+        }
+
+        #links ul {
+            padding: 0;
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            list-style-type: none;
+        }
+
+        #links li {
+            -webkit-box-flex: 1;
+            -moz-box-flex: 1;
+            -webkit-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+            text-align: center;
+            text-align: center;
+            font-size: 2em;
+            transition: all .2s ease-in-out;
+        }
+
+        #links a {
+            text-decoration: none;
+            color: white;
+        }
+
+        #links li:hover {
+            transform: scale(1.1);
+        }
+
+        #links .fab {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }    
+    </style>
+    
+</head>
+
+<body>
+
+    <h1>Denis Isidoro</h1>
+    <h3>Software engineer</h3>
+
+    <div class="lower-contrast" id="summary">
+        <p>Having studied in <b>renown Engineering schools</b> both in <b>Brazil</b> and in <b>France</b>, I've developed skills that are transferable to most industries such as problem solving, decision making and team working in multicultural groups.</p>
+        <p>I currently <b>work</b> at a fintech which is <b>revolutionizing banking and financial products</b>. I've had the opportunity to be the <b>lead developer, from inception to production</b>, of services such as bill payments, debit cards, withdrawals and a rewards program. My role spectrum spans from <b>frontend to backend and devops</b>.</p>
+        <p>I believe that technologies come and go, so I'm truly passionate about learning new frameworks, languages and paradigms. <b>I wish to be challenged</b> so that I may improve on the skills I have acquired, and am driven by a <b>desire to learn</b>.</p>
+    </div>
+
+    <p id="sidenote">
+        This website still is WIP but here are the most important links that showcase my trajectory:
+    </p>
+
+    <div id="links">
         <ul>
-            <li><a href="https://www.linkedin.com/in/dnsisidoro/">LinkedIn</a></li>
-            <li><a href="https://github.com/denisidoro">Github</a></li>
-            <li><a href="https://medium.com/@den.isidoro">Medium</a></li>
+            <li><a href="https://github.com/denisidoro" title="Open source code"><i class="fab fa-github"></i><br>Github</a></li>
+            <li><a href="https://www.linkedin.com/in/dnsisidoro/" title="CV"><i class="fab fa-linkedin"></i><br>LinkedIn</a></li>
+            <li><a href="https://medium.com/@den.isidoro" title="Blog posts"><i class="fab fa-medium"></i><br>Medium</a></li>
         </ul>
-    </body>
+    </div>
+
+</body>
+
 </html>
