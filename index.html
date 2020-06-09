@@ -4,9 +4,23 @@
 <head>
     <title>Denis Isidoro - Software Engineer</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <script src="https://kit.fontawesome.com/756ed1fcfc.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
-    
+
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org/",
+          "@type": "Person",
+          "name": "Denis Isidoro",
+          "url": "https://denisidoro.github.io",
+          "image": "https://media-exp1.licdn.com/dms/image/C4E03AQHxkT_QUBR8qQ/profile-displayphoto-shrink_400_400/0?e=1597276800&v=beta&t=9OZTm9DVg1Dk57XnTU9vXgY2jijf0TVT5UkbAyAqX1Q",
+          "jobTitle": "Senior Software Engineer",
+          "worksFor": {
+            "@type": "Organization",
+            "name": "Uber"
+          }  
+        }
+    </script>
+
     <style>
         body,
         html {
@@ -15,8 +29,8 @@
             text-align: center;
             margin: auto;
             height: 94%;
-	    max-width: 800px;
-	    padding: 20px;
+            max-width: 800px;
+            padding: 20px;
             font-family: 'ubuntu', sans-serif;
         }
 
@@ -29,81 +43,42 @@
             margin-top: 45px;
             margin-bottom: 15px;
             text-align: left;
+            font-size: 1.1em;
+            line-height: 1.4em;
         }
 
-        #sidenote {
-            font-style: oblique;
-            margin-top: 60px;
-            margin-bottom: 45px;
-        }
-
-        #links {
-            width: 80%;
-            font-size: 0.5em;
-            margin: auto;
-            margin-bottom: 45px;
-        }
-
-        #links ul {
-            padding: 0;
-            display: -webkit-box;
-            display: -moz-box;
-            display: -ms-flexbox;
-            display: -webkit-flex;
-            display: flex;
-            list-style-type: none;
-        }
-
-        #links li {
-            -webkit-box-flex: 1;
-            -moz-box-flex: 1;
-            -webkit-flex: 1;
-            -ms-flex: 1;
-            flex: 1;
-            text-align: center;
-            text-align: center;
-            font-size: 2em;
-            transition: all .2s ease-in-out;
-        }
-
-        #links a {
+        a {
             text-decoration: none;
+            color: lightgray;
+            transition: all .7s ease-in-out;
+        }
+
+        a:hover {
             color: white;
         }
-
-        #links li:hover {
-            transform: scale(1.1);
-        }
-
-        #links .fab {
-            font-size: 3em;
-            margin-bottom: 10px;
-        }    
     </style>
-    
+
 </head>
 
 <body>
 
-    <h1>Denis Isidoro</h1>
-    <h3>Software engineer</h3>
+    <h1>Hi! I'm Denis!</h1>
+    <h3>I'm a Software Engineer. Nice to meet you! 👋</h3>
 
     <div class="lower-contrast" id="summary">
-        <p>I've helped build a fintech which now has millions of customers and is revolutionizing banking and financial products. The dev team has grown from a dozen engineers to more than 500 since I joined it.</p>
- 	<p>During these years I've had the opportunity to be the lead developer of many projects from inception to production. My role ranges from frontend to backend and devops.</p>
-	<p>Besides writing code, I'm driven by mentoring other developers, designing systems and discovering what are the next challenges to tackle, features to develop and improvements to make.</p>
-   </div>
+        <p>I've helped build <a href="https://nubank.com.br/en/" title="Nubank">Nubank</a>, a fintech which now has
+            millions of customers and is revolutionizing banking and financial products.</p>
 
-    <p id="sidenote">
-        This website still is WIP but here are the most important links that showcase my trajectory:
-    </p>
+        <p>Today I work at <a href="https://www.uber.com/" title="Uber">Uber</a>, dedicated to helping users <a
+                href="https://www.uber.com/br/en/ride/safety/" title="Uber safety">move safely</a>.</p>
 
-    <div id="links">
-        <ul>
-            <li><a href="https://github.com/denisidoro" title="Open source code"><i class="fab fa-github"></i><br>Github</a></li>
-            <li><a href="https://www.linkedin.com/in/dnsisidoro/" title="CV"><i class="fab fa-linkedin"></i><br>LinkedIn</a></li>
-            <li><a href="https://medium.com/@den.isidoro" title="Blog posts"><i class="fab fa-medium"></i><br>Medium</a></li>
-        </ul>
+        <p>Every once in a while I scribble some blog posts on <a href="https://medium.com/@den.isidoro"
+                title="Medium">Medium</a> and contribute to <a href="https://github.com/denisidoro/navi"
+                title="navi">navi</a>, an open source project of mine which has 7k+ stars on <a
+                href="https://github.com/denisidoro" title="GitHub">GitHub</a>.
+
+        <p>If you want to know more about my education and work experience, please check my <a
+                href="https://www.linkedin.com/in/dnsisidoro" title="LinkedIn">LinkedIn</a>.</p>
     </div>
 
 </body>
