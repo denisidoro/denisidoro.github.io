@@ -28,10 +28,10 @@
             color: white;
             text-align: center;
             margin: auto;
-            height: 94%;
-            max-width: 800px;
-            padding: 20px;
+            height: 99.9%;
+            width: 100%;
             font-family: 'ubuntu', sans-serif;
+            overflow: auto;
         }
 
         .lower-contrast {
@@ -45,6 +45,7 @@
             text-align: left;
             font-size: 1.1em;
             line-height: 1.4em;
+            max-width: 800px;
         }
 
         a {
@@ -56,29 +57,46 @@
         a:hover {
             color: white;
         }
+
+        #container {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #main {
+            padding: 4em;
+            overflow-y: auto;
+        }
     </style>
 
 </head>
 
 <body>
 
-    <h1>Hi! I'm Denis!</h1>
-    <h3>I'm a Software Engineer. Nice to meet you! 👋</h3>
+    <div id="container">
+        <div id="main">
+            <h1>Hi! I'm Denis!</h1>
+            <h3>I'm a Software Engineer. Nice to meet you! 👋</h3>
 
-    <div class="lower-contrast" id="summary">
-        <p>I've helped build <a href="https://nubank.com.br/en/" title="Nubank">Nubank</a>, a fintech which now has
-            millions of customers and is revolutionizing banking and financial products.</p>
+            <div class="lower-contrast" id="summary">
+                <p>I've helped build <a href="https://nubank.com.br/en/" title="Nubank">Nubank</a>, a fintech which now
+                    has
+                    millions of customers and is revolutionizing banking and financial products.</p>
 
-        <p>Today I work at <a href="https://www.uber.com/" title="Uber">Uber</a>, dedicated to helping users <a
-                href="https://www.uber.com/br/en/ride/safety/" title="Uber safety">move safely</a>.</p>
+                <p>Today I work at <a href="https://www.uber.com/" title="Uber">Uber</a>, dedicated to helping users <a
+                        href="https://www.uber.com/br/en/ride/safety/" title="Uber safety">move safely</a>.</p>
 
-        <p>Every once in a while I scribble some blog posts on <a href="https://medium.com/@den.isidoro"
-                title="Medium">Medium</a> and contribute to <a href="https://github.com/denisidoro/navi"
-                title="navi">navi</a>, an open source project of mine which has 7k+ stars on <a
-                href="https://github.com/denisidoro" title="GitHub">GitHub</a>.
+                <p>Every once in a while I scribble some blog posts on <a href="https://medium.com/@den.isidoro"
+                        title="Medium">Medium</a> and contribute to <a href="https://github.com/denisidoro/navi"
+                        title="navi">navi</a>, an open source project of mine which has 7k+ stars on <a
+                        href="https://github.com/denisidoro" title="GitHub">GitHub</a>.
 
-        <p>If you want to know more about my education and work experience, please check my <a
-                href="https://www.linkedin.com/in/dnsisidoro" title="LinkedIn">LinkedIn</a>.</p>
+                <p>If you want to know more about my education and work experience, please check my <a
+                        href="https://www.linkedin.com/in/dnsisidoro" title="LinkedIn">LinkedIn</a>.</p>
+            </div>
+        </div>
     </div>
 
 </body>
