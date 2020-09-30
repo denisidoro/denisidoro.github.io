@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+
+    <style>
+      :root {
+        --accent-color: #05a081;
+        --accent-color-light: #82d0c0;
+      }
+    </style>
+
+    <meta name="theme-color" content="#05a081" />
+
+    
+      <link rel="icon" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+      <link rel="apple-touch-icon" sizes="48x48" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+      <link rel="apple-touch-icon" sizes="72x72" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;919926a10d297a1500.jpg" />
+      <link rel="apple-touch-icon" sizes="96x96" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;6c2aa64354c1ad0e00.jpg" />
+      <link rel="apple-touch-icon" sizes="144x144" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;f15f82763548a03000.jpg" />
+      <link rel="apple-touch-icon" sizes="192x192" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;60ba6917360f159900.jpg" />
+      <link rel="apple-touch-icon" sizes="256x256" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;be09d2da8b7096cc00.jpg" />
+      <link rel="apple-touch-icon" sizes="384x384" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;165598e81aa1737500.jpg" />
+      <link rel="apple-touch-icon" sizes="512x512" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;ca26ad195d4a364c00.jpg" />
+    
+
+    
+
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary">
+
+    
+
+    
+
+    
+      
+        <meta name="description" content="About, opinions and rants" />
+        <meta name="twitter:description" content="About, opinions and rants">
+      
+    
+
+    
+      <meta name="twitter:title" content="Quick prototyping with a Golang REPL">
+    
+
+    
+      <link rel="prerender" href="&#x2F;tags&#x2F;" />
+    
+      <link rel="prerender" href="&#x2F;blog&#x2F;" />
+    
+
+    <link rel="prefetch" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;d8f0e5c553a5794d00.jpg" />
+
+    <title>
+      
+        
+          Quick prototyping with a Golang REPL
+        
+      
+    </title>
+
+    
+    
+      <link rel="stylesheet" href="https://denisidoro.github.io/main.css">
+    
+    
+
+<link rel="prerender" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;blog&#x2F;dictionaries-in-shell-scripts&#x2F;">
+
+
+
+<link rel="prerender" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;blog&#x2F;data-driven-programming&#x2F;">
+
+
+
+<link rel="prerender" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;dev&#x2F;">
+
+<link rel="prerender" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;go&#x2F;">
+
+
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "NewsArticle",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://google.com/article"
+      },
+      "headline": "Quick prototyping with a Golang REPL",
+      "image": [],
+      "datePublished": "2020-06-02T00:00:00+00:00",
+      "dateModified": "2020-06-02T00:00:00+00:00",
+      "author": {
+        "@type": "Person",
+        "name": "Denis Isidoro"
+      },
+       "publisher": {
+        "@type": "Organization",
+        "name": "Denis Isidoro",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://denisidoro.github.io/profile_square.jpg"
+        }
+        
+      }
+      
+    }
+  </script>
+
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        
+
+        
+        {
+          
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Denis&#x27;s blog",
+          "item": "https://denisidoro.github.io/"
+        },
+        
+        {
+          
+          "@type": "ListItem",
+          "position": 2,
+          "name": "",
+          "item": "https://denisidoro.github.io/blog/"
+        },
+        
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Quick prototyping with a Golang REPL",
+          "item": "https://denisidoro.github.io/blog/golang-repl/"
+        }
+      ]
+    }
+  </script>
+
+  </head>
+  <body>
+    
+      <header>
+        <a class="profile-icon" href="/">
+          <img src="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;d8f0e5c553a5794d00.jpg" alt="profile picture">
+        </a>
+        <nav>
+          
+            <a href="&#x2F;tags&#x2F;">Tags</a>
+          
+            <a href="&#x2F;blog&#x2F;">Blog</a>
+          
+        </nav>
+      </header>
+    
+    <main>
+    
+<div class="post-title">
+  <h1>Quick prototyping with a Golang REPL</h1>
+  <small>
+    June 02, 2020
+    
+    -
+    <span class="tags">
+      
+      <a href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;dev&#x2F;">dev</a>
+      
+      <a href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;go&#x2F;">go</a>
+      
+    </span>
+    
+  </small>
+</div>
+
+<div>
+  <p>I miss a REPL when coding in Golang. It turns out we can have a Go REPL connected to our IDE of choice.</p>
+<p>After developing in <a href="https://clojure.org/">Clojure</a> for some time, I miss a <a href="https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop">REPL</a> when coding in <a href="https://golang.org/">Golang</a>. It turns out we can have a Go REPL connected to our IDE of choice.</p>
+<figure>
+    <img alt="Image for post" class="medium-image"
+        src="https://miro.medium.com/max/2160/1*PYNPylp2BS_XSKYIlNrXyw.gif"
+        srcSet="https://miro.medium.com/max/552/1*PYNPylp2BS_XSKYIlNrXyw.gif 276w, https://miro.medium.com/max/1104/1*PYNPylp2BS_XSKYIlNrXyw.gif 552w, https://miro.medium.com/max/1280/1*PYNPylp2BS_XSKYIlNrXyw.gif 640w, https://miro.medium.com/max/1400/1*PYNPylp2BS_XSKYIlNrXyw.gif 700w"
+        sizes="700px" />
+</figure>
+<h3 id="why-use-a-repl">Why use a REPL?</h3>
+<p>Because it allows rapid experimentation and gives feedbacks instantaneously. Will my complex regex work? Instead of double-checking everything let’s just eval one case. When selecting a substring is the last index exclusive or not? Instead of reading the documentation let’s just try it out with an example.</p>
+<p>Data scientists usually do this with <a href="https://jupyter.org/">Jupyter Notebooks</a>, for example, but this is a practice which still isn’t ubiquitous in the backend/frontend/devops scene.</p>
+<p>For more use cases, please check one video about <a href="https://www.youtube.com/results?search_query=repl+driven+development">REPL driven development</a>.</p>
+<h3 id="how-to-configure-it">How to configure it?</h3>
+<p>First install <a href="https://github.com/motemen/gore">gore</a>. Then integrate it with your IDE.</p>
+<p>I’ll highlight my configuration with VSCode but other setups should be similar.</p>
+<p>I simply added the following keybinding to “vim.visualModeKeyBindings” and “vim.normalModeKeyBindings”:</p>
+<p>This way, whenever I type <code>&lt;space&gt;+l+t</code> the highlighted text will be sent to the REPL session, provided that I run <code>gore</code> in VSCode’s terminal window. If there’s no selection, the current line will be sent.</p>
+<h3 id="caveats">Caveats</h3>
+<ul>
+<li>gore is somewhat slow. But still is faster than running an adhoc test case + <code>go test</code> for the same purpose or setting up an adhoc entrypoint + <code>go run</code>.</li>
+<li>depending on the modules imported by your project it may not be trivial to replicate the same imports to your gore session.</li>
+</ul>
+<h3 id="does-this-work-for-other-languages">Does this work for other languages?</h3>
+<p>Yes! Your shell is a REPL in some sense. When writing long <code>for</code>s or commands with many pipes this may come in handy as well.</p>
+<figcaption>⏮ This post first appeared on
+    <a href="https://medium.com/@den.isidoro/quick-prototyping-with-a-golang-repl-547703885bd8" target="_blank">Medium</a></figcaption>
+
+</div>
+
+<hr class="footer-rule" />
+
+
+<div class="footer-about">
+  <p><em>Note: opinions expressed here are solely my own and do not necessarily express the views or experiences of my employer or past employers.</em></p>
+
+</div>
+
+
+<div class="related-container">
+
+  
+  <div class="link">
+    Previous <br />
+    <a href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;blog&#x2F;dictionaries-in-shell-scripts&#x2F;">Using dictionaries in shell scripts</a>
+  </div>
+  
+
+  
+  <div class="link">
+    Next <br />
+    <a href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;blog&#x2F;data-driven-programming&#x2F;">On data-driven programming</a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </body>
+</html>

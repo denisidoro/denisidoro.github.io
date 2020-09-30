@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+
+    <style>
+      :root {
+        --accent-color: #05a081;
+        --accent-color-light: #82d0c0;
+      }
+    </style>
+
+    <meta name="theme-color" content="#05a081" />
+
+    
+      <link rel="icon" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+      <link rel="apple-touch-icon" sizes="48x48" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+      <link rel="apple-touch-icon" sizes="72x72" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;919926a10d297a1500.jpg" />
+      <link rel="apple-touch-icon" sizes="96x96" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;6c2aa64354c1ad0e00.jpg" />
+      <link rel="apple-touch-icon" sizes="144x144" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;f15f82763548a03000.jpg" />
+      <link rel="apple-touch-icon" sizes="192x192" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;60ba6917360f159900.jpg" />
+      <link rel="apple-touch-icon" sizes="256x256" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;be09d2da8b7096cc00.jpg" />
+      <link rel="apple-touch-icon" sizes="384x384" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;165598e81aa1737500.jpg" />
+      <link rel="apple-touch-icon" sizes="512x512" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;ca26ad195d4a364c00.jpg" />
+    
+
+    
+
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary">
+
+    
+
+    
+
+    
+      
+        <meta name="description" content="About, opinions and rants" />
+        <meta name="twitter:description" content="About, opinions and rants">
+      
+    
+
+    
+      <meta name="twitter:title" content="On microservice splitting and code refactoring">
+    
+
+    
+      <link rel="prerender" href="&#x2F;tags&#x2F;" />
+    
+      <link rel="prerender" href="&#x2F;blog&#x2F;" />
+    
+
+    <link rel="prefetch" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;d8f0e5c553a5794d00.jpg" />
+
+    <title>
+      
+        
+          On microservice splitting and code refactoring
+        
+      
+    </title>
+
+    
+    
+      <link rel="stylesheet" href="https://denisidoro.github.io/main.css">
+    
+    
+
+<link rel="prerender" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;blog&#x2F;clojure-graalvm-shell-scripting&#x2F;">
+
+
+
+<link rel="prerender" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;blog&#x2F;grafana-personal-finance&#x2F;">
+
+
+
+<link rel="prerender" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;dev&#x2F;">
+
+<link rel="prerender" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;architecture&#x2F;">
+
+
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "NewsArticle",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://google.com/article"
+      },
+      "headline": "On microservice splitting and code refactoring",
+      "image": [],
+      "datePublished": "2019-01-06T00:00:00+00:00",
+      "dateModified": "2019-01-06T00:00:00+00:00",
+      "author": {
+        "@type": "Person",
+        "name": "Denis Isidoro"
+      },
+       "publisher": {
+        "@type": "Organization",
+        "name": "Denis Isidoro",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://denisidoro.github.io/profile_square.jpg"
+        }
+        
+      }
+      
+    }
+  </script>
+
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        
+
+        
+        {
+          
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Denis&#x27;s blog",
+          "item": "https://denisidoro.github.io/"
+        },
+        
+        {
+          
+          "@type": "ListItem",
+          "position": 2,
+          "name": "",
+          "item": "https://denisidoro.github.io/blog/"
+        },
+        
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "On microservice splitting and code refactoring",
+          "item": "https://denisidoro.github.io/blog/microservice-splitting-code-refactoring/"
+        }
+      ]
+    }
+  </script>
+
+  </head>
+  <body>
+    
+      <header>
+        <a class="profile-icon" href="/">
+          <img src="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;d8f0e5c553a5794d00.jpg" alt="profile picture">
+        </a>
+        <nav>
+          
+            <a href="&#x2F;tags&#x2F;">Tags</a>
+          
+            <a href="&#x2F;blog&#x2F;">Blog</a>
+          
+        </nav>
+      </header>
+    
+    <main>
+    
+<div class="post-title">
+  <h1>On microservice splitting and code refactoring</h1>
+  <small>
+    January 06, 2019
+    
+    -
+    <span class="tags">
+      
+      <a href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;dev&#x2F;">dev</a>
+      
+      <a href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;architecture&#x2F;">architecture</a>
+      
+    </span>
+    
+  </small>
+</div>
+
+<div>
+  <figure>
+    <img alt="Image for post" class="t u v gh aj" src="https://miro.medium.com/max/11014/0*YzywaYKyaA6w-HcY" srcSet=" https://miro.medium.com/max/552/0*YzywaYKyaA6w-HcY 276w, https://miro.medium.com/max/1104/0*YzywaYKyaA6w-HcY 552w,
+    https://miro.medium.com/max/1280/0*YzywaYKyaA6w-HcY 640w, https://miro.medium.com/max/1400/0*YzywaYKyaA6w-HcY 700w" sizes="700px" />
+    <figcaption>Photo by
+        <a href="https://unsplash.com/@leliejens?utm_source=medium&utm_medium=referral">leliejens</a>
+        on <a href="https://unsplash.com?utm_source=medium&utm_medium=referral">Unsplash</a> </figcaption>
+</figure>
+<p>Let’s say that you work for a company that offers a platform for personal finance management. You were requested to add a feature whose input from the customer is a list of company × amount of stocks × investment date and the output is the customer’s total balance for a given point in time.</p>
+<p>How big or small should the microservice(s) be?</p>
+<p>At one end of the spectrum, you have a single <a href="https://www.thoughtworks.com/insights/blog/monoliths-are-bad-design-and-you-know-it">monolith</a>, with scalability issues.</p>
+<p>At the other end, you have one service for:</p>
+<ul>
+<li>stock value scraping (<code>stockScraper</code>)</li>
+<li>company info store (<code>companyStore</code>)</li>
+<li>stock value history store (<code>stockHistory</code>)</li>
+<li>customer input stock store (<code>stockStore</code>)</li>
+</ul>
+<p>This approach gives us a nice separation of concerns and makes it easy to develop and scale each part independently. However, it takes more time to have an <a href="https://en.wikipedia.org/wiki/Minimum_viable_product">MVP</a> this way, and <a href="https://en.wikipedia.org/wiki/Time_to_market">time to market</a> may be crucial. And it costs more, as well, because of overheads (such as multiple JVMs, databases, message streaming, etc).</p>
+<p>Given your resource constraints, maybe it makes sense to start as a single service (<code>newFeature</code>). But what if you want or need to split it later?</p>
+<p>Here are my tips for designing a service easy to refactor, at a low cost during development.</p>
+<h3 id="0-divide-your-application-into-layers">0. Divide your application into layers</h3>
+<p>You can choose from <a href="https://dzone.com/articles/onion-architecture-is-interesting">onion</a>, <a href="https://dzone.com/articles/layered-architecture-is-good">layered</a>, and <a href="https://dzone.com/articles/hexagonal-architecture-is-powerful">hexagonal</a> architectures, among others. As always, prioritize immutability, state management, pure logic extraction and all the other best practices.</p>
+<h3 id="1-don-t-be-afraid-of-using-many-namespaces">1. Don’t be afraid of using many namespaces</h3>
+<p>Don’t keep all namespaces (packages, files) centralized in a root one. Instead of <code>newFeature.logic.stockScraper</code>, use <code>stockScraper.logic</code>. Have you created a pure function that may be useful for both <code>stockScraper</code> and <code>stockStore</code>? Put it inside <code>stock.logic</code>. Have you written a function for linear interpolation? This math concept isn't restricted to a specific feature so it doesn't have to be inside <code>newFeature.logic.math</code>, for example. Put it inside <code>common.math</code>. This way you aren't tempted to put <code>linearInterpolate</code> and <code>stockSum</code> in the same file.</p>
+<p>When the time comes for service splitting, you can deploy the <code>common</code> and <code>stock</code> folders as libraries and start the <code>stockScraper</code> service by cut and pasting the respective folder. Much easier than traversing all the codebase later to extract everything you need!</p>
+<h3 id="2-import-non-common-namespaces-with-care">2. Import non-common namespaces with care</h3>
+<p>Does <code>stockHistory</code> have to import <code>stockScraper</code> a lot? Can't it be minimized? Remember that when splitting this will translate into HTTP calls or message streaming. Try to at least isolate this dependency into a single namespace, which will be the precursor of the API between the two. This step is the most subjective, because it can quickly introduce overheads in the codebase for an MVP. You must consider the trade-offs.</p>
+<h3 id="3-isolate-implementation-details-into-higher-level-components">3. Isolate implementation details into higher level components</h3>
+<p>Let’s now implement the handler for the endpoint that returns information about all the companies a customer has stocks from. One common approach is the following (we’re exposing components via dependency injection and middlewares):</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;d77a550d25bd6a77d35b5b57d40cf4b8.js"></script>
+</div>
+<p>After splitting our service, not all data will be available via the <code>db</code> argument, of course. We'll need to make some HTTP calls. <code>customerCompaniesHandler</code> will have to get an HTTP component and pass it to <code>getCustomerCompanies</code>, which will propagate it to the domain-specific helper functions and so on...</p>
+<p>But why does the handler have to know this in the first place? We have divided our application into layers and, more importantly, we have already separated our code into <code>companyStore</code>, <code>stockStore</code> and other namespaces. Yet, we clearly have an implementation detail leak such that all our higher level, integration API code has to know about low level dependency management. These layers should be agnostic to where we store the <code>company</code> entity...</p>
+<p>Ideally, our handler should only know that it has to fetch data that depends on the <code>stock</code> and <code>company</code> entities. What if we created a component that abstracts this away, per entity? Let's call one of them as <code>CompanyRepository</code> (you can come up with the name you like):</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;335efcab949ddaa3f40c78a9fec4666e.js"></script>
+</div>
+<p>You can skip the interface/protocol definition if you’re not into that. The important thing is to avoid leaking lower level components.</p>
+<p>After adding this component to our dependency graph, our code would become:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;36dd706464e5cbb223fd6debdfba24a9.js"></script>
+</div>
+<p>For the service split, we could create:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;36dd706464e5cbb223fd6debdfba24a9.js"></script>
+</div>
+<p>The only thing we need to do is update the dependency graph! All the rest of the code remains the same.</p>
+<p>As a plus, we can move <code>CompanyDbRepository</code> to <code>companyStore</code>. Code reuse!</p>
+<h3 id="wrap-up">Wrap up</h3>
+<p>Suppose you’re absolutely certain that you won’t have to split your recently created microservice or that the process will be easy enough such that you won’t curse your past self. Then, you may not see much value in my article.</p>
+<p>However, this isn’t just about spatial organization or isolation. It’s about making domains arguably easier to reason about. Establishing higher level boundaries reduces the cognitive requirement to fiddle with a codebase. You only need to traverse the code as deep as required. I find it easier to handle new abstractions than reaching a mental stack overflow when browsing lines of code.</p>
+<p>And even if you decide to keep a single service, it’s much easier for a newcomer to improve <code>stockParser</code>, for example, if he or she only has to read a root namespace and not the whole microservice code.</p>
+<p>Anyway, no one is able to perfectly measure the ideal microservice size, because that varies in time, the company size, the feature success and many other factors. So it’s nice to be flexible.</p>
+<h3 id="clojure-sidenotes">Clojure sidenotes</h3>
+<ul>
+<li><a href="https://github.com/duct-framework/duct">Duct</a> follows this pattern and calls it boundary.</li>
+<li>You can skip the component creation altogether and define boundaries with resolvers using a library such as <a href="https://github.com/wilkerlucio/pathom">Pathom</a>: you define a graph edge that enables you to go from a <code>customerId</code> to a <code>company</code>, for example.</li>
+</ul>
+<h3 id="front-end-sidenote">Front-end sidenote</h3>
+<p>Even though I focused on the back-end, this applies to front-end as well. Why make the <code>CompanyDetailsPage</code> receive an HTTP component and perform a request? It can simply receive a <code>CompanyRepository</code> and you can call <code>repository.getDetails()</code>.</p>
+<figcaption>⏮ This post first appeared on
+    <a href="https://medium.com/@den.isidoro/microservice-size-and-splitting-dd9fc98a262e" target="_blank">Medium</a></figcaption>
+
+</div>
+
+<hr class="footer-rule" />
+
+
+<div class="footer-about">
+  <p><em>Note: opinions expressed here are solely my own and do not necessarily express the views or experiences of my employer or past employers.</em></p>
+
+</div>
+
+
+<div class="related-container">
+
+  
+  <div class="link">
+    Previous <br />
+    <a href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;blog&#x2F;clojure-graalvm-shell-scripting&#x2F;">Using Clojure + GraalVM for shell scripting</a>
+  </div>
+  
+
+  
+  <div class="link">
+    Next <br />
+    <a href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;blog&#x2F;grafana-personal-finance&#x2F;">Using Grafana for personal financial management</a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </body>
+</html>
