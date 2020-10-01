@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#ffffff" name="theme-color" />
+  <meta content="#da532c" name="msapplication-TileColor" />
+
+  
+    <link rel="icon" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+    <link rel="apple-touch-icon" sizes="48x48"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+    <link rel="apple-touch-icon" sizes="72x72"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;919926a10d297a1500.jpg" />
+    <link rel="apple-touch-icon" sizes="96x96"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;6c2aa64354c1ad0e00.jpg" />
+    <link rel="apple-touch-icon" sizes="144x144"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;f15f82763548a03000.jpg" />
+    <link rel="apple-touch-icon" sizes="192x192"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;60ba6917360f159900.jpg" />
+    <link rel="apple-touch-icon" sizes="256x256"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;be09d2da8b7096cc00.jpg" />
+    <link rel="apple-touch-icon" sizes="384x384"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;165598e81aa1737500.jpg" />
+    <link rel="apple-touch-icon" sizes="512x512"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;ca26ad195d4a364c00.jpg" />
+  
+
+  
+  
+  
+  
+  
+  <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" rel="stylesheet" />
+  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.css"
+    rel="stylesheet" /> -->
+  <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+  <link href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;site.css' rel="stylesheet" /> 
+  <title>
+    
+  Denis&#x27;s blog | Using Grafana for personal financial management
+
+  </title>
+  <script crossorigin="anonymous" src="https://kit.fontawesome.com/201b8d5e05.js"></script>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168912661-1"></script>
+  <script type="text/javascript">
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-168912661-1");
+  </script>
+  
+</head>
+
+<body class="has-background-light">
+  
+  <nav aria-label="main navigation" class="navbar is-light" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item has-text-weight-bold" href="/">Denis&#x27;s blog</a>
+        <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navMenu">
+        <div class="navbar-end has-text-centered">
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;'>
+            Home
+          </a>
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts'>
+            Posts
+          </a>
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags'>
+            Tags
+          </a>
+          
+          <a class="navbar-item" id="nav-search" title="Search" data-target="#search-modal">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </a>
+          <a class="navbar-item" id="dark-mode" title="Switch to dark theme">
+            <span class="icon">
+              <i class="fas fa-adjust"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="modal" id="search-modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="field">
+        <p class="control has-icons-right">
+          <input class="input" id="search" placeholder="Search this website." type="search" />
+          <span class="icon is-small is-right">
+            <i class="fas fa-search"></i>
+          </span>
+        </p>
+      </div>
+      <div class="search-results">
+        <div class="search-results__items"></div>
+      </div>
+    </div>
+    <button aria-label="close" class="modal-close is-large"></button>
+  </div>
+  
+  
+  <main class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-10 is-offset-1">
+          <article>
+            <h1 class="title">Using Grafana for personal financial management</h1>
+            <h2 class="subtitle"></h2>
+            <div class="columns mb-0">
+              <div class="column">
+                
+<p class="has-text-grey">
+  <!-- CUSTOM 
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  Denis Isidoro published on 
+  -->
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <time datetime='2019-04-04'>April 04, 2019</time>
+</p>
+
+              </div>
+              <div class="column has-text-right-desktop">
+                
+<p class="has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  5 min,
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  873 words
+</p>
+
+              </div>
+              <div class="column has-text-right-desktop">
+                
+                  
+<p>
+  <span class="has-text-black has-text-weight-normal">Tags:</span>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;grafana&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    grafana
+  </a>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;finance&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    finance
+  </a>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;clojure&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    clojure
+  </a>
+  
+</p>
+
+                
+              </div>
+            </div>
+            <!-- CUSTOM 
+            <div class="columns mb-0">
+              <div class="column">
+                
+              </div>
+            </div>
+            -->
+            
+            <hr/>
+            <div class="content has-text-justified">
+              <figure class="medium-image">
+    <img alt="Image for post" class="medium-image"
+        src="https://miro.medium.com/max/2160/1*tfGEp0dvIJ1_L3-D0rJSdw.jpeg"
+        srcSet="https://miro.medium.com/max/552/1*tfGEp0dvIJ1_L3-D0rJSdw.jpeg 276w, https://miro.medium.com/max/1104/1*tfGEp0dvIJ1_L3-D0rJSdw.jpeg 552w, https://miro.medium.com/max/1280/1*tfGEp0dvIJ1_L3-D0rJSdw.jpeg 640w, https://miro.medium.com/max/1400/1*tfGEp0dvIJ1_L3-D0rJSdw.jpeg 700w"
+        sizes="700px" />
+    <figcaption>One of the dashboards provided by the system</figcaption>
+</figure>
+<p>This post is intended to be a brain dump with quick highlights of some technologies. If you’re somewhat familiar with the stack I’ve used, hopefully there will be something useful for you to learn or to base on. It will be fast paced.</p>
+<h3 id="objective">Objective</h3>
+<p>To develop an investment tracker with the following requirements:</p>
+<ul>
+<li>everything must be determined by a plain-text file;</li>
+<li>the only recurring input needed is sparse balance data;</li>
+<li>it must infer data as good as possible;</li>
+<li>it must maintain historic data;</li>
+<li>it must draw beautiful visualizations.</li>
+</ul>
+<p>In other words, if I write down today the balance of some investments of mine, and 1 month from now I write down the balance of other investments, the system should be able to interpolate data so that it can plot smooth, realistic curves.</p>
+<p>This is different from a ledger system, for which there are plenty of open source solutions.</p>
+<p>It could be done with some Excel wizardry, I suppose. But I didn’t want to learn that much of Excel.</p>
+<h3 id="file-syntax">File syntax</h3>
+<p>I’ve decided to use the <a href="https://github.com/edn-format/edn">edn format</a>, because I was determined to code the system in <a href="https://clojure.org/">Clojure</a>. Here is some simplified, mock data:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;d9c38c04feb8e69c27d706adf435043a.js"></script>
+</div>
+<p>It has as little information as possible yet it still is human-readable. Nice!</p>
+<h3 id="internalizing-data">Internalizing data</h3>
+<p>The first step was to convert the file contents to internal models with namespaced keys. In particular, I converted date strings to a numeric format so that I could apply traditional math over it. After some maps and reduces, we have a collection of elements such as:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;8ffe9d8009d712a500ba1fbe79c8e93c.js"></script>
+</div>
+<p>Initially, I had written functions for integrals, derivatives, curve aggregation and so on. But I was reinventing the wheel. Now, I’m leveraging the robustness of time-series ecosystems.</p>
+<p>The competitors were <a href="https://prometheus.io/">Prometheus</a>, <a href="https://www.influxdata.com/">InfluxDB</a> and <a href="https://graphiteapp.org/">Graphite</a>. As of the time of writing, there’s no way to fetch past data into Prometheus. InfluxDB has too much SQL for my taste. Graphite was the chosen one, then.</p>
+<p>With a simple pure function, we can export our internal models as Graphite-compatible data:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#abb2bf;">citigroup.rf.cdb_paribas 1554325794 1000.00
+citigroup.rf.cdb_paribas 1554378794 1050.33
+citigroup.rf.cdb_paribas 1564325312 1097.44
+</span></code></pre>
+<p>Now we can perform queries such as <code>sumSeries(some.bucket.*)</code>, instead of hand crafting it directly in our code.</p>
+<h3 id="visualizing-balances">Visualizing balances</h3>
+<p>Graphite has a built-in renderer for data:</p>
+<figure class="medium-image">
+    <img alt="Image for post" class="medium-image"
+        src="https://miro.medium.com/max/2160/1*nLHgAwVpSW9veGmMp_-Rbg.png"
+        srcSet="https://miro.medium.com/max/552/1*nLHgAwVpSW9veGmMp_-Rbg.png 276w, https://miro.medium.com/max/1104/1*nLHgAwVpSW9veGmMp_-Rbg.png 552w, https://miro.medium.com/max/1280/1*nLHgAwVpSW9veGmMp_-Rbg.png 640w, https://miro.medium.com/max/1400/1*nLHgAwVpSW9veGmMp_-Rbg.png 700w"
+        sizes="700px" />
+    <figcaption>This is really ugly</figcaption>
+</figure>
+<p>But we aren’t in the 90s anymore. I wanted to use something easier on the eyes: <a href="https://grafana.com/">Grafana</a>.</p>
+<p>Fortunately, Grafana works out of the box with Graphite, so it was a piece of cake to build beautiful dashboards:</p>
+<figure class="medium-image">
+    <img alt="Image for post" class="medium-image"
+        src="https://miro.medium.com/max/2160/1*FFPJW-tIF3967y3BcEoSoQ.png"
+        srcSet="https://miro.medium.com/max/552/1*FFPJW-tIF3967y3BcEoSoQ.png 276w, https://miro.medium.com/max/1104/1*FFPJW-tIF3967y3BcEoSoQ.png 552w, https://miro.medium.com/max/1280/1*FFPJW-tIF3967y3BcEoSoQ.png 640w, https://miro.medium.com/max/1400/1*FFPJW-tIF3967y3BcEoSoQ.png 700w"
+        sizes="700px" />
+    <figcaption>The main dashboard</figcaption>
+</figure>
+<h3 id="tabular-and-scalar-data">Tabular and scalar data</h3>
+<p>Even though piping data to Graphite made my life easier, it limited possibilities. There’s no simple way to display in a table all the info for yielding investments. Or adding a single stat with the next investment maturity date.</p>
+<p>It became clear I had to add a second data source. Considering that some steps before I already had all the data in Clojure code, I decided to upgrade the Clojure scripts to an HTTP server.</p>
+<figure class="medium-image">
+    <img alt="Image for post" class="medium-image"
+        src="https://miro.medium.com/max/2160/1*274rN8NGm-TdaKmZXEwquA.png"
+        srcSet="https://miro.medium.com/max/552/1*274rN8NGm-TdaKmZXEwquA.png 276w, https://miro.medium.com/max/1104/1*274rN8NGm-TdaKmZXEwquA.png 552w, https://miro.medium.com/max/1280/1*274rN8NGm-TdaKmZXEwquA.png 640w, https://miro.medium.com/max/1400/1*274rN8NGm-TdaKmZXEwquA.png 700w"
+        sizes="700px" />
+    <figcaption>InfluxDB can’t provide this tabular data</figcaption>
+</figure>
+<p>Grafana has support for <a href="https://grafana.com/plugins/grafana-simple-json-datasource">JSON APIs as data source</a>. Its serialization format is different from Graphite’s but I only had to write yet another pure, adapter function to get a result like this:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;f2cb104d0c47aec5e93b81d84568ef67.js"></script>
+</div>
+<h3 id="extras">Extras</h3>
+<p>After finishing all the groundwork, it became easy peasy to add new features, such as consuming external APIs for displaying stock values or currency history, to name a few.</p>
+<figure class="medium-image">
+    <img alt="Image for post" class="medium-image"
+        src="https://miro.medium.com/max/2160/1*7TJ_w-ThefC6aVi4Yy4J9g.png"
+        srcSet="https://miro.medium.com/max/552/1*7TJ_w-ThefC6aVi4Yy4J9g.png 276w, https://miro.medium.com/max/1104/1*7TJ_w-ThefC6aVi4Yy4J9g.png 552w, https://miro.medium.com/max/1280/1*7TJ_w-ThefC6aVi4Yy4J9g.png 640w, https://miro.medium.com/max/1400/1*7TJ_w-ThefC6aVi4Yy4J9g.png 700w"
+        sizes="700px" />
+    <figcaption>Currencies and stock information scraped from third-party APIs</figcaption>
+</figure>
+<p><a href="https://github.com/denisidoro/rosebud/blob/e68671b/server/resources/example_log.edn">This</a> is a complete edn file specifying what currencies and stocks we should keep track of.</p>
+<h3 id="deploying">Deploying</h3>
+<p>The easiest way to install Grafana on OSX is to use <a href="https://brew.sh/">brew</a>. Then you run <code>brew service start</code> and have to remember to stop it because the service persists even after a reboot. Then there's Graphite and Clojure.</p>
+<p>Maybe there’s a better way to do it but I rage quit it and started using <a href="https://www.docker.com/">docker</a> for everything instead.</p>
+<p>By mounting volumes, we can start Grafana pre-configured with the default data sources and dashboards in a such way that we don’t have to set it up manually everytime.</p>
+<h3 id="adapting-it-to-your-needs">Adapting it to your needs</h3>
+<p><a href="https://github.com/denisidoro/rosebud">The code is available on Github</a> for you to fork. It’s a little bit oriented to my needs and the Brazilian financial system. However, smalls adjustments should be enough to adapt it.</p>
+<h3 id="conclusion">Conclusion</h3>
+<p>I’m very happy with the result because I was able to develop it quickly, without having to learn new tools. <a href="https://medium.com/@den.isidoro/microservice-size-and-splitting-dd9fc98a262e">The way the namespaces and models are organized</a> facilitates swapping backends or splitting the code into microservices, if the future demands it.</p>
+<div class="medium-first">
+    This post first appeared on
+    <a href="https://medium.com/@den.isidoro/using-grafana-for-personal-financial-management-ac0e4d0cb43" target="_blank">Medium</a>.
+</div>
+
+            </div>
+            <!-- CUSTOM <div id="mapid"></div> -->
+
+            <div class="disclaimer">
+              Note: opinions expressed here are solely my own and do not necessarily express the views or experiences of my employer or past employers.
+            </div>
+            
+            <div class="container has-text-centered mt-6">
+              
+<!-- CUSTOM
+<p class="is-size-5">
+  Share:
+  <a class="link" data-sharer="facebook" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;grafana-personal-finance&#x2F;' href="javascript:void(0);"
+    title="Share on facebook">
+    <span class="icon">
+      <i class="fab fa-facebook-square"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="twitter" data-title='Using Grafana for personal financial management' data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;grafana-personal-finance&#x2F;'
+    href="javascript:void(0);" title="Share on twitter">
+    <span class="icon">
+      <i class="fab fa-twitter"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="linkedin" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;grafana-personal-finance&#x2F;' href="javascript:void(0);"
+    title="Share on linkedin">
+    <span class="icon">
+      <i class="fab fa-linkedin"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="reddit" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;grafana-personal-finance&#x2F;' href="javascript:void(0);"
+    title="Share on reddit">
+    <span class="icon">
+      <i class="fab fa-reddit"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="hackernews" data-title="Using Grafana for personal financial management" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;grafana-personal-finance&#x2F;'
+    href="javascript:void(0);" title="Share on hackernews">
+    <span class="icon">
+      <i class="fab fa-hacker-news"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="whatsapp" data-title="Using Grafana for personal financial management" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;grafana-personal-finance&#x2F;'
+    href="javascript:void(0);" title="Share on whatsapp">
+    <span class="icon">
+      <i class="fab fa-whatsapp-square"></i>
+    </span>
+  </a>
+</p>
+-->
+
+            </div>
+          </article>
+          <hr/>
+          
+            <nav class="level mt-2">
+              
+                <div class="level-item has-text-centered">
+                  <a class="button is-black is-outlined" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;monolithic-apps-graph-apis&#x2F;'>
+                    <span class="icon mr-2">
+                      <i class="fas fa-arrow-circle-left"></i>
+                    </span>
+                    Writing multi-module, monolithic apps with graph APIs
+                  </a>
+                </div>
+              
+              
+                <div class="level-item has-text-centered">
+                  <a class="button is-black is-outlined" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;microservice-splitting-code-refactoring&#x2F;'>
+                    On microservice splitting and code refactoring<span class="icon ml-2">
+                      <i class="fas fa-arrow-circle-right"></i>
+                    </span>
+                  </a>
+                </div>
+              
+              
+              
+            </nav>
+          
+          
+        </div>
+      </div>
+    </div>
+  </main>
+
+  
+  <!--<footer class="py-2">
+    <p class="has-text-centered">
+      Built with
+      <span class="icon is-small">
+        <i class="fas fa-code fa-xs"></i>
+      </span>
+      code and
+      <span class="icon is-small">
+        <i class="fas fa-heart fa-xs"></i>
+      </span>
+      love <br /> Powered By
+      <span class="icon is-small">
+        <i class="fas fa-power-off fa-xs"></i>
+      </span>
+      Zola
+    </p>
+  </footer>-->
+  
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sharer.js@latest/sharer.min.js"></script>
+  <!-- CUSTOM
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/galleria.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1/dist/chart.xkcd.min.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.js"></script>
+  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/elasticlunr/0.9.6/elasticlunr.min.js"></script>
+  <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;search_index.en.js'></script>
+  <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;js&#x2F;site.js'></script>
+  
+  
+
+</body>
+
+</html>

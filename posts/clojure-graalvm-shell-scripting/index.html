@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#ffffff" name="theme-color" />
+  <meta content="#da532c" name="msapplication-TileColor" />
+
+  
+    <link rel="icon" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+    <link rel="apple-touch-icon" sizes="48x48"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+    <link rel="apple-touch-icon" sizes="72x72"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;919926a10d297a1500.jpg" />
+    <link rel="apple-touch-icon" sizes="96x96"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;6c2aa64354c1ad0e00.jpg" />
+    <link rel="apple-touch-icon" sizes="144x144"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;f15f82763548a03000.jpg" />
+    <link rel="apple-touch-icon" sizes="192x192"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;60ba6917360f159900.jpg" />
+    <link rel="apple-touch-icon" sizes="256x256"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;be09d2da8b7096cc00.jpg" />
+    <link rel="apple-touch-icon" sizes="384x384"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;165598e81aa1737500.jpg" />
+    <link rel="apple-touch-icon" sizes="512x512"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;ca26ad195d4a364c00.jpg" />
+  
+
+  
+  
+  
+  
+  
+  <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" rel="stylesheet" />
+  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.css"
+    rel="stylesheet" /> -->
+  <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+  <link href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;site.css' rel="stylesheet" /> 
+  <title>
+    
+  Denis&#x27;s blog | Using Clojure + GraalVM for shell scripting
+
+  </title>
+  <script crossorigin="anonymous" src="https://kit.fontawesome.com/201b8d5e05.js"></script>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168912661-1"></script>
+  <script type="text/javascript">
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-168912661-1");
+  </script>
+  
+</head>
+
+<body class="has-background-light">
+  
+  <nav aria-label="main navigation" class="navbar is-light" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item has-text-weight-bold" href="/">Denis&#x27;s blog</a>
+        <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navMenu">
+        <div class="navbar-end has-text-centered">
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;'>
+            Home
+          </a>
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts'>
+            Posts
+          </a>
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags'>
+            Tags
+          </a>
+          
+          <a class="navbar-item" id="nav-search" title="Search" data-target="#search-modal">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </a>
+          <a class="navbar-item" id="dark-mode" title="Switch to dark theme">
+            <span class="icon">
+              <i class="fas fa-adjust"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="modal" id="search-modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="field">
+        <p class="control has-icons-right">
+          <input class="input" id="search" placeholder="Search this website." type="search" />
+          <span class="icon is-small is-right">
+            <i class="fas fa-search"></i>
+          </span>
+        </p>
+      </div>
+      <div class="search-results">
+        <div class="search-results__items"></div>
+      </div>
+    </div>
+    <button aria-label="close" class="modal-close is-large"></button>
+  </div>
+  
+  
+  <main class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-10 is-offset-1">
+          <article>
+            <h1 class="title">Using Clojure + GraalVM for shell scripting</h1>
+            <h2 class="subtitle"></h2>
+            <div class="columns mb-0">
+              <div class="column">
+                
+<p class="has-text-grey">
+  <!-- CUSTOM 
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  Denis Isidoro published on 
+  -->
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <time datetime='2018-09-14'>September 14, 2018</time>
+</p>
+
+              </div>
+              <div class="column has-text-right-desktop">
+                
+<p class="has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  3 min,
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  537 words
+</p>
+
+              </div>
+              <div class="column has-text-right-desktop">
+                
+                  
+<p>
+  <span class="has-text-black has-text-weight-normal">Tags:</span>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;dev&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    dev
+  </a>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;clojure&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    clojure
+  </a>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;shell&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    shell
+  </a>
+  
+</p>
+
+                
+              </div>
+            </div>
+            <!-- CUSTOM 
+            <div class="columns mb-0">
+              <div class="column">
+                
+              </div>
+            </div>
+            -->
+            
+            <hr/>
+            <div class="content has-text-justified">
+              <figure class="medium-image">
+    <img alt="Image for post" class="medium-image"
+        src="https://miro.medium.com/max/2160/1*gJm3BZcNrKoPOa2QO69p3Q.png"
+        srcSet="https://miro.medium.com/max/552/1*gJm3BZcNrKoPOa2QO69p3Q.png 276w, https://miro.medium.com/max/1104/1*gJm3BZcNrKoPOa2QO69p3Q.png 552w, https://miro.medium.com/max/1280/1*gJm3BZcNrKoPOa2QO69p3Q.png 640w, https://miro.medium.com/max/1400/1*gJm3BZcNrKoPOa2QO69p3Q.png 700w"
+        sizes="700px" />
+    <figcaption>Part of a shell script written in Clojure</figcaption>
+</figure>
+<h3 id="motivation">Motivation</h3>
+<p>Objective: develop a shell script to ease the writing of XML files.</p>
+<p>Let’s say that the output to be generated is:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#abb2bf;">&lt;</span><span style="color:#eb6772;">grid</span><span style="color:#abb2bf;">&gt;   
+  &lt;</span><span style="color:#eb6772;">row</span><span style="color:#abb2bf;">&gt;   
+     &lt;</span><span style="color:#eb6772;">label </span><span style="color:#db9d63;">id</span><span style="color:#abb2bf;">=</span><span style="color:#9acc76;">&quot;info&quot; </span><span style="color:#abb2bf;">/&gt;   
+     &lt;</span><span style="color:#eb6772;">text</span><span style="color:#abb2bf;">&gt;Now playing&lt;/</span><span style="color:#eb6772;">text</span><span style="color:#abb2bf;">&gt;   
+  &lt;/</span><span style="color:#eb6772;">row</span><span style="color:#abb2bf;">&gt;   
+  &lt;</span><span style="color:#eb6772;">row</span><span style="color:#abb2bf;">&gt;   
+     &lt;</span><span style="color:#eb6772;">button </span><span style="color:#db9d63;">onTap</span><span style="color:#abb2bf;">=</span><span style="color:#9acc76;">&quot;mute&quot; </span><span style="color:#abb2bf;">/&gt;   
+  &lt;/</span><span style="color:#eb6772;">row</span><span style="color:#abb2bf;">&gt;   
+&lt;/</span><span style="color:#eb6772;">grid</span><span style="color:#abb2bf;">&gt;
+</span></code></pre>
+<p>I’d like to write it as:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#abb2bf;">[</span><span style="color:#db9d63;">:grid </span><span style="color:#abb2bf;">[</span><span style="color:#db9d63;">:row </span><span style="color:#abb2bf;">[</span><span style="color:#db9d63;">:label </span><span style="color:#abb2bf;">{</span><span style="color:#db9d63;">:id :info</span><span style="color:#abb2bf;">}]   
+             [</span><span style="color:#db9d63;">:text </span><span style="color:#9acc76;">&quot;Now playing&quot;</span><span style="color:#abb2bf;">]]   
+       [</span><span style="color:#db9d63;">:row </span><span style="color:#abb2bf;">[</span><span style="color:#db9d63;">:button :onTap </span><span style="color:#9acc76;">&quot;mute&quot;</span><span style="color:#abb2bf;">]]]
+</span></code></pre>
+<p>By the way, this syntax is a subset of <a href="https://github.com/edn-format/edn">EDN</a> and called <a href="https://github.com/weavejester/hiccup">hiccup</a>, used by frameworks such as <a href="https://github.com/Day8/re-frame">re-frame</a>.</p>
+<p>This way, in <a href="https://github.com/denisidoro/dotfiles">my dotfiles</a>, I can store, versionate and compose my configs as hiccup files and not as XML ones.</p>
+<p>This is no simple task for Bash and would feel natural to use <a href="https://clojure.org/">Clojure(Script)</a>.</p>
+<h3 id="using-clojurescript">Using Clojurescript</h3>
+<p>Until some months ago, I would write this script using <a href="https://github.com/anmonteiro/lumo">lumo</a>, a cross-platform, standalone ClojureScript environment.</p>
+<p>It runs on Node.js and the V8 JavaScript engine. Also, the scripts are relatively fast: a “hello world” takes ~1s to run without caching on my machine; with caching enabled, ~0.3s.</p>
+<p>You can find example scripts and helpers for lumo <a href="https://github.com/denisidoro/dotfiles/tree/ce5cfac70858966687986614443a7e805b60df76/scripts/clojure">here</a>.</p>
+<h3 id="using-clojure">Using Clojure</h3>
+<p>With the advent of <a href="https://clojure.org/guides/deps_and_cli">Clojure CLI</a> I stopped using lumo and I’m simply using the <code>clj</code> command now.</p>
+<p>Migrating from lumo to clj is <a href="https://clojurescript.org/about/differences">trivial</a> and gives us more features, such as better support for macros and multithreading.</p>
+<p>I’m using <a href="https://github.com/clojure/tools.deps.alpha">tools.deps</a> for dependency graph expansion and using <a href="https://github.com/RickMoynihan/lein-tools-deps">lein-tools-deps</a> for <a href="https://leiningen.org/">leiningen</a> compatibility.</p>
+<p>The downside is the startup time: a simple “hello world” takes around ~2.5s and my XML→hiccup script, which depends on some libraries, needs more than 3s to finish.</p>
+<p>This is fine for one-time only scripts but if I call a clj script in a Bash for-loop I’ll probably want to grab some coffee while it runs.</p>
+<h3 id="speeding-up-with-graalvm">Speeding up with GraalVM</h3>
+<p><a href="https://www.graalvm.org/">GraalVM</a> is a universal virtual machine for running applications written in JavaScript, Ruby, JVM-based languages and more.</p>
+<p>By using <a href="https://www.graalvm.org/docs/reference-manual/aot-compilation/">AOT compilation</a> we can compile our clj scripts to native code, which doesn’t rely on the JVM. The benefit? Let’s compare startup times:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#eb6772;">λ</span><span style="color:#abb2bf;"> echo </span><span style="color:#9acc76;">&#39;[:table]&#39; </span><span style="color:#adb7c9;">| </span><span style="color:#eb6772;">time</span><span style="color:#abb2bf;"> clj</span><span style="color:#eb6772;"> -m</span><span style="color:#abb2bf;"> xml 
+</span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">table </span><span style="color:#eb6772;">/</span><span style="color:#adb7c9;">&gt;</span><span style="color:#abb2bf;"> 
+clj</span><span style="color:#eb6772;"> -m</span><span style="color:#abb2bf;"> xml 9.88s user 0.68s system 293% cpu 3.593 total 
+
+</span><span style="color:#eb6772;">λ</span><span style="color:#abb2bf;"> echo </span><span style="color:#9acc76;">&#39;[:table]&#39; </span><span style="color:#adb7c9;">| </span><span style="color:#eb6772;">time</span><span style="color:#abb2bf;"> native-binary 
+</span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">table </span><span style="color:#eb6772;">/</span><span style="color:#adb7c9;">&gt;</span><span style="color:#abb2bf;"> 
+native-binary 0.01s user 0.01s system 79% cpu 0.019 total
+</span></code></pre>
+<p>That’s 200x faster!</p>
+<p>In addition, I can simply copy/paste this binary to any other machine with the same architecture + OS and it will work regardless of JVM or Node.js being installed or not.</p>
+<p>Example scripts and helpers for clj and GraalVM can be found <a href="https://github.com/denisidoro/dotfiles/tree/c4f656d6c83f34c106afc61f44568fcd4e3ea1b9/scripts/clojure">here</a>.</p>
+<p>For other people’s experiences, click <a href="https://www.innoq.com/en/blog/native-clojure-and-graalvm/">here</a> or <a href="https://www.astrecipes.net/blog/2018/07/20/cmd-line-apps-with-clojure-and-graalvm/">there</a>.</p>
+<div class="medium-first">
+    This post first appeared on
+    <a href="https://medium.com/@den.isidoro/https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;700&#x2F;1*gJm3BZcNrKoPOa2QO69p3Q.png" target="_blank">Medium</a>.
+</div>
+
+            </div>
+            <!-- CUSTOM <div id="mapid"></div> -->
+
+            <div class="disclaimer">
+              Note: opinions expressed here are solely my own and do not necessarily express the views or experiences of my employer or past employers.
+            </div>
+            
+            <div class="container has-text-centered mt-6">
+              
+<!-- CUSTOM
+<p class="is-size-5">
+  Share:
+  <a class="link" data-sharer="facebook" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;clojure-graalvm-shell-scripting&#x2F;' href="javascript:void(0);"
+    title="Share on facebook">
+    <span class="icon">
+      <i class="fab fa-facebook-square"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="twitter" data-title='Using Clojure + GraalVM for shell scripting' data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;clojure-graalvm-shell-scripting&#x2F;'
+    href="javascript:void(0);" title="Share on twitter">
+    <span class="icon">
+      <i class="fab fa-twitter"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="linkedin" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;clojure-graalvm-shell-scripting&#x2F;' href="javascript:void(0);"
+    title="Share on linkedin">
+    <span class="icon">
+      <i class="fab fa-linkedin"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="reddit" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;clojure-graalvm-shell-scripting&#x2F;' href="javascript:void(0);"
+    title="Share on reddit">
+    <span class="icon">
+      <i class="fab fa-reddit"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="hackernews" data-title="Using Clojure + GraalVM for shell scripting" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;clojure-graalvm-shell-scripting&#x2F;'
+    href="javascript:void(0);" title="Share on hackernews">
+    <span class="icon">
+      <i class="fab fa-hacker-news"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="whatsapp" data-title="Using Clojure + GraalVM for shell scripting" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;clojure-graalvm-shell-scripting&#x2F;'
+    href="javascript:void(0);" title="Share on whatsapp">
+    <span class="icon">
+      <i class="fab fa-whatsapp-square"></i>
+    </span>
+  </a>
+</p>
+-->
+
+            </div>
+          </article>
+          <hr/>
+          
+            <nav class="level mt-2">
+              
+                <div class="level-item has-text-centered">
+                  <a class="button is-black is-outlined" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;microservice-splitting-code-refactoring&#x2F;'>
+                    <span class="icon mr-2">
+                      <i class="fas fa-arrow-circle-left"></i>
+                    </span>
+                    On microservice splitting and code refactoring
+                  </a>
+                </div>
+              
+              
+                <div class="level-item has-text-centered">
+                  <a class="button is-black is-outlined" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;tips-for-faster-development&#x2F;'>
+                    Save 15min a day: tips for faster development<span class="icon ml-2">
+                      <i class="fas fa-arrow-circle-right"></i>
+                    </span>
+                  </a>
+                </div>
+              
+              
+              
+            </nav>
+          
+          
+        </div>
+      </div>
+    </div>
+  </main>
+
+  
+  <!--<footer class="py-2">
+    <p class="has-text-centered">
+      Built with
+      <span class="icon is-small">
+        <i class="fas fa-code fa-xs"></i>
+      </span>
+      code and
+      <span class="icon is-small">
+        <i class="fas fa-heart fa-xs"></i>
+      </span>
+      love <br /> Powered By
+      <span class="icon is-small">
+        <i class="fas fa-power-off fa-xs"></i>
+      </span>
+      Zola
+    </p>
+  </footer>-->
+  
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sharer.js@latest/sharer.min.js"></script>
+  <!-- CUSTOM
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/galleria.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1/dist/chart.xkcd.min.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.js"></script>
+  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/elasticlunr/0.9.6/elasticlunr.min.js"></script>
+  <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;search_index.en.js'></script>
+  <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;js&#x2F;site.js'></script>
+  
+  
+
+</body>
+
+</html>

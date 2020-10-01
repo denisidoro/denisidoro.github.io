@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#ffffff" name="theme-color" />
+  <meta content="#da532c" name="msapplication-TileColor" />
+
+  
+    <link rel="icon" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+    <link rel="apple-touch-icon" sizes="48x48"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+    <link rel="apple-touch-icon" sizes="72x72"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;919926a10d297a1500.jpg" />
+    <link rel="apple-touch-icon" sizes="96x96"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;6c2aa64354c1ad0e00.jpg" />
+    <link rel="apple-touch-icon" sizes="144x144"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;f15f82763548a03000.jpg" />
+    <link rel="apple-touch-icon" sizes="192x192"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;60ba6917360f159900.jpg" />
+    <link rel="apple-touch-icon" sizes="256x256"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;be09d2da8b7096cc00.jpg" />
+    <link rel="apple-touch-icon" sizes="384x384"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;165598e81aa1737500.jpg" />
+    <link rel="apple-touch-icon" sizes="512x512"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;ca26ad195d4a364c00.jpg" />
+  
+
+  
+  
+  
+  
+  
+  <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" rel="stylesheet" />
+  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.css"
+    rel="stylesheet" /> -->
+  <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+  <link href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;site.css' rel="stylesheet" /> 
+  <title>
+    
+  Denis&#x27;s blog | Writing multi-platform mobile apps with React Native and KotlinJS
+
+  </title>
+  <script crossorigin="anonymous" src="https://kit.fontawesome.com/201b8d5e05.js"></script>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168912661-1"></script>
+  <script type="text/javascript">
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-168912661-1");
+  </script>
+  
+</head>
+
+<body class="has-background-light">
+  
+  <nav aria-label="main navigation" class="navbar is-light" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item has-text-weight-bold" href="/">Denis&#x27;s blog</a>
+        <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navMenu">
+        <div class="navbar-end has-text-centered">
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;'>
+            Home
+          </a>
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts'>
+            Posts
+          </a>
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags'>
+            Tags
+          </a>
+          
+          <a class="navbar-item" id="nav-search" title="Search" data-target="#search-modal">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </a>
+          <a class="navbar-item" id="dark-mode" title="Switch to dark theme">
+            <span class="icon">
+              <i class="fas fa-adjust"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="modal" id="search-modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="field">
+        <p class="control has-icons-right">
+          <input class="input" id="search" placeholder="Search this website." type="search" />
+          <span class="icon is-small is-right">
+            <i class="fas fa-search"></i>
+          </span>
+        </p>
+      </div>
+      <div class="search-results">
+        <div class="search-results__items"></div>
+      </div>
+    </div>
+    <button aria-label="close" class="modal-close is-large"></button>
+  </div>
+  
+  
+  <main class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-10 is-offset-1">
+          <article>
+            <h1 class="title">Writing multi-platform mobile apps with React Native and KotlinJS</h1>
+            <h2 class="subtitle"></h2>
+            <div class="columns mb-0">
+              <div class="column">
+                
+<p class="has-text-grey">
+  <!-- CUSTOM 
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  Denis Isidoro published on 
+  -->
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <time datetime='2018-04-23'>April 23, 2018</time>
+</p>
+
+              </div>
+              <div class="column has-text-right-desktop">
+                
+<p class="has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  5 min,
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  918 words
+</p>
+
+              </div>
+              <div class="column has-text-right-desktop">
+                
+                  
+<p>
+  <span class="has-text-black has-text-weight-normal">Tags:</span>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;dev&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    dev
+  </a>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;kotlin&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    kotlin
+  </a>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;js&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    js
+  </a>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;react&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    react
+  </a>
+  
+</p>
+
+                
+              </div>
+            </div>
+            <!-- CUSTOM 
+            <div class="columns mb-0">
+              <div class="column">
+                
+              </div>
+            </div>
+            -->
+            
+            <hr/>
+            <div class="content has-text-justified">
+              <figure class="medium-cover">
+    <img alt="Image for post" class="t u v gh aj" src="https://miro.medium.com/max/11014/0*EnXaEGp3rgRz7NS4." srcSet=" https://miro.medium.com/max/552/0*EnXaEGp3rgRz7NS4. 276w, https://miro.medium.com/max/1104/0*EnXaEGp3rgRz7NS4. 552w,
+    https://miro.medium.com/max/1280/0*EnXaEGp3rgRz7NS4. 640w, https://miro.medium.com/max/1400/0*EnXaEGp3rgRz7NS4. 700w" sizes="700px" />
+</figure>
+<p>Kotlin is an awesome language. It is functional and offers <a href="https://kotlinlang.org/docs/reference/extensions.html">extension functions</a>, <a href="https://kotlinlang.org/docs/reference/null-safety.html">null safety</a>, <a href="https://www.callicoder.com/kotlin-type-checks-smart-casts/">smart casting</a>, <a href="https://kotlinlang.org/docs/reference/type-safe-builders.html">type-safe builders</a>, <a href="https://www.callicoder.com/kotlin-functions/">default and named arguments</a>, <a href="https://www.callicoder.com/kotlin-functions/">data classes</a> and much more. It is arguably the language of choice for Android developers and <a href="http://nilhcem.com/swift-is-like-kotlin/">very familiar</a> to iOS developers.</p>
+<p>React Native enables us to write only once for multiple platforms, has a simpler API than native development and a smooth learning curve. Steve Yegg, a former Google engineer, conjectures in <a href="https://medium.com/@steve.yegge/who-will-steal-android-from-google-af3622b6252e">his blog post</a> that hybrid frameworks are likely to become even more popular. And the framework from Facebook is the major player at the moment.</p>
+<p>So why not mixing both? <br />
+Standing on the shoulder of giants (<a href="https://github.com/JetBrains/kotlin-wrappers/tree/master/kotlin-react">JetBrains/kotlin-wrappers</a> and <a href="https://github.com/ScottPierce/kotlin-react-native">ScottPierce/kotlin-react-native</a>), we can. <br />
+An example repository can be found <a href="https://github.com/denisidoro/korn">here</a>.</p>
+<h3 id="react-in-a-nutshell">React in a nutshell</h3>
+<p>You can learn the basics of React Native very quickly reading the <a href="https://facebook.github.io/react-native/docs/tutorial.html">official tutorial</a>, but three important takeaways are:<br />
+- view = f(state) <br />
+- React has a virtual representation of the view, and it calculates the smallest diff between renders<br />
+- development should be component-driven</p>
+<h3 id="hello-world-in-kotlin">Hello world in Kotlin</h3>
+<p>After cloning the <a href="https://github.com/denisidoro/korn">example repository</a> and following the README, you can simply edit the render() function to immediately see the result on the device.</p>
+<p>For example, writing the following code…</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;64a189c08b57e50440c7e5bc9bcdc1a2.js"></script>
+</div>
+<p>…would render the following output:</p>
+<figure class="medium-image">
+    <img alt="Image for post" class="medium-image"
+        src="https://miro.medium.com/max/2160/1*QGZmQ_Zq7_jTQXXiBWFILg.png"
+        srcSet="https://miro.medium.com/max/552/1*QGZmQ_Zq7_jTQXXiBWFILg.png 276w, https://miro.medium.com/max/1104/1*QGZmQ_Zq7_jTQXXiBWFILg.png 552w, https://miro.medium.com/max/1280/1*QGZmQ_Zq7_jTQXXiBWFILg.png 640w, https://miro.medium.com/max/1400/1*QGZmQ_Zq7_jTQXXiBWFILg.png 700w"
+        sizes="700px" />
+    <figcaption>Our first application with Kotlin and React Native</figcaption>
+</figure>
+<p>Thanks to the Kotlin language features, we can write the view using a builder DSL similar to <a href="https://reactjs.org/docs/jsx-in-depth.html">JSX</a>, instead of manually calling React.createElement(…, React.createElement(…)).</p>
+<h3 id="creating-our-first-component">Creating our first component</h3>
+<p>Let’s say you have the following view architecture and you want to make the code for headers reusable:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;3264c01ad43aa051893d6937a22aa850.js"></script>
+</div>
+<p>For this task, you could create a Header component:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;bbe3b31572c52acfecc76f2ecc50bd03.js"></script>
+</div>
+<p>And call it from the render() function as such:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;bd46d12af1fd4188393bdde48f2c02a1.js"></script>
+</div>
+<p>Alternatively, if you want the extend the DSL so that you can call this component directly, just create an extension function:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;2ab29ea9159c3f55285bd52ac8e5ac95.js"></script>
+</div>
+<h3 id="managing-state">Managing state</h3>
+<p>React doesn’t dictate how state management should be. For the sake of this example, let’s write our own simplified, naive implementation of <a href="https://redux.js.org">Redux</a>.</p>
+<p>In this pattern, we have three main elements:<br />
+- store: holds the state<br />
+- actions: describe the changes<br />
+- reducers: return an updated state based on the requested action</p>
+<p>Here is the full implementation:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;c60df8ce463f92e03d74926ad6bd2328.js"></script>
+</div>
+<p>Evidently, on a real world application, you should prevent race conditions and implement the subscriptions in an atomic fashion, possibly using <a href="https://github.com/reactivex/rxjs">RxJS</a>. But that’s good for now.</p>
+<h3 id="a-less-contrived-example">A less contrived example</h3>
+<p>Now let’s write a simple application which consists of a header, and two rating widgets, for giving scores to two different programming languages.</p>
+<p>First we create the models:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;c9b8b14b9f43500ad243339fe78fb792.js"></script>
+</div>
+<p>Then the actions that can be dispatched:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;fddebcf58c3b6330213b74868cd8fec8.js"></script>
+</div>
+<p>Later on, we define the reducer:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;c3c46f8e78e30d476e6ca9b17c46995e.js"></script>
+</div>
+<p>Then we define a view model, mapping state to view abstractions:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;f7bf0931eaa4acc382386faf804a3fc4.js"></script>
+</div>
+<p>We connect everything with a store:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;f308d63f310d6f52cfd85e7a0d706263.js"></script>
+</div>
+<p>Finally, we create a stateless, dumb component:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;bc52bf9cc2c899cde5f0ad4b383190bc.js"></script>
+</div>
+<p>And another component that keeps track of the state:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;cefc050a3e2e5798c53ddd387d3ae94f.js"></script>
+</div>
+<p>And the final result is:</p>
+<figure class="medium-image">
+    <img alt="Image for post" class="medium-image"
+        src="https://miro.medium.com/max/2160/1*EDiObUxyPdrQpEFEKovdKQ.png"
+        srcSet="https://miro.medium.com/max/552/1*EDiObUxyPdrQpEFEKovdKQ.png 276w, https://miro.medium.com/max/1104/1*EDiObUxyPdrQpEFEKovdKQ.png 552w, https://miro.medium.com/max/1280/1*EDiObUxyPdrQpEFEKovdKQ.png 640w, https://miro.medium.com/max/1400/1*EDiObUxyPdrQpEFEKovdKQ.png 700w"
+        sizes="700px" />
+    <figcaption>Our final application</figcaption>
+</figure>
+<h3 id="so-is-kotlin-with-react-native-production-ready">So… Is Kotlin with React Native production-ready?</h3>
+<p>Possibly, but there are still some improvements to be made to the whole ecosystem. The interoperability with JavaScript isn’t effortless and has some pitfalls. For example, passing the store via props to the component won’t work because the state will become immutable. Also, using data classes for the props directly will return an error from React because apparently the serialization contains some metadata. In addition, you’re supposed to write your own type definitions, which is a huge productivity killer.</p>
+<p>I think JetBrains is to blame for the unpopularity of KotlinJS, by not giving the language the love it deserves. <a href="https://github.com/Kotlin/ts2kt">Kotlin/ts2kt</a>, for instance, could solve the type definition problem. However, most of the attempts for converting types fail, and the <a href="https://github.com/Kotlin/ts2kt/issues">issues remain open</a>. Actually, we don’t see many examples targeting JS at all, despite the fact that this a working platform for more than a year. Maybe they are focused on <a href="https://kotlinlang.org/docs/reference/native-overview.html">Kotlin/Native</a>…</p>
+<p>In the meantime, another alternative to JavaScript is <a href="https://clojurescript.org/">Clojurescript</a>, which is awesome with <a href="https://github.com/Day8/re-frame">re-frame</a> and in my opinion offers the best development experience out there. However, it’s not for the faint-hearted.</p>
+<p>I hope that with this article and the example repository, the community can reconsider Kotlin as a language for React Native. Feel free to <a href="https://github.com/denisidoro/korn">fork the code</a>!</p>
+<div class="medium-first">
+    This post first appeared on
+    <a href="https://medium.com/@den.isidoro/writing-multi-platform-mobile-apps-with-react-native-and-kotlin-50f486b53462" target="_blank">Medium</a>.
+</div>
+
+            </div>
+            <!-- CUSTOM <div id="mapid"></div> -->
+
+            <div class="disclaimer">
+              Note: opinions expressed here are solely my own and do not necessarily express the views or experiences of my employer or past employers.
+            </div>
+            
+            <div class="container has-text-centered mt-6">
+              
+<!-- CUSTOM
+<p class="is-size-5">
+  Share:
+  <a class="link" data-sharer="facebook" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;react-native-kotlinjs&#x2F;' href="javascript:void(0);"
+    title="Share on facebook">
+    <span class="icon">
+      <i class="fab fa-facebook-square"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="twitter" data-title='Writing multi-platform mobile apps with React Native and KotlinJS' data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;react-native-kotlinjs&#x2F;'
+    href="javascript:void(0);" title="Share on twitter">
+    <span class="icon">
+      <i class="fab fa-twitter"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="linkedin" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;react-native-kotlinjs&#x2F;' href="javascript:void(0);"
+    title="Share on linkedin">
+    <span class="icon">
+      <i class="fab fa-linkedin"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="reddit" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;react-native-kotlinjs&#x2F;' href="javascript:void(0);"
+    title="Share on reddit">
+    <span class="icon">
+      <i class="fab fa-reddit"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="hackernews" data-title="Writing multi-platform mobile apps with React Native and KotlinJS" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;react-native-kotlinjs&#x2F;'
+    href="javascript:void(0);" title="Share on hackernews">
+    <span class="icon">
+      <i class="fab fa-hacker-news"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="whatsapp" data-title="Writing multi-platform mobile apps with React Native and KotlinJS" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;react-native-kotlinjs&#x2F;'
+    href="javascript:void(0);" title="Share on whatsapp">
+    <span class="icon">
+      <i class="fab fa-whatsapp-square"></i>
+    </span>
+  </a>
+</p>
+-->
+
+            </div>
+          </article>
+          <hr/>
+          
+            <nav class="level mt-2">
+              
+                <div class="level-item has-text-centered">
+                  <a class="button is-black is-outlined" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;tips-for-faster-development&#x2F;'>
+                    <span class="icon mr-2">
+                      <i class="fas fa-arrow-circle-left"></i>
+                    </span>
+                    Save 15min a day: tips for faster development
+                  </a>
+                </div>
+              
+              
+              
+              
+            </nav>
+          
+          
+        </div>
+      </div>
+    </div>
+  </main>
+
+  
+  <!--<footer class="py-2">
+    <p class="has-text-centered">
+      Built with
+      <span class="icon is-small">
+        <i class="fas fa-code fa-xs"></i>
+      </span>
+      code and
+      <span class="icon is-small">
+        <i class="fas fa-heart fa-xs"></i>
+      </span>
+      love <br /> Powered By
+      <span class="icon is-small">
+        <i class="fas fa-power-off fa-xs"></i>
+      </span>
+      Zola
+    </p>
+  </footer>-->
+  
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sharer.js@latest/sharer.min.js"></script>
+  <!-- CUSTOM
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/galleria.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1/dist/chart.xkcd.min.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.js"></script>
+  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/elasticlunr/0.9.6/elasticlunr.min.js"></script>
+  <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;search_index.en.js'></script>
+  <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;js&#x2F;site.js'></script>
+  
+  
+
+</body>
+
+</html>

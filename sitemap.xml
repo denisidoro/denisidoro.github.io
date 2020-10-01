@@ -43,42 +43,123 @@
         <lastmod>2018-08-07</lastmod>
     </url>
     <url>
+        <loc>https://denisidoro.github.io/posts/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/posts/clojure-graalvm-shell-scripting/</loc>
+        <lastmod>2018-09-14</lastmod>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/posts/data-driven-programming/</loc>
+        <lastmod>2020-09-02</lastmod>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/posts/dictionaries-in-shell-scripts/</loc>
+        <lastmod>2019-09-23</lastmod>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/posts/golang-repl/</loc>
+        <lastmod>2020-06-02</lastmod>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/posts/grafana-personal-finance/</loc>
+        <lastmod>2019-04-04</lastmod>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/posts/microservice-splitting-code-refactoring/</loc>
+        <lastmod>2019-01-06</lastmod>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/posts/monolithic-apps-graph-apis/</loc>
+        <lastmod>2019-07-01</lastmod>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/posts/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/posts/react-native-kotlinjs/</loc>
+        <lastmod>2018-04-23</lastmod>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/posts/tips-for-faster-development/</loc>
+        <lastmod>2018-08-07</lastmod>
+    </url>
+    <url>
         <loc>https://denisidoro.github.io/tags/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/architecture/</loc>
     </url>
     <url>
+        <loc>https://denisidoro.github.io/tags/architecture/page/1/</loc>
+    </url>
+    <url>
         <loc>https://denisidoro.github.io/tags/clojure/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/clojure/page/1/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/dev/</loc>
     </url>
     <url>
+        <loc>https://denisidoro.github.io/tags/dev/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/dev/page/2/</loc>
+    </url>
+    <url>
         <loc>https://denisidoro.github.io/tags/finance/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/finance/page/1/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/git/</loc>
     </url>
     <url>
+        <loc>https://denisidoro.github.io/tags/git/page/1/</loc>
+    </url>
+    <url>
         <loc>https://denisidoro.github.io/tags/go/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/go/page/1/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/grafana/</loc>
     </url>
     <url>
+        <loc>https://denisidoro.github.io/tags/grafana/page/1/</loc>
+    </url>
+    <url>
         <loc>https://denisidoro.github.io/tags/js/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/js/page/1/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/kotlin/</loc>
     </url>
     <url>
+        <loc>https://denisidoro.github.io/tags/kotlin/page/1/</loc>
+    </url>
+    <url>
         <loc>https://denisidoro.github.io/tags/productivity/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/productivity/page/1/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/react/</loc>
     </url>
     <url>
+        <loc>https://denisidoro.github.io/tags/react/page/1/</loc>
+    </url>
+    <url>
         <loc>https://denisidoro.github.io/tags/shell/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/shell/page/1/</loc>
     </url>
 </urlset>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#ffffff" name="theme-color" />
+  <meta content="#da532c" name="msapplication-TileColor" />
+
+  
+    <link rel="icon" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+    <link rel="apple-touch-icon" sizes="48x48"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+    <link rel="apple-touch-icon" sizes="72x72"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;919926a10d297a1500.jpg" />
+    <link rel="apple-touch-icon" sizes="96x96"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;6c2aa64354c1ad0e00.jpg" />
+    <link rel="apple-touch-icon" sizes="144x144"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;f15f82763548a03000.jpg" />
+    <link rel="apple-touch-icon" sizes="192x192"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;60ba6917360f159900.jpg" />
+    <link rel="apple-touch-icon" sizes="256x256"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;be09d2da8b7096cc00.jpg" />
+    <link rel="apple-touch-icon" sizes="384x384"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;165598e81aa1737500.jpg" />
+    <link rel="apple-touch-icon" sizes="512x512"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;ca26ad195d4a364c00.jpg" />
+  
+
+  
+  
+  
+  
+  
+  <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" rel="stylesheet" />
+  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.css"
+    rel="stylesheet" /> -->
+  <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+  <link href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;site.css' rel="stylesheet" /> 
+  <title>
+    
+  Denis&#x27;s blog | Writing multi-module, monolithic apps with graph APIs
+
+  </title>
+  <script crossorigin="anonymous" src="https://kit.fontawesome.com/201b8d5e05.js"></script>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168912661-1"></script>
+  <script type="text/javascript">
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-168912661-1");
+  </script>
+  
+</head>
+
+<body class="has-background-light">
+  
+  <nav aria-label="main navigation" class="navbar is-light" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item has-text-weight-bold" href="/">Denis&#x27;s blog</a>
+        <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navMenu">
+        <div class="navbar-end has-text-centered">
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;'>
+            Home
+          </a>
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts'>
+            Posts
+          </a>
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags'>
+            Tags
+          </a>
+          
+          <a class="navbar-item" id="nav-search" title="Search" data-target="#search-modal">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </a>
+          <a class="navbar-item" id="dark-mode" title="Switch to dark theme">
+            <span class="icon">
+              <i class="fas fa-adjust"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="modal" id="search-modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="field">
+        <p class="control has-icons-right">
+          <input class="input" id="search" placeholder="Search this website." type="search" />
+          <span class="icon is-small is-right">
+            <i class="fas fa-search"></i>
+          </span>
+        </p>
+      </div>
+      <div class="search-results">
+        <div class="search-results__items"></div>
+      </div>
+    </div>
+    <button aria-label="close" class="modal-close is-large"></button>
+  </div>
+  
+  
+  <main class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-10 is-offset-1">
+          <article>
+            <h1 class="title">Writing multi-module, monolithic apps with graph APIs</h1>
+            <h2 class="subtitle"></h2>
+            <div class="columns mb-0">
+              <div class="column">
+                
+<p class="has-text-grey">
+  <!-- CUSTOM 
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  Denis Isidoro published on 
+  -->
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <time datetime='2019-07-01'>July 01, 2019</time>
+</p>
+
+              </div>
+              <div class="column has-text-right-desktop">
+                
+<p class="has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  7 min,
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  1237 words
+</p>
+
+              </div>
+              <div class="column has-text-right-desktop">
+                
+                  
+<p>
+  <span class="has-text-black has-text-weight-normal">Tags:</span>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;dev&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    dev
+  </a>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;clojure&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    clojure
+  </a>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;architecture&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    architecture
+  </a>
+  
+</p>
+
+                
+              </div>
+            </div>
+            <!-- CUSTOM 
+            <div class="columns mb-0">
+              <div class="column">
+                
+              </div>
+            </div>
+            -->
+            
+            <hr/>
+            <div class="content has-text-justified">
+              <figure class="medium-cover">
+    <img alt="Image for post" class="t u v gh aj" src="https://miro.medium.com/max/11014/0*sbUufEe2m6a0hwbN" srcSet=" https://miro.medium.com/max/552/0*sbUufEe2m6a0hwbN 276w, https://miro.medium.com/max/1104/0*sbUufEe2m6a0hwbN 552w,
+    https://miro.medium.com/max/1280/0*sbUufEe2m6a0hwbN 640w, https://miro.medium.com/max/1400/0*sbUufEe2m6a0hwbN 700w" sizes="700px" />
+    <figcaption>Honeycombs have many cells but they act together to fulfill the same purpose by
+        <a href="https://unsplash.com/@matthew_t_rader?utm_source=medium&utm_medium=referral">matthew_t_rader</a>
+        on <a href="https://unsplash.com?utm_source=medium&utm_medium=referral">Unsplash</a> </figcaption>
+</figure>
+<p>Last year, I talked about monolithic architecture that enables easy microservice splitting later.</p>
+<p>After applying it for a large codebase, I’ve started using another approach: <a href="https://zapier.com/engineering/graph-apis/">graph APIs</a>.</p>
+<h3 id="recap">Recap</h3>
+<p>In a nutshell, I believe it’s fundamental to isolate different parts of an application into different modules, even if they are deployed as a single monolith at the end of the day.</p>
+<p>Limiting the required cognitive load to navigate the code base is a must.</p>
+<p>Writing scalable and readable code in the first shot is tough. If you have time and effort constraints (as I have for personal projects: I don’t want to spend hundreds of hours developing them), it’s even harder.</p>
+<p>Unreadable, difficult to maintain code is a red flag. But if it works, is isolated and no one needs to look at it anymore, it’s less bad. Sure, one day it will stop working or will need to be updated, but until then people will have better context and know what works and what doesn’t. If it’s contained, it may even be plausible to rewrite it from scratch without huge costs.</p>
+<h3 id="past-proposal">Past proposal</h3>
+<p><a href="https://medium.com/@den.isidoro/microservice-size-and-splitting-dd9fc98a262e">In my past article</a> I proposed this isolation via interfaces/objects/providers. I’ve been using it in <a href="https://medium.com/@den.isidoro/using-grafana-for-personal-financial-management-ac0e4d0cb43">my personal financial platform</a> and it has been great!</p>
+<p>I needed to change the provider for stock historical value and I only had to look at a single package, because there was no implementation details leakage to other parts of the code. Even if the codebase had 1MM LOC for all sorts of features, I knew that I (or anyone else) would only need to look at, and try to understand, ~50 LOC.</p>
+<p>However, using these providers has some downsides:</p>
+<h4 id="it-s-relatively-too-verbose">It’s relatively too verbose</h4>
+<p>One module of mine only had pure functions, summing up ~20 LOC. However, in order to isolate it, I had to create a <code>[defprotocol](https://clojuredocs.org/clojure.core/defprotocol)</code>, a <code>[defrecord](https://clojuredocs.org/clojure.core/defrecord)</code>, implement some lifecycle and so on, even though it was stateless.</p>
+<h4 id="the-interfaces-don-t-scale-well">The interfaces don’t scale well</h4>
+<p>Having a <code>defprotocol</code> with <code>get-stocks</code> and <code>get-stock-history</code> is fine. But when you start pushing it towards <code>get-new-stocks-with-high-volatility</code>, things can get out of control.</p>
+<h4 id="explicit-dependencies">Explicit dependencies</h4>
+<p>I wanted to get the historical value of all the investments available at my bank. One module was able to fetch my bank and get the name of the investments. Another one, which queries another API, was able to convert the name to an ID. Finally, a third module was able to get the history given an ID.</p>
+<p>Where to put this composition? I wanted to make things transparent (the fact that my bank doesn’t expose the IDs shouldn’t leak to outer modules), so I made the bank module depend on the second one.</p>
+<p>That worked. But in another flow the second module relied on the bank one. If we’re not careful enough, circular dependency may happen. This interdependency is difficult to reason about.</p>
+<p>Another solution is to have a higher-level module that knows everyone else. A sort of <a href="https://alexandreesl.com/2016/03/18/backend-for-frontends-a-microservices-pattern/">BFF/façade</a>. That’s better, but it still needs to know that, e.g., the bank module doesn’t expose the IDs so and additional query is needed.</p>
+<h3 id="new-approach">New approach</h3>
+<p>What if we could have looser dependencies? What if no one needed to know how to surgically compose different modules to deliver a single response? With Graph APIs we can.</p>
+<p>For <a href="https://clojure.org/">Clojure</a>, you can use the awesome <a href="https://github.com/wilkerlucio/pathom">Pathom library</a>, which will do all the heavy work for you.</p>
+<p>To implement my example, the bank module could register a resolver like the one below (I’m stripping away some boilerplate for readability):</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;e259a93747d73caeb584feb07820f925.js"></script>
+</div>
+<p>For the second module:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;c6803b999adae0fb703268b7bc5cd2be.js"></script>
+</div>
+<p>Finally, for the last module:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;0860d8729e08705a6785f296032494c9.js"></script>
+</div>
+<p>I now have a decentralized system. The graph parser knows by itself that, for each element in <code>:bank/investments</code>, it needs to go from <code>:investment/name</code> to <code>:investment/id</code> then <code>:investment/history</code> and how to resolve it.</p>
+<p>As for the namespace organization, each module has the following structure:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;64a9111749ced25ac06a6ebba0e6c0a1.js"></script>
+</div>
+<ul>
+<li><code>logic/</code> contains pure functions</li>
+<li><code>http/</code> and <code>db/</code> are one of many ports in the <a href="https://dzone.com/articles/hexagonal-architecture-what-is-it-and-how-does-it">hexagonal architecture</a></li>
+<li><code>graph/</code> has the resolvers above</li>
+<li>when the resolvers get complicated, helper functions are extracted to <code>controllers/</code>, which orchestrate function calls</li>
+<li><code>definition.clj</code> is a file I already had to bootstrap the server, but has now been extended to each module</li>
+</ul>
+<h3 id="module-definition">Module definition</h3>
+<p>An example of <code>definition.clj</code>:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;f44af804265590d3aa5e51689146076a&#x2F;raw&#x2F;5b16fe38fbbdfbf7d0d77ad27c5dcd67ac6a07cb&#x2F;definition.clj.js"></script>
+</div>
+<ul>
+<li><code>:http</code> and <code>:bank</code> have immutable data that can be propagated to other components</li>
+<li><code>:components</code> has some dependency-injection declarations</li>
+<li><code>:entry-point</code> is the function to be called in case this module is to be used standalone or as the routing hub</li>
+</ul>
+<p>Finally, I have a <code>[defmethod](https://clojuredocs.org/clojure.core/defmethod)</code> that’s able to reduce a config vector into a final, single config. For <code>:http</code>, for example, it merges all the bookmarks; for <code>:resolvers</code> it concatenates all vectors; for <code>:entry-point</code>, it keeps the last one.</p>
+<p>In the end, to start the system, I call:</p>
+<div >
+    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;5a1a4b9b7db59a54e1d9afc2c6f34001&#x2F;raw&#x2F;75b2f2e804988c0c49cb3560ef82eabcd39db059&#x2F;boot.clj.js"></script>
+</div>
+<p><code>(:entry-point rest-server.definition/config)</code>, for instance, is what spawns the server listening on port 80. If I want to use the system as a CLI, there's no need to spawn the server and curl it. I could simply swap the last config with <code>cli.definition/config</code>.</p>
+<h3 id="splitting-into-microservices-libraries">Splitting into microservices/libraries</h3>
+<p>If for any reason the need arises, deploying a module as a microservice is trivial from a code perspective.</p>
+<p>For the new microservice:</p>
+<ul>
+<li>clone the monolith into a different repository</li>
+<li>remove all undesired modules</li>
+<li>edit the <code>bootstrap-app!</code> call accordingly</li>
+<li>expose the resolvers it has (Pathom call this <code>index</code>)</li>
+</ul>
+<p>For the original monolith:</p>
+<ul>
+<li>remove the module folder except <code>definition.clj</code></li>
+<li>change <code>definition.clj</code> in such a way that the monolith is able to merge its <code>index</code> with the one in the new microservice (Pathom allows merging <code>index</code>es as well)</li>
+</ul>
+<p>Steps for extracting a module to a library would be very similar (in case the module only has pure logic, for example).</p>
+<h3 id="downsides-of-the-new-approach">Downsides of the new approach</h3>
+<ul>
+<li>for my particular case, having the graph find out the edge traversal is perfectly fine, but if I wanted maximum performance, calling the functions directly could be faster and less resource intensive (pending benchmark, though)</li>
+<li>since edges are loose, it’s difficult to <code>find usages</code> given a function or field. The IDE won't be able to know in what flows a resolver may be used</li>
+</ul>
+<h3 id="conclusion">Conclusion</h3>
+<p>This has given my code huge scalability at low costs and I’m fine with the downsides I could think of.</p>
+<p>At the moment I have no open-source code to show, but if you’re really interested, contact me and we can work something out.</p>
+<p>If you’ve liked the ideas highlighted here regarding graph APIs, please check <a href="https://www.youtube.com/watch?v=r3zywlNflJI">this talk</a> from Pathom’s author.</p>
+<div class="medium-first">
+    This post first appeared on
+    <a href="https://medium.com/@den.isidoro/writing-multi-module-monolithic-apps-with-graph-apis-1c095cdaccdf" target="_blank">Medium</a>.
+</div>
+
+            </div>
+            <!-- CUSTOM <div id="mapid"></div> -->
+
+            <div class="disclaimer">
+              Note: opinions expressed here are solely my own and do not necessarily express the views or experiences of my employer or past employers.
+            </div>
+            
+            <div class="container has-text-centered mt-6">
+              
+<!-- CUSTOM
+<p class="is-size-5">
+  Share:
+  <a class="link" data-sharer="facebook" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;monolithic-apps-graph-apis&#x2F;' href="javascript:void(0);"
+    title="Share on facebook">
+    <span class="icon">
+      <i class="fab fa-facebook-square"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="twitter" data-title='Writing multi-module, monolithic apps with graph APIs' data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;monolithic-apps-graph-apis&#x2F;'
+    href="javascript:void(0);" title="Share on twitter">
+    <span class="icon">
+      <i class="fab fa-twitter"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="linkedin" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;monolithic-apps-graph-apis&#x2F;' href="javascript:void(0);"
+    title="Share on linkedin">
+    <span class="icon">
+      <i class="fab fa-linkedin"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="reddit" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;monolithic-apps-graph-apis&#x2F;' href="javascript:void(0);"
+    title="Share on reddit">
+    <span class="icon">
+      <i class="fab fa-reddit"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="hackernews" data-title="Writing multi-module, monolithic apps with graph APIs" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;monolithic-apps-graph-apis&#x2F;'
+    href="javascript:void(0);" title="Share on hackernews">
+    <span class="icon">
+      <i class="fab fa-hacker-news"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="whatsapp" data-title="Writing multi-module, monolithic apps with graph APIs" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;monolithic-apps-graph-apis&#x2F;'
+    href="javascript:void(0);" title="Share on whatsapp">
+    <span class="icon">
+      <i class="fab fa-whatsapp-square"></i>
+    </span>
+  </a>
+</p>
+-->
+
+            </div>
+          </article>
+          <hr/>
+          
+            <nav class="level mt-2">
+              
+                <div class="level-item has-text-centered">
+                  <a class="button is-black is-outlined" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;dictionaries-in-shell-scripts&#x2F;'>
+                    <span class="icon mr-2">
+                      <i class="fas fa-arrow-circle-left"></i>
+                    </span>
+                    Using dictionaries in shell scripts
+                  </a>
+                </div>
+              
+              
+                <div class="level-item has-text-centered">
+                  <a class="button is-black is-outlined" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;grafana-personal-finance&#x2F;'>
+                    Using Grafana for personal financial management<span class="icon ml-2">
+                      <i class="fas fa-arrow-circle-right"></i>
+                    </span>
+                  </a>
+                </div>
+              
+              
+              
+            </nav>
+          
+          
+        </div>
+      </div>
+    </div>
+  </main>
+
+  
+  <!--<footer class="py-2">
+    <p class="has-text-centered">
+      Built with
+      <span class="icon is-small">
+        <i class="fas fa-code fa-xs"></i>
+      </span>
+      code and
+      <span class="icon is-small">
+        <i class="fas fa-heart fa-xs"></i>
+      </span>
+      love <br /> Powered By
+      <span class="icon is-small">
+        <i class="fas fa-power-off fa-xs"></i>
+      </span>
+      Zola
+    </p>
+  </footer>-->
+  
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sharer.js@latest/sharer.min.js"></script>
+  <!-- CUSTOM
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/galleria.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1/dist/chart.xkcd.min.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.js"></script>
+  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/elasticlunr/0.9.6/elasticlunr.min.js"></script>
+  <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;search_index.en.js'></script>
+  <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;js&#x2F;site.js'></script>
+  
+  
+
+</body>
+
+</html>
