@@ -4,45 +4,6 @@
         <loc>https://denisidoro.github.io/</loc>
     </url>
     <url>
-        <loc>https://denisidoro.github.io/blog/</loc>
-    </url>
-    <url>
-        <loc>https://denisidoro.github.io/blog/clojure-graalvm-shell-scripting/</loc>
-        <lastmod>2018-09-14</lastmod>
-    </url>
-    <url>
-        <loc>https://denisidoro.github.io/blog/data-driven-programming/</loc>
-        <lastmod>2020-09-02</lastmod>
-    </url>
-    <url>
-        <loc>https://denisidoro.github.io/blog/dictionaries-in-shell-scripts/</loc>
-        <lastmod>2019-09-23</lastmod>
-    </url>
-    <url>
-        <loc>https://denisidoro.github.io/blog/golang-repl/</loc>
-        <lastmod>2020-06-02</lastmod>
-    </url>
-    <url>
-        <loc>https://denisidoro.github.io/blog/grafana-personal-finance/</loc>
-        <lastmod>2019-04-04</lastmod>
-    </url>
-    <url>
-        <loc>https://denisidoro.github.io/blog/microservice-splitting-code-refactoring/</loc>
-        <lastmod>2019-01-06</lastmod>
-    </url>
-    <url>
-        <loc>https://denisidoro.github.io/blog/monolithic-apps-graph-apis/</loc>
-        <lastmod>2019-07-01</lastmod>
-    </url>
-    <url>
-        <loc>https://denisidoro.github.io/blog/react-native-kotlinjs/</loc>
-        <lastmod>2018-04-23</lastmod>
-    </url>
-    <url>
-        <loc>https://denisidoro.github.io/blog/tips-for-faster-development/</loc>
-        <lastmod>2018-08-07</lastmod>
-    </url>
-    <url>
         <loc>https://denisidoro.github.io/posts/</loc>
     </url>
     <url>
@@ -104,9 +65,6 @@
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/dev/page/1/</loc>
-    </url>
-    <url>
-        <loc>https://denisidoro.github.io/tags/dev/page/2/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/finance/</loc>
