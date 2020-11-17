@@ -39,7 +39,7 @@
   <link href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;site.css' rel="stylesheet" /> 
   <title>
     
-  Denis Isidoro | Quick prototyping with a Golang REPL
+  Denis Isidoro | Mind maps
 
   </title>
   <script crossorigin="anonymous" src="https://kit.fontawesome.com/201b8d5e05.js"></script>
@@ -122,7 +122,7 @@
       <div class="columns">
         <div class="column is-10 is-offset-1">
           <article>
-            <h1 class="title">Quick prototyping with a Golang REPL</h1>
+            <h1 class="title">Mind maps</h1>
             <h2 class="subtitle"></h2>
             <div class="columns mb-0">
               <div class="column">
@@ -137,7 +137,7 @@
   <span class="icon">
     <i class="far fa-calendar-alt"></i>
   </span>
-  <time datetime='2020-06-02'>June 02, 2020</time>
+  <time datetime='2020-11-17'>November 17, 2020</time>
 </p>
 
               </div>
@@ -147,11 +147,11 @@
   <span class="icon">
     <i class="far fa-clock"></i>
   </span>
-  2 min,
+  4 min,
   <span class="icon">
     <i class="fas fa-pencil-alt"></i>
   </span>
-  339 words
+  783 words
 </p>
 
               </div>
@@ -161,18 +161,25 @@
 <p>
   <span class="has-text-black has-text-weight-normal">Tags:</span>
   
-  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;dev&#x2F;'>
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;js&#x2F;'>
     <span class="icon is-small">
       <i class="fas fa-tag fa-xs"></i>
     </span>
-    dev
+    js
   </a>
   
-  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;go&#x2F;'>
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;react&#x2F;'>
     <span class="icon is-small">
       <i class="fas fa-tag fa-xs"></i>
     </span>
-    go
+    react
+  </a>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;learning&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    learning
   </a>
   
 </p>
@@ -190,34 +197,63 @@
             
             <hr/>
             <div class="content has-text-justified">
-              <p>I miss a REPL when coding in Golang. It turns out we can have a Go REPL connected to our IDE of choice.</p>
-<p>After developing in <a href="https://clojure.org/">Clojure</a> for some time, I miss a <a href="https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop">REPL</a> when coding in <a href="https://golang.org/">Golang</a>. It turns out we can have a Go REPL connected to our IDE of choice.</p>
-<figure class="medium-image">
-    <img alt="Image for post" class="medium-image"
-        src="https://miro.medium.com/max/2160/1*PYNPylp2BS_XSKYIlNrXyw.gif"
-        srcSet="https://miro.medium.com/max/552/1*PYNPylp2BS_XSKYIlNrXyw.gif 276w, https://miro.medium.com/max/1104/1*PYNPylp2BS_XSKYIlNrXyw.gif 552w, https://miro.medium.com/max/1280/1*PYNPylp2BS_XSKYIlNrXyw.gif 640w, https://miro.medium.com/max/1400/1*PYNPylp2BS_XSKYIlNrXyw.gif 700w"
-        sizes="700px" />
+              <p>Since high school I've never had a paper notebook. Don't get me wrong: I'm not one or these people with very good memory and don't need any notes whatsoever. On the contrary.</p>
+<p>The thing is I've never seen much value in note taking. At least in the traditional way, with paragraphs and blocks of text. I can't memorize these chunks of text and, if I want to dive deep into a subject, I'm much better off reading text books or browsing Wikipedia articles. </p>
+<p>In fact, I've never trusted my own notes. Maybe I got it wrong in the first place. Maybe the way I wrote is ambiguous. Ultimately, the bigger the notes, more likely they can lead me to wrong conclusions. </p>
+<h3 id="the-need">The need</h3>
+<p>However, sometimes I want to refresh my memory on a particular subject and reading books and articles is too time consuming. I just want to recap the absolute essential — things I shouldn't forget. Some minimal notes surely would come in handy. </p>
+<p>I researched for cheap yet effective note taking methods. I tried <a href="https://en.wikipedia.org/wiki/Cornell_Notes">Cornell notes</a> but they didn't do the trick for me. Then I tried <a href="https://en.wikipedia.org/wiki/Mind_map">mind maps</a> and I really liked it. </p>
+<figure>
+    <img src="https://user-images.githubusercontent.com/3226564/99436292-1389eb80-28f0-11eb-8fff-19f085e23c41.png"/>
+    <figcaption>A typical mind map. Source: <a href="https://mindmapping.com" target="_blank">mindmapping.com</a></figcaption>
 </figure>
-<h3 id="why-use-a-repl">Why use a REPL?</h3>
-<p>Because it allows rapid experimentation and gives feedbacks instantaneously. Will my complex regex work? Instead of double-checking everything let’s just eval one case. When selecting a substring is the last index exclusive or not? Instead of reading the documentation let’s just try it out with an example.</p>
-<p>Data scientists usually do this with <a href="https://jupyter.org/">Jupyter Notebooks</a>, for example, but this is a practice which still isn’t ubiquitous in the backend/frontend/devops scene.</p>
-<p>For more use cases, please check one video about <a href="https://www.youtube.com/results?search_query=repl+driven+development">REPL driven development</a>.</p>
-<h3 id="how-to-configure-it">How to configure it?</h3>
-<p>First install <a href="https://github.com/motemen/gore">gore</a>. Then integrate it with your IDE.</p>
-<p>I’ll highlight my configuration with VSCode but other setups should be similar.</p>
-<p>I simply added the following keybinding to “vim.visualModeKeyBindings” and “vim.normalModeKeyBindings”:</p>
-<p>This way, whenever I type <code>&lt;space&gt;+l+t</code> the highlighted text will be sent to the REPL session, provided that I run <code>gore</code> in VSCode’s terminal window. If there’s no selection, the current line will be sent.</p>
-<h3 id="caveats">Caveats</h3>
-<ul>
-<li>gore is somewhat slow. But still is faster than running an adhoc test case + <code>go test</code> for the same purpose or setting up an adhoc entrypoint + <code>go run</code>.</li>
-<li>depending on the modules imported by your project it may not be trivial to replicate the same imports to your gore session.</li>
-</ul>
-<h3 id="does-this-work-for-other-languages">Does this work for other languages?</h3>
-<p>Yes! Your shell is a REPL in some sense. When writing long <code>for</code>s or commands with many pipes this may come in handy as well.</p>
-<div class="medium-first">
-    This post first appeared on
-    <a href="https://medium.com/@den.isidoro/quick-prototyping-with-a-golang-repl-547703885bd8" target="_blank">Medium</a>.
-</div>
+<p>What I fancy about mind maps is that they are extremely minimalist and favor connection of ideas. It's also possible to adjust the level of details you want to write/read by determining how deep into the nodes you want to dive. </p>
+<h3 id="first-experience">First experience</h3>
+<p>The first time I used mind maps for real was when I was studying for a software engineering interview in a big tech company. </p>
+<p>For an Algorithm question in general you need to know beforehand what's the better strategy for solving it. Should it use a graph? Or a linked list? When faced with such a problem it isn't trivial to know how to solve it but if you ask yourself &quot;would graphs work here?&quot; you generally have an immediate yes/no. A mind map —either in paper or in your brain— with all the possibilities makes things much easier. </p>
+<h3 id="the-objective">The objective</h3>
+<p>After the good experience I had with mind maps, I decided to digitally register part of my knowledge using this method. Not only about algorithms but also Biology, History, Grammar and all these other fields I barely know a thing. </p>
+<p>I established some criteria. The tool for this job should:</p>
+<ol>
+<li>have a very low time-wise cost for writing </li>
+<li>have basic search functionality</li>
+<li>have a way to connect different mind maps </li>
+<li>be portable — it should work at least on my PC and my phone</li>
+</ol>
+<p>I didn't find any tool that fits these criteria, so I decided to build my own. That said, one additional requirement was:</p>
+<ol start="5">
+<li>the tool should be so simple that the time to build it should be at most a few hours — because <a href="https://denisidoro.github.io/posts/tips-for-faster-development/">I'm lazy</a></li>
+</ol>
+<p>This requirement made me reject some complex ideas I had that involved graph databases such as <a href="https://neo4j.com/">Neo4j</a>.</p>
+<p>For writing, I went with the most simple solution possible: an indented plain text document. </p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#abb2bf;">Kingdoms
+   Animalia
+   Plantae
+   Arthropoda
+      Insects
+   Fungi
+   Porifera
+</span></code></pre><h3 id="the-result">The result</h3>
+<p>After some work, here's what I came up with:</p>
+<figure>
+    <img src="https://user-images.githubusercontent.com/3226564/99435931-9199c280-28ef-11eb-8bb6-ef0b5450b92d.gif"/>
+    <figcaption>Jumping between nodes and different mind maps is easy!</figcaption>
+</figure>
+<p>The UI is smart enough to show any relevant info related to the root node, so the more mind maps you write that include the query, the more data the UI will be able to connect. </p>
+<p>Since it uses pretty standard web technologies, it works on my phone without any hiccups. </p>
+<figure>
+    <img src="https://user-images.githubusercontent.com/3226564/99438276-5e0c6780-28f2-11eb-8771-d2516ed86273.jpg"/>
+    <figcaption>The UI is fully functional on Chromium-based browsers on Android</figcaption>
+</figure>
+<p>I also added buttons to quickly go the dictionary definition or Wikipedia article related to the root node. </p>
+<figure>
+    <img src="https://user-images.githubusercontent.com/3226564/99437720-99f2fd00-28f1-11eb-9e89-f421b831e3a0.png"/>
+    <figcaption>Clicking on the globe icon leads to the Wikipedia article that best matches "gauss"</figcaption>
+</figure>
+<p>It's hosted on Github Pages so you can try it out <a href="https://denisidoro.github.com/move-reminder">here</a>. </p>
+<p>The app is capable of downloading mind map definitions from the web so it should work for everyone. Please refer to help section for more info.</p>
+<p>Do you have suggestions for this tool? If so please open an issue in its git repo! </p>
 
             </div>
             <!-- CUSTOM <div id="mapid"></div> -->
@@ -231,37 +267,37 @@
 <!-- CUSTOM
 <p class="is-size-5">
   Share:
-  <a class="link" data-sharer="facebook" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;golang-repl&#x2F;' href="javascript:void(0);"
+  <a class="link" data-sharer="facebook" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;mind-maps&#x2F;' href="javascript:void(0);"
     title="Share on facebook">
     <span class="icon">
       <i class="fab fa-facebook-square"></i>
     </span>
   </a>
-  <a class="link" data-sharer="twitter" data-title='Quick prototyping with a Golang REPL' data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;golang-repl&#x2F;'
+  <a class="link" data-sharer="twitter" data-title='Mind maps' data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;mind-maps&#x2F;'
     href="javascript:void(0);" title="Share on twitter">
     <span class="icon">
       <i class="fab fa-twitter"></i>
     </span>
   </a>
-  <a class="link" data-sharer="linkedin" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;golang-repl&#x2F;' href="javascript:void(0);"
+  <a class="link" data-sharer="linkedin" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;mind-maps&#x2F;' href="javascript:void(0);"
     title="Share on linkedin">
     <span class="icon">
       <i class="fab fa-linkedin"></i>
     </span>
   </a>
-  <a class="link" data-sharer="reddit" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;golang-repl&#x2F;' href="javascript:void(0);"
+  <a class="link" data-sharer="reddit" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;mind-maps&#x2F;' href="javascript:void(0);"
     title="Share on reddit">
     <span class="icon">
       <i class="fab fa-reddit"></i>
     </span>
   </a>
-  <a class="link" data-sharer="hackernews" data-title="Quick prototyping with a Golang REPL" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;golang-repl&#x2F;'
+  <a class="link" data-sharer="hackernews" data-title="Mind maps" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;mind-maps&#x2F;'
     href="javascript:void(0);" title="Share on hackernews">
     <span class="icon">
       <i class="fab fa-hacker-news"></i>
     </span>
   </a>
-  <a class="link" data-sharer="whatsapp" data-title="Quick prototyping with a Golang REPL" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;golang-repl&#x2F;'
+  <a class="link" data-sharer="whatsapp" data-title="Mind maps" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;mind-maps&#x2F;'
     href="javascript:void(0);" title="Share on whatsapp">
     <span class="icon">
       <i class="fab fa-whatsapp-square"></i>
@@ -276,19 +312,10 @@
           
             <nav class="level mt-2">
               
+              
                 <div class="level-item has-text-centered">
                   <a class="button is-black is-outlined" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;data-driven-programming&#x2F;'>
-                    <span class="icon mr-2">
-                      <i class="fas fa-arrow-circle-left"></i>
-                    </span>
-                    On data-driven programming
-                  </a>
-                </div>
-              
-              
-                <div class="level-item has-text-centered">
-                  <a class="button is-black is-outlined" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;dictionaries-in-shell-scripts&#x2F;'>
-                    Using dictionaries in shell scripts<span class="icon ml-2">
+                    On data-driven programming<span class="icon ml-2">
                       <i class="fas fa-arrow-circle-right"></i>
                     </span>
                   </a>

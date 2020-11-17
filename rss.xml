@@ -1,13 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>Denis&#x27;s blog</title>
+        <title>Denis Isidoro</title>
         <link>https://denisidoro.github.io</link>
         <description></description>
         <generator>Zola</generator>
         <language>en</language>
         <atom:link href="https://denisidoro.github.io/rss.xml" rel="self" type="application/rss+xml"/>
-        <lastBuildDate>Wed, 02 Sep 2020 00:00:00 +0000</lastBuildDate>
+        <lastBuildDate>Tue, 17 Nov 2020 00:00:00 +0000</lastBuildDate>
+        <item>
+            <title>Mind maps</title>
+            <pubDate>Tue, 17 Nov 2020 00:00:00 +0000</pubDate>
+            <link>https://denisidoro.github.io/posts/mind-maps/</link>
+            <guid>https://denisidoro.github.io/posts/mind-maps/</guid>
+            <description>&lt;p&gt;Since high school I&#x27;ve never had a paper notebook. Don&#x27;t get me wrong: I&#x27;m not one or these people with very good memory and don&#x27;t need any notes whatsoever. On the contrary.&lt;&#x2F;p&gt;
+&lt;p&gt;The thing is I&#x27;ve never seen much value in note taking. At least in the traditional way, with paragraphs and blocks of text. I can&#x27;t memorize these chunks of text and, if I want to dive deep into a subject, I&#x27;m much better off reading text books or browsing Wikipedia articles. &lt;&#x2F;p&gt;
+&lt;p&gt;In fact, I&#x27;ve never trusted my own notes. Maybe I got it wrong in the first place. Maybe the way I wrote is ambiguous. Ultimately, the bigger the notes, more likely they can lead me to wrong conclusions. &lt;&#x2F;p&gt;
+&lt;h3 id=&quot;the-need&quot;&gt;The need&lt;&#x2F;h3&gt;
+&lt;p&gt;However, sometimes I want to refresh my memory on a particular subject and reading books and articles is too time consuming. I just want to recap the absolute essential — things I shouldn&#x27;t forget. Some minimal notes surely would come in handy. &lt;&#x2F;p&gt;
+&lt;p&gt;I researched for cheap yet effective note taking methods. I tried &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Cornell_Notes&quot;&gt;Cornell notes&lt;&#x2F;a&gt; but they didn&#x27;t do the trick for me. Then I tried &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Mind_map&quot;&gt;mind maps&lt;&#x2F;a&gt; and I really liked it. &lt;&#x2F;p&gt;
+&lt;figure&gt;
+    &lt;img src=&quot;https:&#x2F;&#x2F;user-images.githubusercontent.com&#x2F;3226564&#x2F;99436292-1389eb80-28f0-11eb-8fff-19f085e23c41.png&quot;&#x2F;&gt;
+    &lt;figcaption&gt;A typical mind map. Source: &lt;a href=&quot;https:&#x2F;&#x2F;mindmapping.com&quot; target=&quot;_blank&quot;&gt;mindmapping.com&lt;&#x2F;a&gt;&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;p&gt;What I fancy about mind maps is that they are extremely minimalist and favor connection of ideas. It&#x27;s also possible to adjust the level of details you want to write&#x2F;read by determining how deep into the nodes you want to dive. &lt;&#x2F;p&gt;
+&lt;h3 id=&quot;first-experience&quot;&gt;First experience&lt;&#x2F;h3&gt;
+&lt;p&gt;The first time I used mind maps for real was when I was studying for a software engineering interview in a big tech company. &lt;&#x2F;p&gt;
+&lt;p&gt;For an Algorithm question in general you need to know beforehand what&#x27;s the better strategy for solving it. Should it use a graph? Or a linked list? When faced with such a problem it isn&#x27;t trivial to know how to solve it but if you ask yourself &amp;quot;would graphs work here?&amp;quot; you generally have an immediate yes&#x2F;no. A mind map —either in paper or in your brain— with all the possibilities makes things much easier. &lt;&#x2F;p&gt;
+&lt;h3 id=&quot;the-objective&quot;&gt;The objective&lt;&#x2F;h3&gt;
+&lt;p&gt;After the good experience I had with mind maps, I decided to digitally register part of my knowledge using this method. Not only about algorithms but also Biology, History, Grammar and all these other fields I barely know a thing. &lt;&#x2F;p&gt;
+&lt;p&gt;I established some criteria. The tool for this job should:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;have a very low time-wise cost for writing &lt;&#x2F;li&gt;
+&lt;li&gt;have basic search functionality&lt;&#x2F;li&gt;
+&lt;li&gt;have a way to connect different mind maps &lt;&#x2F;li&gt;
+&lt;li&gt;be portable — it should work at least on my PC and my phone&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;I didn&#x27;t find any tool that fits these criteria, so I decided to build my own. That said, one additional requirement was:&lt;&#x2F;p&gt;
+&lt;ol start=&quot;5&quot;&gt;
+&lt;li&gt;the tool should be so simple that the time to build it should be at most a few hours — because &lt;a href=&quot;https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;tips-for-faster-development&#x2F;&quot;&gt;I&#x27;m lazy&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;This requirement made me reject some complex ideas I had that involved graph databases such as &lt;a href=&quot;https:&#x2F;&#x2F;neo4j.com&#x2F;&quot;&gt;Neo4j&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;For writing, I went with the most simple solution possible: an indented plain text document. &lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;Kingdoms
+   Animalia
+   Plantae
+   Arthropoda
+      Insects
+   Fungi
+   Porifera
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h3 id=&quot;the-result&quot;&gt;The result&lt;&#x2F;h3&gt;
+&lt;p&gt;After some work, here&#x27;s what I came up with:&lt;&#x2F;p&gt;
+&lt;figure&gt;
+    &lt;img src=&quot;https:&#x2F;&#x2F;user-images.githubusercontent.com&#x2F;3226564&#x2F;99435931-9199c280-28ef-11eb-8bb6-ef0b5450b92d.gif&quot;&#x2F;&gt;
+    &lt;figcaption&gt;Jumping between nodes and different mind maps is easy!&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;p&gt;The UI is smart enough to show any relevant info related to the root node, so the more mind maps you write that include the query, the more data the UI will be able to connect. &lt;&#x2F;p&gt;
+&lt;p&gt;Since it uses pretty standard web technologies, it works on my phone without any hiccups. &lt;&#x2F;p&gt;
+&lt;figure&gt;
+    &lt;img src=&quot;https:&#x2F;&#x2F;user-images.githubusercontent.com&#x2F;3226564&#x2F;99438276-5e0c6780-28f2-11eb-8771-d2516ed86273.jpg&quot;&#x2F;&gt;
+    &lt;figcaption&gt;The UI is fully functional on Chromium-based browsers on Android&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;p&gt;I also added buttons to quickly go the dictionary definition or Wikipedia article related to the root node. &lt;&#x2F;p&gt;
+&lt;figure&gt;
+    &lt;img src=&quot;https:&#x2F;&#x2F;user-images.githubusercontent.com&#x2F;3226564&#x2F;99437720-99f2fd00-28f1-11eb-9e89-f421b831e3a0.png&quot;&#x2F;&gt;
+    &lt;figcaption&gt;Clicking on the globe icon leads to the Wikipedia article that best matches &quot;gauss&quot;&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;p&gt;It&#x27;s hosted on Github Pages so you can try it out &lt;a href=&quot;https:&#x2F;&#x2F;denisidoro.github.com&#x2F;move-reminder&quot;&gt;here&lt;&#x2F;a&gt;. &lt;&#x2F;p&gt;
+&lt;p&gt;The app is capable of downloading mind map definitions from the web so it should work for everyone. Please refer to help section for more info.&lt;&#x2F;p&gt;
+&lt;p&gt;Do you have suggestions for this tool? If so please open an issue in its git repo! &lt;&#x2F;p&gt;
+</description>
+        </item>
         <item>
             <title>On data-driven programming</title>
             <pubDate>Wed, 02 Sep 2020 00:00:00 +0000</pubDate>
@@ -443,6 +507,22 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
 </description>
         </item>
         <item>
+            <title>Moving from Medium</title>
+            <pubDate>Mon, 01 Oct 2018 00:00:00 +0000</pubDate>
+            <link>https://denisidoro.github.io/posts/moving-from-medium/</link>
+            <guid>https://denisidoro.github.io/posts/moving-from-medium/</guid>
+            <description>&lt;p&gt;I plan to stop posting on &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&quot;&gt;Medium&lt;&#x2F;a&gt; and start posting on &lt;a href=&quot;https:&#x2F;&#x2F;denisidoro.github.io&#x2F;&quot;&gt;my own blog&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;It uses zola under the hood and will allow me to write posts faster and with more features.&lt;&#x2F;p&gt;
+&lt;p&gt;Hopefully I&#x27;ll be able to post more frequently.&lt;&#x2F;p&gt;
+&lt;p&gt;The website includes an RSS feed as well.&lt;&#x2F;p&gt;
+&lt;p&gt;Again, if you want to check new posts, &lt;a href=&quot;https:&#x2F;&#x2F;denisidoro.github.io&#x2F;&quot;&gt;click here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;div class=&quot;medium-first&quot;&gt;
+    This post first appeared on
+    &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;new-posts-moving-from-medium-f4e9ae4acc19&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
+&lt;&#x2F;div&gt;
+</description>
+        </item>
+        <item>
             <title>Using Clojure + GraalVM for shell scripting</title>
             <pubDate>Fri, 14 Sep 2018 00:00:00 +0000</pubDate>
             <link>https://denisidoro.github.io/posts/clojure-graalvm-shell-scripting/</link>
@@ -505,7 +585,7 @@ native-binary 0.01s user 0.01s system 79% cpu 0.019 total
 &lt;p&gt;For other people’s experiences, click &lt;a href=&quot;https:&#x2F;&#x2F;www.innoq.com&#x2F;en&#x2F;blog&#x2F;native-clojure-and-graalvm&#x2F;&quot;&gt;here&lt;&#x2F;a&gt; or &lt;a href=&quot;https:&#x2F;&#x2F;www.astrecipes.net&#x2F;blog&#x2F;2018&#x2F;07&#x2F;20&#x2F;cmd-line-apps-with-clojure-and-graalvm&#x2F;&quot;&gt;there&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;div class=&quot;medium-first&quot;&gt;
     This post first appeared on
-    &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;https:&amp;#x2F;&amp;#x2F;miro.medium.com&amp;#x2F;max&amp;#x2F;700&amp;#x2F;1*gJm3BZcNrKoPOa2QO69p3Q.png&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
+    &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;using-clojure-graalvm-for-shell-scripting-da0bcc8955d4&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 &lt;&#x2F;div&gt;
 </description>
         </item>
@@ -701,10 +781,10 @@ Using &lt;a href=&quot;http:&#x2F;&#x2F;docopt.org&#x2F;&quot;&gt;&lt;strong&gt;
 &lt;&#x2F;figure&gt;
 &lt;p&gt;&lt;strong&gt;Don’t throw away your scripts&lt;&#x2F;strong&gt;, even if they are simple. Instead, put them in a folder, document them and make them available to your disposal whenever you need. I never remember the command for spawning a new Android emulator, for example, but I can always remember how to type &lt;code&gt;dot android emu start&lt;&#x2F;code&gt;. In particular, I divide all my scripts into non-nested folders and make them callable by a &lt;code&gt;dot&lt;&#x2F;code&gt; command.&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;ANDROID&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5ebfcc;&quot;&gt;\_&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;HOME&#x2F;tools&#x2F;emulator start     &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# is it like this?  
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;$ $&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;ANDROID&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5ebfcc;&quot;&gt;\_&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;SDK&#x2F;tools&#x2F;emulator&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -avd&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; nexus &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# maybe like this?  
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5ebfcc;&quot;&gt;\#&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; checks StackOverflow, other references or simply...  
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; dot android emu start                  &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# there you go!
+&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;ANDROID_HOME&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&#x2F;tools&#x2F;emulator start     &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# is it like this?  
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;$ $&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;ANDROID_SDK&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&#x2F;tools&#x2F;emulator&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -avd&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; nexus &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# maybe like this?  
+# checks StackOverflow, other references or simply...  
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;$ dot android emu start                  &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# there you go!
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Finally, my biggest tip for bash is… &lt;strong&gt;don’t use bash&lt;&#x2F;strong&gt;.&lt;br &#x2F;&gt;
 Use a language you feel comfortable with or that makes sense to your project.&lt;br &#x2F;&gt;
@@ -774,10 +854,12 @@ If you’re lazy, you’ll get uncomfortable with time-demanding processes and i
 Standing on the shoulder of giants (&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;JetBrains&#x2F;kotlin-wrappers&#x2F;tree&#x2F;master&#x2F;kotlin-react&quot;&gt;JetBrains&#x2F;kotlin-wrappers&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ScottPierce&#x2F;kotlin-react-native&quot;&gt;ScottPierce&#x2F;kotlin-react-native&lt;&#x2F;a&gt;), we can. &lt;br &#x2F;&gt;
 An example repository can be found &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;korn&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;react-in-a-nutshell&quot;&gt;React in a nutshell&lt;&#x2F;h3&gt;
-&lt;p&gt;You can learn the basics of React Native very quickly reading the &lt;a href=&quot;https:&#x2F;&#x2F;facebook.github.io&#x2F;react-native&#x2F;docs&#x2F;tutorial.html&quot;&gt;official tutorial&lt;&#x2F;a&gt;, but three important takeaways are:&lt;br &#x2F;&gt;
-- view = f(state) &lt;br &#x2F;&gt;
-- React has a virtual representation of the view, and it calculates the smallest diff between renders&lt;br &#x2F;&gt;
-- development should be component-driven&lt;&#x2F;p&gt;
+&lt;p&gt;You can learn the basics of React Native very quickly reading the &lt;a href=&quot;https:&#x2F;&#x2F;facebook.github.io&#x2F;react-native&#x2F;docs&#x2F;tutorial.html&quot;&gt;official tutorial&lt;&#x2F;a&gt;, but three important takeaways are:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;view = f(state) &lt;&#x2F;li&gt;
+&lt;li&gt;React has a virtual representation of the view, and it calculates the smallest diff between renders&lt;&#x2F;li&gt;
+&lt;li&gt;development should be component-driven&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
 &lt;h3 id=&quot;hello-world-in-kotlin&quot;&gt;Hello world in Kotlin&lt;&#x2F;h3&gt;
 &lt;p&gt;After cloning the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;korn&quot;&gt;example repository&lt;&#x2F;a&gt; and following the README, you can simply edit the render() function to immediately see the result on the device.&lt;&#x2F;p&gt;
 &lt;p&gt;For example, writing the following code…&lt;&#x2F;p&gt;
@@ -812,10 +894,12 @@ An example repository can be found &lt;a href=&quot;https:&#x2F;&#x2F;github.com
 &lt;&#x2F;div&gt;
 &lt;h3 id=&quot;managing-state&quot;&gt;Managing state&lt;&#x2F;h3&gt;
 &lt;p&gt;React doesn’t dictate how state management should be. For the sake of this example, let’s write our own simplified, naive implementation of &lt;a href=&quot;https:&#x2F;&#x2F;redux.js.org&quot;&gt;Redux&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
-&lt;p&gt;In this pattern, we have three main elements:&lt;br &#x2F;&gt;
-- store: holds the state&lt;br &#x2F;&gt;
-- actions: describe the changes&lt;br &#x2F;&gt;
-- reducers: return an updated state based on the requested action&lt;&#x2F;p&gt;
+&lt;p&gt;In this pattern, we have three main elements:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;store: holds the state&lt;&#x2F;li&gt;
+&lt;li&gt;actions: describe the changes&lt;&#x2F;li&gt;
+&lt;li&gt;reducers: return an updated state based on the requested action&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
 &lt;p&gt;Here is the full implementation:&lt;&#x2F;p&gt;
 &lt;div &gt;
     &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;c60df8ce463f92e03d74926ad6bd2328.js&quot;&gt;&lt;&#x2F;script&gt;
