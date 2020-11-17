@@ -31,11 +31,22 @@
         <lastmod>2019-01-06</lastmod>
     </url>
     <url>
+        <loc>https://denisidoro.github.io/posts/mind-maps/</loc>
+        <lastmod>2020-11-17</lastmod>
+    </url>
+    <url>
         <loc>https://denisidoro.github.io/posts/monolithic-apps-graph-apis/</loc>
         <lastmod>2019-07-01</lastmod>
     </url>
     <url>
+        <loc>https://denisidoro.github.io/posts/moving-from-medium/</loc>
+        <lastmod>2018-10-01</lastmod>
+    </url>
+    <url>
         <loc>https://denisidoro.github.io/posts/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/posts/page/2/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/posts/react-native-kotlinjs/</loc>
@@ -53,6 +64,12 @@
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/architecture/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/blog/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/blog/page/1/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/clojure/</loc>
@@ -101,6 +118,12 @@
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/kotlin/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/learning/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/learning/page/1/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/productivity/</loc>

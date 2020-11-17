@@ -39,7 +39,7 @@
   <link href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;site.css' rel="stylesheet" /> 
   <title>
     
-  Denis&#x27;s blog | Writing multi-platform mobile apps with React Native and KotlinJS
+  Denis Isidoro | Writing multi-platform mobile apps with React Native and KotlinJS
 
   </title>
   <script crossorigin="anonymous" src="https://kit.fontawesome.com/201b8d5e05.js"></script>
@@ -61,7 +61,7 @@
   <nav aria-label="main navigation" class="navbar is-light" role="navigation">
     <div class="container">
       <div class="navbar-brand">
-        <a class="navbar-item has-text-weight-bold" href="/">Denis&#x27;s blog</a>
+        <a class="navbar-item has-text-weight-bold" href="/">Denis Isidoro</a>
         <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
@@ -214,10 +214,12 @@
 Standing on the shoulder of giants (<a href="https://github.com/JetBrains/kotlin-wrappers/tree/master/kotlin-react">JetBrains/kotlin-wrappers</a> and <a href="https://github.com/ScottPierce/kotlin-react-native">ScottPierce/kotlin-react-native</a>), we can. <br />
 An example repository can be found <a href="https://github.com/denisidoro/korn">here</a>.</p>
 <h3 id="react-in-a-nutshell">React in a nutshell</h3>
-<p>You can learn the basics of React Native very quickly reading the <a href="https://facebook.github.io/react-native/docs/tutorial.html">official tutorial</a>, but three important takeaways are:<br />
-- view = f(state) <br />
-- React has a virtual representation of the view, and it calculates the smallest diff between renders<br />
-- development should be component-driven</p>
+<p>You can learn the basics of React Native very quickly reading the <a href="https://facebook.github.io/react-native/docs/tutorial.html">official tutorial</a>, but three important takeaways are:</p>
+<ul>
+<li>view = f(state) </li>
+<li>React has a virtual representation of the view, and it calculates the smallest diff between renders</li>
+<li>development should be component-driven</li>
+</ul>
 <h3 id="hello-world-in-kotlin">Hello world in Kotlin</h3>
 <p>After cloning the <a href="https://github.com/denisidoro/korn">example repository</a> and following the README, you can simply edit the render() function to immediately see the result on the device.</p>
 <p>For example, writing the following code…</p>
@@ -252,10 +254,12 @@ An example repository can be found <a href="https://github.com/denisidoro/korn">
 </div>
 <h3 id="managing-state">Managing state</h3>
 <p>React doesn’t dictate how state management should be. For the sake of this example, let’s write our own simplified, naive implementation of <a href="https://redux.js.org">Redux</a>.</p>
-<p>In this pattern, we have three main elements:<br />
-- store: holds the state<br />
-- actions: describe the changes<br />
-- reducers: return an updated state based on the requested action</p>
+<p>In this pattern, we have three main elements:</p>
+<ul>
+<li>store: holds the state</li>
+<li>actions: describe the changes</li>
+<li>reducers: return an updated state based on the requested action</li>
+</ul>
 <p>Here is the full implementation:</p>
 <div >
     <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;c60df8ce463f92e03d74926ad6bd2328.js"></script>
