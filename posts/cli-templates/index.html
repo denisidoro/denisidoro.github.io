@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#ffffff" name="theme-color" />
+  <meta content="#da532c" name="msapplication-TileColor" />
+  <meta name="google-site-verification" content="kCkEw_7g3u9-z3dP2MXtD-SNMTXjEUdoI9fRUbPB7Ks" />
+
+  
+    <link rel="icon" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+    <link rel="apple-touch-icon" sizes="48x48"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+    <link rel="apple-touch-icon" sizes="72x72"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;919926a10d297a1500.jpg" />
+    <link rel="apple-touch-icon" sizes="96x96"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;6c2aa64354c1ad0e00.jpg" />
+    <link rel="apple-touch-icon" sizes="144x144"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;f15f82763548a03000.jpg" />
+    <link rel="apple-touch-icon" sizes="192x192"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;60ba6917360f159900.jpg" />
+    <link rel="apple-touch-icon" sizes="256x256"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;be09d2da8b7096cc00.jpg" />
+    <link rel="apple-touch-icon" sizes="384x384"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;165598e81aa1737500.jpg" />
+    <link rel="apple-touch-icon" sizes="512x512"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;ca26ad195d4a364c00.jpg" />
+  
+
+  
+  
+  
+  
+  
+  <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" rel="stylesheet" />
+  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.css"
+    rel="stylesheet" /> 
+  <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" /> -->
+  <link href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;site.css' rel="stylesheet" /> 
+  <title>
+    
+  Denis Isidoro | Creating templates for CLIs
+
+  </title>
+  <script crossorigin="anonymous" src="https://kit.fontawesome.com/201b8d5e05.js"></script>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168912661-1"></script>
+  <script type="text/javascript">
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-168912661-1");
+  </script>
+  
+</head>
+
+<body class="has-background-light">
+  
+  <nav aria-label="main navigation" class="navbar is-light" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item has-text-weight-bold" href="/">Denis Isidoro</a>
+        <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navMenu">
+        <div class="navbar-end has-text-centered">
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;'>
+            Home
+          </a>
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts'>
+            Posts
+          </a>
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags'>
+            Tags
+          </a>
+          
+          <a class="navbar-item" id="nav-search" title="Search" data-target="#search-modal">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </a>
+          <a class="navbar-item" id="dark-mode" title="Switch to dark theme">
+            <span class="icon">
+              <i class="fas fa-adjust"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="modal" id="search-modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="field">
+        <p class="control has-icons-right">
+          <input class="input" id="search" placeholder="Search this website." type="search" />
+          <span class="icon is-small is-right">
+            <i class="fas fa-search"></i>
+          </span>
+        </p>
+      </div>
+      <div class="search-results">
+        <div class="search-results__items"></div>
+      </div>
+    </div>
+    <button aria-label="close" class="modal-close is-large"></button>
+  </div>
+  
+  
+  <main class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-10 is-offset-1">
+          <article>
+            <h1 class="title">Creating templates for CLIs</h1>
+            <h2 class="subtitle"></h2>
+            <div class="columns mb-0">
+              <div class="column">
+                
+<p class="has-text-grey">
+  <!-- CUSTOM 
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  Denis Isidoro published on 
+  -->
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <time datetime='2021-01-13'>January 13, 2021</time>
+</p>
+
+              </div>
+              <div class="column has-text-right-desktop">
+                
+<p class="has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  4 min,
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  683 words
+</p>
+
+              </div>
+              <div class="column has-text-right-desktop">
+                
+                  
+<p>
+  <span class="has-text-black has-text-weight-normal">Tags:</span>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;dev&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    dev
+  </a>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;terminal&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    terminal
+  </a>
+  
+</p>
+
+                
+              </div>
+            </div>
+            <!-- CUSTOM 
+            <div class="columns mb-0">
+              <div class="column">
+                
+              </div>
+            </div>
+            -->
+            
+            <hr/>
+            <div class="content has-text-justified">
+              <h3 id="inspiration">Inspiration</h3>
+<p>I've been using <a href="https://github.com/yarpc/yab">yab</a> -- a curl-like CLI -- recently and I was surprised how elegantly it solves a common problem.</p>
+<p>yab calls can get quite verbose. As an example, to get a <code>Customer</code> by its <code>id</code> from a <code>customer</code> microservice:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#eb6772;">yab</span><span style="color:#abb2bf;"> customer Customer::get \
+</span><span style="color:#eb6772;">    -t</span><span style="color:#abb2bf;"> /path/to/idl/some.company/customer/customer.thrift \
+</span><span style="color:#eb6772;">    -P</span><span style="color:#abb2bf;"> 131.144.23.5/customer:tchannel \
+</span><span style="color:#eb6772;">    -r </span><span style="color:#9acc76;">&#39;{&quot;request&quot;: {&quot;id&quot;: 11}}&#39;
+</span></code></pre>
+<p>The call is pretty convoluted, but it can be simplified by storing params in a yaml file:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="font-style:italic;color:#5f697a;"># customer_by_id.yaml
+</span><span style="color:#eb6772;">service</span><span style="color:#abb2bf;">: </span><span style="color:#eb6772;">customer
+procedure</span><span style="color:#abb2bf;">: </span><span style="color:#9acc76;">&quot;Customer::get&quot;
+</span><span style="color:#eb6772;">thrift</span><span style="color:#abb2bf;">: </span><span style="color:#eb6772;">/path/to/idl/some.company/customer/customer.thrift
+peer-list</span><span style="color:#abb2bf;">: </span><span style="color:#eb6772;">131.144.23.5/customer:tchannel
+request</span><span style="color:#abb2bf;">:
+  </span><span style="color:#eb6772;">request</span><span style="color:#abb2bf;">:
+    </span><span style="color:#eb6772;">id</span><span style="color:#abb2bf;">: </span><span style="color:#9acc76;">${number:11}
+</span></code></pre>
+<p>The file takes a set of CLI flags in their long form, e.g. <code>--thrift</code> instead of <code>-t</code>, and their associated values.</p>
+<p>Then, the following call is equivalent to the beforementioned one:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#eb6772;">yab -y</span><span style="color:#abb2bf;"> customer_by_id.yaml
+</span></code></pre>
+<p>Additional flags can be passed to yab to override the default values specified in the yaml file:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#eb6772;">yab -y</span><span style="color:#abb2bf;"> customer_by_id.yaml</span><span style="color:#eb6772;"> --number</span><span style="color:#abb2bf;"> 42
+</span></code></pre>
+<p>I think this is pretty cool!</p>
+<p>It can save us lots of time. It also helps sharing knowledge between team members: we could have a git repo with a bunch of these <code>.yaml</code> files and a simple <code>git pull</code> would allow everyone to be on the same page.</p>
+<p>My immediate thought &quot;could we easily replicate this for other commands?&quot;</p>
+<h1 id="solution">Solution</h1>
+<p>For the sake of simplicity, let's try to write a complex <a href="https://github.com/httpie/httpie">httpie</a> command. It could be an involved <code>awk</code>, <code>grep</code> or <code>jq</code> command, though.</p>
+<p>The final call should look like this:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#abb2bf;">http -v POST https://jsonplaceholder.typicode.com/posts title=foo body=bar userId=11
+</span></code></pre>
+<p>The tool I'm going to use is <a href="https://github.com/denisidoro/navi">navi</a>. It allows you to browse through cheatsheets --that you may write yourself or download from maintainers-- and execute commands. </p>
+<p>navi encourages you to write <code>.cheat</code> files which break commands down into smaller, reusable pieces, like so:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#eb6772;">%</span><span style="color:#abb2bf;"> httpie
+
+</span><span style="font-style:italic;color:#5f697a;"># make a request to a typicode microservice
+</span><span style="color:#abb2bf;">http</span><span style="color:#eb6772;"> -v </span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">method</span><span style="color:#adb7c9;">&gt; </span><span style="color:#9acc76;">&quot;https://&lt;service&gt;.typicode.com/&lt;endpoint&gt;&quot; </span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">http-body</span><span style="color:#adb7c9;">&gt;</span><span style="color:#abb2bf;">
+
+$ method: echo </span><span style="color:#9acc76;">&#39;GET;POST;PUT&#39; </span><span style="color:#adb7c9;">| </span><span style="color:#eb6772;">tr </span><span style="color:#9acc76;">&#39;;&#39; &#39;\n&#39;
+</span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> service: echo </span><span style="color:#9acc76;">&#39;jsonplaceholder;anotherservice&#39; </span><span style="color:#adb7c9;">| </span><span style="color:#eb6772;">tr </span><span style="color:#9acc76;">&#39;;&#39; &#39;\n&#39;
+</span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> endpoint: case </span><span style="color:#9acc76;">&quot;${</span><span style="color:#eb6772;">service</span><span style="color:#9acc76;">}:${</span><span style="color:#eb6772;">method</span><span style="color:#9acc76;">}&quot;</span><span style="color:#abb2bf;"> in</span><span style="color:#adb7c9;">; </span><span style="color:#9acc76;">&quot;jsonplaceholder-post&quot;</span><span style="color:#abb2bf;">) </span><span style="color:#5ebfcc;">echo </span><span style="color:#9acc76;">&#39;e1;e2;e3&#39; </span><span style="color:#adb7c9;">| </span><span style="color:#eb6772;">tr </span><span style="color:#9acc76;">&#39;;&#39; &#39;\n&#39;</span><span style="color:#abb2bf;">;</span><span style="color:#adb7c9;">; </span><span style="color:#cd74e8;">esac
+</span></code></pre>
+<p>The <code>endpoint</code> values here are incomplete for briefness and, in a real-world scenario, would probably be fetched dynamically, instead of being harcoded.</p>
+<p>This offers a way to very quickly make a request to any endpoint in our company, given that we somehow mapped all possible values to the corresponding values. </p>
+<p>But an engineer who recently joined the team still wouldn't know what service/endpoint to request for creating a new <code>post</code>. We could then add another cheatsheet entry for more granular commands:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#eb6772;">%</span><span style="color:#abb2bf;"> httpie, endpoints
+
+</span><span style="font-style:italic;color:#5f697a;"># create a post
+</span><span style="color:#abb2bf;">http</span><span style="color:#eb6772;"> -v </span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">method</span><span style="color:#adb7c9;">&gt; </span><span style="color:#9acc76;">&quot;https://&lt;service&gt;.typicode.com/&lt;endpoint&gt;&quot;</span><span style="color:#abb2bf;"> title=</span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">title</span><span style="color:#adb7c9;">&gt;</span><span style="color:#abb2bf;"> body=</span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">body</span><span style="color:#adb7c9;">&gt;</span><span style="color:#abb2bf;"> userId=</span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">userId</span><span style="color:#adb7c9;">&gt;</span><span style="color:#abb2bf;">
+
+$ method: echo </span><span style="color:#9acc76;">&#39;POST&#39;
+</span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> service: echo </span><span style="color:#9acc76;">&#39;jsonplaceholder&#39;
+</span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> endpoint: echo </span><span style="color:#9acc76;">&#39;posts&#39;
+</span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> title: echo </span><span style="color:#9acc76;">&#39;foo&#39;
+</span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> body: echo </span><span style="color:#9acc76;">&#39;bar&#39;
+</span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> userId: echo </span><span style="color:#9acc76;">&#39;11&#39;
+</span></code></pre>
+<p>There are a multitude of ways to invoke this cheatsheet. One of them is like this:</p>
+<script id="asciicast-Su5eUYFHn7M5A6Yccvcv7WH7k" src="https://asciinema.org/a/Su5eUYFHn7M5A6Yccvcv7WH7k.js" async></script>
+<h3 id="preventing-user-interaction">Preventing user interaction</h3>
+<p>If no interaction is wanted we could override values using environment variables and autoselect the desired command by using the <code>--best-match</code> flag:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#eb6772;">userId</span><span style="color:#adb7c9;">=</span><span style="color:#9acc76;">12 </span><span style="color:#eb6772;">navi --query </span><span style="color:#9acc76;">&#39;http endpoints create post&#39;</span><span style="color:#eb6772;"> --best-match
+</span></code></pre>
+<p>Let's say that we want to skip the <code>--query</code> and <code>--best-match</code> boilerplate and we know that we're always gonna use this tool for <code>http endpoints</code>. A simple bash script could come to the rescue:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#5cb3fa;">export_var</span><span style="color:#abb2bf;">() {
+   </span><span style="color:#cd74e8;">local </span><span style="color:#eb6772;">-r var</span><span style="color:#adb7c9;">=</span><span style="color:#9acc76;">&quot;$(</span><span style="color:#5ebfcc;">echo </span><span style="color:#9acc76;">&quot;$</span><span style="color:#eb6772;">1</span><span style="color:#9acc76;">&quot; </span><span style="color:#adb7c9;">| </span><span style="color:#eb6772;">tr </span><span style="color:#9acc76;">&#39;-&#39; &#39;_&#39;)&quot;
+   </span><span style="color:#cd74e8;">export </span><span style="color:#9acc76;">&quot;$</span><span style="color:#eb6772;">var</span><span style="color:#9acc76;">&quot;</span><span style="color:#adb7c9;">=</span><span style="color:#9acc76;">&quot;$</span><span style="color:#eb6772;">2</span><span style="color:#9acc76;">&quot;
+</span><span style="color:#abb2bf;">}
+
+</span><span style="color:#5cb3fa;">endpoint</span><span style="color:#abb2bf;">() {
+   </span><span style="color:#cd74e8;">local </span><span style="color:#eb6772;">var
+   </span><span style="color:#cd74e8;">for</span><span style="color:#abb2bf;"> v </span><span style="color:#cd74e8;">in </span><span style="color:#abb2bf;">$</span><span style="color:#eb6772;">@</span><span style="color:#adb7c9;">; </span><span style="color:#cd74e8;">do
+    case </span><span style="color:#abb2bf;">$</span><span style="color:#eb6772;">v </span><span style="color:#cd74e8;">in
+        </span><span style="color:#abb2bf;">--</span><span style="color:#adb7c9;">*</span><span style="color:#cd74e8;">) </span><span style="color:#eb6772;">var</span><span style="color:#adb7c9;">=</span><span style="color:#9acc76;">&quot;${</span><span style="color:#eb6772;">v</span><span style="color:#adb7c9;">:</span><span style="color:#db9d63;">2</span><span style="color:#9acc76;">}&quot; </span><span style="color:#abb2bf;">;;
+        </span><span style="color:#adb7c9;">*</span><span style="color:#cd74e8;">) </span><span style="color:#eb6772;">export_var </span><span style="color:#9acc76;">&quot;$</span><span style="color:#eb6772;">var</span><span style="color:#9acc76;">&quot; &quot;$</span><span style="color:#eb6772;">v</span><span style="color:#9acc76;">&quot; </span><span style="color:#abb2bf;">;;
+    </span><span style="color:#cd74e8;">esac
+   done
+
+   </span><span style="color:#eb6772;">navi --query </span><span style="color:#9acc76;">&quot;http endpoints ${</span><span style="color:#eb6772;">query</span><span style="color:#9acc76;">}&quot;</span><span style="color:#eb6772;"> --best-match
+</span><span style="color:#abb2bf;">}
+</span></code></pre>
+<p>And we could call it like:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#abb2bf;">endpoint &#39;create post&#39;
+endpoint &#39;create post&#39; --userId 12
+</span></code></pre><h3 id="conclusion">Conclusion</h3>
+<p>I hope that, with these tips, using the terminal becomes easier for you. </p>
+<p>Creating templates may speed up day-to-day tasks and improve knowledge sharing --either with other team members or with your future self.</p>
+<p>By the way, if you have any feature requests for navi, feel free to leave an issue <a href="https://github.com/denisidoro/navi/issues">here</a>!</p>
+
+            </div>
+            <!-- CUSTOM <div id="mapid"></div> -->
+
+            <div class="disclaimer">
+              Note: opinions expressed here are solely my own and do not necessarily express the views or experiences of my employer or past employers.
+            </div>
+            
+            <div class="container has-text-centered mt-6">
+              
+<!-- CUSTOM
+<p class="is-size-5">
+  Share:
+  <a class="link" data-sharer="facebook" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;cli-templates&#x2F;' href="javascript:void(0);"
+    title="Share on facebook">
+    <span class="icon">
+      <i class="fab fa-facebook-square"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="twitter" data-title='Creating templates for CLIs' data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;cli-templates&#x2F;'
+    href="javascript:void(0);" title="Share on twitter">
+    <span class="icon">
+      <i class="fab fa-twitter"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="linkedin" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;cli-templates&#x2F;' href="javascript:void(0);"
+    title="Share on linkedin">
+    <span class="icon">
+      <i class="fab fa-linkedin"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="reddit" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;cli-templates&#x2F;' href="javascript:void(0);"
+    title="Share on reddit">
+    <span class="icon">
+      <i class="fab fa-reddit"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="hackernews" data-title="Creating templates for CLIs" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;cli-templates&#x2F;'
+    href="javascript:void(0);" title="Share on hackernews">
+    <span class="icon">
+      <i class="fab fa-hacker-news"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="whatsapp" data-title="Creating templates for CLIs" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;cli-templates&#x2F;'
+    href="javascript:void(0);" title="Share on whatsapp">
+    <span class="icon">
+      <i class="fab fa-whatsapp-square"></i>
+    </span>
+  </a>
+</p>
+-->
+
+            </div>
+          </article>
+          <hr/>
+          
+            <nav class="level mt-2">
+              
+              
+                <div class="level-item has-text-centered">
+                  <a class="button is-black is-outlined" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;mind-maps&#x2F;'>
+                    Mind maps<span class="icon ml-2">
+                      <i class="fas fa-arrow-circle-right"></i>
+                    </span>
+                  </a>
+                </div>
+              
+              
+              
+            </nav>
+          
+          
+        </div>
+      </div>
+    </div>
+  </main>
+
+  
+  <!--<footer class="py-2">
+    <p class="has-text-centered">
+      Built with
+      <span class="icon is-small">
+        <i class="fas fa-code fa-xs"></i>
+      </span>
+      code and
+      <span class="icon is-small">
+        <i class="fas fa-heart fa-xs"></i>
+      </span>
+      love <br /> Powered By
+      <span class="icon is-small">
+        <i class="fas fa-power-off fa-xs"></i>
+      </span>
+      Zola
+    </p>
+  </footer>-->
+  
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <!-- 
+    <script src="https://cdn.jsdelivr.net/npm/sharer.js@latest/sharer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/galleria.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1/dist/chart.xkcd.min.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.js"></script>
+  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/elasticlunr/0.9.6/elasticlunr.min.js"></script>
+  <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;search_index.en.js'></script>
+  <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;js&#x2F;site.js'></script>
+  
+  
+
+</body>
+
+</html>

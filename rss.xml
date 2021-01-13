@@ -7,7 +7,114 @@
         <generator>Zola</generator>
         <language>en</language>
         <atom:link href="https://denisidoro.github.io/rss.xml" rel="self" type="application/rss+xml"/>
-        <lastBuildDate>Tue, 17 Nov 2020 00:00:00 +0000</lastBuildDate>
+        <lastBuildDate>Wed, 13 Jan 2021 00:00:00 +0000</lastBuildDate>
+        <item>
+            <title>Creating templates for CLIs</title>
+            <pubDate>Wed, 13 Jan 2021 00:00:00 +0000</pubDate>
+            <link>https://denisidoro.github.io/posts/cli-templates/</link>
+            <guid>https://denisidoro.github.io/posts/cli-templates/</guid>
+            <description>&lt;h3 id=&quot;inspiration&quot;&gt;Inspiration&lt;&#x2F;h3&gt;
+&lt;p&gt;I&#x27;ve been using &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;yarpc&#x2F;yab&quot;&gt;yab&lt;&#x2F;a&gt; -- a curl-like CLI -- recently and I was surprised how elegantly it solves a common problem.&lt;&#x2F;p&gt;
+&lt;p&gt;yab calls can get quite verbose. As an example, to get a &lt;code&gt;Customer&lt;&#x2F;code&gt; by its &lt;code&gt;id&lt;&#x2F;code&gt; from a &lt;code&gt;customer&lt;&#x2F;code&gt; microservice:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;yab&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; customer Customer::get \
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;    -t&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; &#x2F;path&#x2F;to&#x2F;idl&#x2F;some.company&#x2F;customer&#x2F;customer.thrift \
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;    -P&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; 131.144.23.5&#x2F;customer:tchannel \
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;    -r &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;{&amp;quot;request&amp;quot;: {&amp;quot;id&amp;quot;: 11}}&amp;#39;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The call is pretty convoluted, but it can be simplified by storing params in a yaml file:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# customer_by_id.yaml
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;service&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;customer
+procedure&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;Customer::get&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;thrift&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;&#x2F;path&#x2F;to&#x2F;idl&#x2F;some.company&#x2F;customer&#x2F;customer.thrift
+peer-list&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;131.144.23.5&#x2F;customer:tchannel
+request&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;:
+  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;request&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;:
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;id&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;${number:11}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The file takes a set of CLI flags in their long form, e.g. &lt;code&gt;--thrift&lt;&#x2F;code&gt; instead of &lt;code&gt;-t&lt;&#x2F;code&gt;, and their associated values.&lt;&#x2F;p&gt;
+&lt;p&gt;Then, the following call is equivalent to the beforementioned one:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;yab -y&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; customer_by_id.yaml
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Additional flags can be passed to yab to override the default values specified in the yaml file:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;yab -y&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; customer_by_id.yaml&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; --number&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; 42
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;I think this is pretty cool!&lt;&#x2F;p&gt;
+&lt;p&gt;It can save us lots of time. It also helps sharing knowledge between team members: we could have a git repo with a bunch of these &lt;code&gt;.yaml&lt;&#x2F;code&gt; files and a simple &lt;code&gt;git pull&lt;&#x2F;code&gt; would allow everyone to be on the same page.&lt;&#x2F;p&gt;
+&lt;p&gt;My immediate thought &amp;quot;could we easily replicate this for other commands?&amp;quot;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;solution&quot;&gt;Solution&lt;&#x2F;h1&gt;
+&lt;p&gt;For the sake of simplicity, let&#x27;s try to write a complex &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;httpie&#x2F;httpie&quot;&gt;httpie&lt;&#x2F;a&gt; command. It could be an involved &lt;code&gt;awk&lt;&#x2F;code&gt;, &lt;code&gt;grep&lt;&#x2F;code&gt; or &lt;code&gt;jq&lt;&#x2F;code&gt; command, though.&lt;&#x2F;p&gt;
+&lt;p&gt;The final call should look like this:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;http -v POST https:&#x2F;&#x2F;jsonplaceholder.typicode.com&#x2F;posts title=foo body=bar userId=11
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The tool I&#x27;m going to use is &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;navi&quot;&gt;navi&lt;&#x2F;a&gt;. It allows you to browse through cheatsheets --that you may write yourself or download from maintainers-- and execute commands. &lt;&#x2F;p&gt;
+&lt;p&gt;navi encourages you to write &lt;code&gt;.cheat&lt;&#x2F;code&gt; files which break commands down into smaller, reusable pieces, like so:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;%&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; httpie
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# make a request to a typicode microservice
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;http&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -v &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;method&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;https:&#x2F;&#x2F;&amp;lt;service&amp;gt;.typicode.com&#x2F;&amp;lt;endpoint&amp;gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;http-body&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;
+
+$ method: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;GET;POST;PUT&amp;#39; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;tr &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;;&amp;#39; &amp;#39;\n&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; service: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;jsonplaceholder;anotherservice&amp;#39; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;tr &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;;&amp;#39; &amp;#39;\n&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; endpoint: case &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;${&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;service&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;}:${&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;method&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;}&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; in&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;jsonplaceholder-post&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#5ebfcc;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;e1;e2;e3&amp;#39; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;tr &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;;&amp;#39; &amp;#39;\n&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;esac
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The &lt;code&gt;endpoint&lt;&#x2F;code&gt; values here are incomplete for briefness and, in a real-world scenario, would probably be fetched dynamically, instead of being harcoded.&lt;&#x2F;p&gt;
+&lt;p&gt;This offers a way to very quickly make a request to any endpoint in our company, given that we somehow mapped all possible values to the corresponding values. &lt;&#x2F;p&gt;
+&lt;p&gt;But an engineer who recently joined the team still wouldn&#x27;t know what service&#x2F;endpoint to request for creating a new &lt;code&gt;post&lt;&#x2F;code&gt;. We could then add another cheatsheet entry for more granular commands:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;%&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; httpie, endpoints
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# create a post
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;http&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -v &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;method&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;https:&#x2F;&#x2F;&amp;lt;service&amp;gt;.typicode.com&#x2F;&amp;lt;endpoint&amp;gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; title=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; body=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; userId=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;userId&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;
+
+$ method: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;POST&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; service: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;jsonplaceholder&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; endpoint: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;posts&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; title: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;foo&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; body: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;bar&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; userId: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;11&amp;#39;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;There are a multitude of ways to invoke this cheatsheet. One of them is like this:&lt;&#x2F;p&gt;
+&lt;script id=&quot;asciicast-Su5eUYFHn7M5A6Yccvcv7WH7k&quot; src=&quot;https:&#x2F;&#x2F;asciinema.org&#x2F;a&#x2F;Su5eUYFHn7M5A6Yccvcv7WH7k.js&quot; async&gt;&lt;&#x2F;script&gt;
+&lt;h3 id=&quot;preventing-user-interaction&quot;&gt;Preventing user interaction&lt;&#x2F;h3&gt;
+&lt;p&gt;If no interaction is wanted we could override values using environment variables and autoselect the desired command by using the &lt;code&gt;--best-match&lt;&#x2F;code&gt; flag:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;userId&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;12 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;navi --query &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;http endpoints create post&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; --best-match
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Let&#x27;s say that we want to skip the &lt;code&gt;--query&lt;&#x2F;code&gt; and &lt;code&gt;--best-match&lt;&#x2F;code&gt; boilerplate and we know that we&#x27;re always gonna use this tool for &lt;code&gt;http endpoints&lt;&#x2F;code&gt;. A simple bash script could come to the rescue:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;export_var&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;() {
+   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;local &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;-r var&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5ebfcc;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;tr &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;-&amp;#39; &amp;#39;_&amp;#39;)&amp;quot;
+   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;export &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;var&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;}
+
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;endpoint&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;() {
+   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;local &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;var
+   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;for&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; v &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;in &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;@&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;do
+    case &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;v &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;in
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;--&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;var&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;${&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;v&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;}&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;;;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;export_var &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;var&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot; &amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;v&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;;;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;esac
+   done
+
+   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;navi --query &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;http endpoints ${&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;query&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;}&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; --best-match
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;And we could call it like:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;endpoint &amp;#39;create post&amp;#39;
+endpoint &amp;#39;create post&amp;#39; --userId 12
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
+&lt;p&gt;I hope that, with these tips, using the terminal becomes easier for you. &lt;&#x2F;p&gt;
+&lt;p&gt;Creating templates may speed up day-to-day tasks and improve knowledge sharing --either with other team members or with your future self.&lt;&#x2F;p&gt;
+&lt;p&gt;By the way, if you have any feature requests for navi, feel free to leave an issue &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;navi&#x2F;issues&quot;&gt;here&lt;&#x2F;a&gt;!&lt;&#x2F;p&gt;
+</description>
+        </item>
         <item>
             <title>Mind maps</title>
             <pubDate>Tue, 17 Nov 2020 00:00:00 +0000</pubDate>

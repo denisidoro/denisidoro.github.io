@@ -7,6 +7,10 @@
         <loc>https://denisidoro.github.io/posts/</loc>
     </url>
     <url>
+        <loc>https://denisidoro.github.io/posts/cli-templates/</loc>
+        <lastmod>2021-01-13</lastmod>
+    </url>
+    <url>
         <loc>https://denisidoro.github.io/posts/clojure-graalvm-shell-scripting/</loc>
         <lastmod>2018-09-14</lastmod>
     </url>
@@ -142,5 +146,11 @@
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/shell/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/terminal/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/terminal/page/1/</loc>
     </url>
 </urlset>
