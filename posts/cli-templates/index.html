@@ -40,7 +40,7 @@
   <link href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;site.css' rel="stylesheet" /> 
   <title>
     
-  Denis Isidoro | Creating templates for CLIs
+  Creating templates for CLIs
 
   </title>
   <script crossorigin="anonymous" src="https://kit.fontawesome.com/201b8d5e05.js"></script>
@@ -117,6 +117,15 @@
     <button aria-label="close" class="modal-close is-large"></button>
   </div>
   
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="example.com" />
+
+
+<meta name="og:title" content="Creating templates for CLIs" />
+
+
+
+
   
   <main class="section">
     <div class="container">
@@ -152,7 +161,7 @@
   <span class="icon">
     <i class="fas fa-pencil-alt"></i>
   </span>
-  683 words
+  678 words
 </p>
 
               </div>
@@ -192,7 +201,7 @@
             <hr/>
             <div class="content has-text-justified">
               <h3 id="inspiration">Inspiration</h3>
-<p>I've been using <a href="https://github.com/yarpc/yab">yab</a> -- a curl-like CLI -- recently and I was surprised how elegantly it solves a common problem.</p>
+<p>I've been using <a href="https://github.com/yarpc/yab">yab</a> —a curl-like CLI— recently and I was surprised by how elegantly it solves a common problem.</p>
 <p>yab calls can get quite verbose. As an example, to get a <code>Customer</code> by its <code>id</code> from a <code>customer</code> microservice:</p>
 <pre style="background-color:#2b303b;">
 <code><span style="color:#eb6772;">yab</span><span style="color:#abb2bf;"> customer Customer::get \
@@ -222,27 +231,27 @@ request</span><span style="color:#abb2bf;">:
 </span></code></pre>
 <p>I think this is pretty cool!</p>
 <p>It can save us lots of time. It also helps sharing knowledge between team members: we could have a git repo with a bunch of these <code>.yaml</code> files and a simple <code>git pull</code> would allow everyone to be on the same page.</p>
-<p>My immediate thought &quot;could we easily replicate this for other commands?&quot;</p>
+<p>My immediate thought was &quot;could we easily replicate this for other commands?&quot;</p>
 <h1 id="solution">Solution</h1>
 <p>For the sake of simplicity, let's try to write a complex <a href="https://github.com/httpie/httpie">httpie</a> command. It could be an involved <code>awk</code>, <code>grep</code> or <code>jq</code> command, though.</p>
 <p>The final call should look like this:</p>
 <pre style="background-color:#2b303b;">
 <code><span style="color:#abb2bf;">http -v POST https://jsonplaceholder.typicode.com/posts title=foo body=bar userId=11
 </span></code></pre>
-<p>The tool I'm going to use is <a href="https://github.com/denisidoro/navi">navi</a>. It allows you to browse through cheatsheets --that you may write yourself or download from maintainers-- and execute commands. </p>
-<p>navi encourages you to write <code>.cheat</code> files which break commands down into smaller, reusable pieces, like so:</p>
+<p>The tool I'm going to use is <a href="https://github.com/denisidoro/navi">navi</a>. It allows you to browse through cheatsheets —that you may write yourself or download from maintainers— and execute commands. </p>
+<p>navi encourages you to write <code>.cheat</code> files which break commands down into smaller, reusable pieces:</p>
 <pre style="background-color:#2b303b;">
 <code><span style="color:#eb6772;">%</span><span style="color:#abb2bf;"> httpie
 
 </span><span style="font-style:italic;color:#5f697a;"># make a request to a typicode microservice
 </span><span style="color:#abb2bf;">http</span><span style="color:#eb6772;"> -v </span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">method</span><span style="color:#adb7c9;">&gt; </span><span style="color:#9acc76;">&quot;https://&lt;service&gt;.typicode.com/&lt;endpoint&gt;&quot; </span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">http-body</span><span style="color:#adb7c9;">&gt;</span><span style="color:#abb2bf;">
 
-$ method: echo </span><span style="color:#9acc76;">&#39;GET;POST;PUT&#39; </span><span style="color:#adb7c9;">| </span><span style="color:#eb6772;">tr </span><span style="color:#9acc76;">&#39;;&#39; &#39;\n&#39;
-</span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> service: echo </span><span style="color:#9acc76;">&#39;jsonplaceholder;anotherservice&#39; </span><span style="color:#adb7c9;">| </span><span style="color:#eb6772;">tr </span><span style="color:#9acc76;">&#39;;&#39; &#39;\n&#39;
-</span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> endpoint: case </span><span style="color:#9acc76;">&quot;${</span><span style="color:#eb6772;">service</span><span style="color:#9acc76;">}:${</span><span style="color:#eb6772;">method</span><span style="color:#9acc76;">}&quot;</span><span style="color:#abb2bf;"> in</span><span style="color:#adb7c9;">; </span><span style="color:#9acc76;">&quot;jsonplaceholder-post&quot;</span><span style="color:#abb2bf;">) </span><span style="color:#5ebfcc;">echo </span><span style="color:#9acc76;">&#39;e1;e2;e3&#39; </span><span style="color:#adb7c9;">| </span><span style="color:#eb6772;">tr </span><span style="color:#9acc76;">&#39;;&#39; &#39;\n&#39;</span><span style="color:#abb2bf;">;</span><span style="color:#adb7c9;">; </span><span style="color:#cd74e8;">esac
+$ method: echo</span><span style="color:#eb6772;"> -e </span><span style="color:#9acc76;">&#39;GET\nPOST\nPUT&#39;
+</span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> service: echo</span><span style="color:#eb6772;"> -e </span><span style="color:#9acc76;">&#39;jsonplaceholder\nanotherservice&#39;
+</span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> endpoint: case </span><span style="color:#9acc76;">&quot;${</span><span style="color:#eb6772;">service</span><span style="color:#9acc76;">}:${</span><span style="color:#eb6772;">method</span><span style="color:#9acc76;">}&quot;</span><span style="color:#abb2bf;"> in</span><span style="color:#adb7c9;">; </span><span style="color:#9acc76;">&quot;jsonplaceholder:post&quot;</span><span style="color:#abb2bf;">) </span><span style="color:#5ebfcc;">echo </span><span style="color:#eb6772;">-e </span><span style="color:#9acc76;">&#39;e1\ne2\ne3&#39;</span><span style="color:#abb2bf;">;</span><span style="color:#adb7c9;">; </span><span style="color:#cd74e8;">esac
 </span></code></pre>
 <p>The <code>endpoint</code> values here are incomplete for briefness and, in a real-world scenario, would probably be fetched dynamically, instead of being harcoded.</p>
-<p>This offers a way to very quickly make a request to any endpoint in our company, given that we somehow mapped all possible values to the corresponding values. </p>
+<p>This <code>.cheat</code> enables us to very quickly make a request to any endpoint in our company, given that we somehow mapped all possible values to the corresponding variables. </p>
 <p>But an engineer who recently joined the team still wouldn't know what service/endpoint to request for creating a new <code>post</code>. We could then add another cheatsheet entry for more granular commands:</p>
 <pre style="background-color:#2b303b;">
 <code><span style="color:#eb6772;">%</span><span style="color:#abb2bf;"> httpie, endpoints
@@ -264,10 +273,10 @@ $ method: echo </span><span style="color:#9acc76;">&#39;POST&#39;
 <pre style="background-color:#2b303b;">
 <code><span style="color:#eb6772;">userId</span><span style="color:#adb7c9;">=</span><span style="color:#9acc76;">12 </span><span style="color:#eb6772;">navi --query </span><span style="color:#9acc76;">&#39;http endpoints create post&#39;</span><span style="color:#eb6772;"> --best-match
 </span></code></pre>
-<p>Let's say that we want to skip the <code>--query</code> and <code>--best-match</code> boilerplate and we know that we're always gonna use this tool for <code>http endpoints</code>. A simple bash script could come to the rescue:</p>
+<p>Let's say that we want to skip the <code>--query</code> and <code>--best-match</code> boilerplate and we know that we're always gonna use this tool for <code>http endpoints</code>. A simple bash script  come to the rescue:</p>
 <pre style="background-color:#2b303b;">
 <code><span style="color:#5cb3fa;">export_var</span><span style="color:#abb2bf;">() {
-   </span><span style="color:#cd74e8;">local </span><span style="color:#eb6772;">-r var</span><span style="color:#adb7c9;">=</span><span style="color:#9acc76;">&quot;$(</span><span style="color:#5ebfcc;">echo </span><span style="color:#9acc76;">&quot;$</span><span style="color:#eb6772;">1</span><span style="color:#9acc76;">&quot; </span><span style="color:#adb7c9;">| </span><span style="color:#eb6772;">tr </span><span style="color:#9acc76;">&#39;-&#39; &#39;_&#39;)&quot;
+   </span><span style="color:#cd74e8;">local </span><span style="color:#eb6772;">-r var</span><span style="color:#adb7c9;">=</span><span style="color:#9acc76;">&quot;${</span><span style="color:#eb6772;">1</span><span style="color:#adb7c9;">/</span><span style="color:#eb6772;">/</span><span style="color:#9acc76;">-</span><span style="color:#adb7c9;">/</span><span style="color:#9acc76;">_}&quot;
    </span><span style="color:#cd74e8;">export </span><span style="color:#9acc76;">&quot;$</span><span style="color:#eb6772;">var</span><span style="color:#9acc76;">&quot;</span><span style="color:#adb7c9;">=</span><span style="color:#9acc76;">&quot;$</span><span style="color:#eb6772;">2</span><span style="color:#9acc76;">&quot;
 </span><span style="color:#abb2bf;">}
 
@@ -283,13 +292,13 @@ $ method: echo </span><span style="color:#9acc76;">&#39;POST&#39;
    </span><span style="color:#eb6772;">navi --query </span><span style="color:#9acc76;">&quot;http endpoints ${</span><span style="color:#eb6772;">query</span><span style="color:#9acc76;">}&quot;</span><span style="color:#eb6772;"> --best-match
 </span><span style="color:#abb2bf;">}
 </span></code></pre>
-<p>And we could call it like:</p>
+<p>And we could call it as follows:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#abb2bf;">endpoint &#39;create post&#39;
-endpoint &#39;create post&#39; --userId 12
+<code><span style="color:#eb6772;">endpoint </span><span style="color:#9acc76;">&#39;create post&#39;
+</span><span style="color:#eb6772;">endpoint </span><span style="color:#9acc76;">&#39;create post&#39;</span><span style="color:#eb6772;"> --userId</span><span style="color:#abb2bf;"> 12
 </span></code></pre><h3 id="conclusion">Conclusion</h3>
 <p>I hope that, with these tips, using the terminal becomes easier for you. </p>
-<p>Creating templates may speed up day-to-day tasks and improve knowledge sharing --either with other team members or with your future self.</p>
+<p>Creating templates may speed up day-to-day tasks and improve knowledge sharing —either with other team members or with your future self.</p>
 <p>By the way, if you have any feature requests for navi, feel free to leave an issue <a href="https://github.com/denisidoro/navi/issues">here</a>!</p>
 
             </div>
@@ -343,6 +352,16 @@ endpoint &#39;create post&#39; --userId 12
 </p>
 -->
 
+            </div>
+
+            <div class="comment-section">
+              <script src="https://utteranc.es/client.js"
+                repo="denisidoro/blog"
+                issue-term="og:title"
+                label="comment"
+                crossorigin="anonymous"
+                async>
+              </script>
             </div>
           </article>
           <hr/>
