@@ -208,11 +208,18 @@
             <hr/>
             <div class="content has-text-justified">
               <figure class="medium-image">
+
     <img alt="Image for post" class="medium-image"
         src="https://miro.medium.com/max/2160/1*tfGEp0dvIJ1_L3-D0rJSdw.jpeg"
         srcSet="https://miro.medium.com/max/552/1*tfGEp0dvIJ1_L3-D0rJSdw.jpeg 276w, https://miro.medium.com/max/1104/1*tfGEp0dvIJ1_L3-D0rJSdw.jpeg 552w, https://miro.medium.com/max/1280/1*tfGEp0dvIJ1_L3-D0rJSdw.jpeg 640w, https://miro.medium.com/max/1400/1*tfGEp0dvIJ1_L3-D0rJSdw.jpeg 700w"
         sizes="700px" />
+
+    
     <figcaption>One of the dashboards provided by the system</figcaption>
+    
+
+    
+
 </figure>
 <p>This post is intended to be a brain dump with quick highlights of some technologies. If you’re somewhat familiar with the stack I’ve used, hopefully there will be something useful for you to learn or to base on. It will be fast paced.</p>
 <h3 id="objective">Objective</h3>
@@ -250,30 +257,51 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
 <h3 id="visualizing-balances">Visualizing balances</h3>
 <p>Graphite has a built-in renderer for data:</p>
 <figure class="medium-image">
+
     <img alt="Image for post" class="medium-image"
         src="https://miro.medium.com/max/2160/1*nLHgAwVpSW9veGmMp_-Rbg.png"
         srcSet="https://miro.medium.com/max/552/1*nLHgAwVpSW9veGmMp_-Rbg.png 276w, https://miro.medium.com/max/1104/1*nLHgAwVpSW9veGmMp_-Rbg.png 552w, https://miro.medium.com/max/1280/1*nLHgAwVpSW9veGmMp_-Rbg.png 640w, https://miro.medium.com/max/1400/1*nLHgAwVpSW9veGmMp_-Rbg.png 700w"
         sizes="700px" />
+
+    
     <figcaption>This is really ugly</figcaption>
+    
+
+    
+
 </figure>
 <p>But we aren’t in the 90s anymore. I wanted to use something easier on the eyes: <a href="https://grafana.com/">Grafana</a>.</p>
 <p>Fortunately, Grafana works out of the box with Graphite, so it was a piece of cake to build beautiful dashboards:</p>
 <figure class="medium-image">
+
     <img alt="Image for post" class="medium-image"
         src="https://miro.medium.com/max/2160/1*FFPJW-tIF3967y3BcEoSoQ.png"
         srcSet="https://miro.medium.com/max/552/1*FFPJW-tIF3967y3BcEoSoQ.png 276w, https://miro.medium.com/max/1104/1*FFPJW-tIF3967y3BcEoSoQ.png 552w, https://miro.medium.com/max/1280/1*FFPJW-tIF3967y3BcEoSoQ.png 640w, https://miro.medium.com/max/1400/1*FFPJW-tIF3967y3BcEoSoQ.png 700w"
         sizes="700px" />
+
+    
     <figcaption>The main dashboard</figcaption>
+    
+
+    
+
 </figure>
 <h3 id="tabular-and-scalar-data">Tabular and scalar data</h3>
 <p>Even though piping data to Graphite made my life easier, it limited possibilities. There’s no simple way to display in a table all the info for yielding investments. Or adding a single stat with the next investment maturity date.</p>
 <p>It became clear I had to add a second data source. Considering that some steps before I already had all the data in Clojure code, I decided to upgrade the Clojure scripts to an HTTP server.</p>
 <figure class="medium-image">
+
     <img alt="Image for post" class="medium-image"
         src="https://miro.medium.com/max/2160/1*274rN8NGm-TdaKmZXEwquA.png"
         srcSet="https://miro.medium.com/max/552/1*274rN8NGm-TdaKmZXEwquA.png 276w, https://miro.medium.com/max/1104/1*274rN8NGm-TdaKmZXEwquA.png 552w, https://miro.medium.com/max/1280/1*274rN8NGm-TdaKmZXEwquA.png 640w, https://miro.medium.com/max/1400/1*274rN8NGm-TdaKmZXEwquA.png 700w"
         sizes="700px" />
+
+    
     <figcaption>InfluxDB can’t provide this tabular data</figcaption>
+    
+
+    
+
 </figure>
 <p>Grafana has support for <a href="https://grafana.com/plugins/grafana-simple-json-datasource">JSON APIs as data source</a>. Its serialization format is different from Graphite’s but I only had to write yet another pure, adapter function to get a result like this:</p>
 <div >
@@ -282,11 +310,18 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
 <h3 id="extras">Extras</h3>
 <p>After finishing all the groundwork, it became easy peasy to add new features, such as consuming external APIs for displaying stock values or currency history, to name a few.</p>
 <figure class="medium-image">
+
     <img alt="Image for post" class="medium-image"
         src="https://miro.medium.com/max/2160/1*7TJ_w-ThefC6aVi4Yy4J9g.png"
         srcSet="https://miro.medium.com/max/552/1*7TJ_w-ThefC6aVi4Yy4J9g.png 276w, https://miro.medium.com/max/1104/1*7TJ_w-ThefC6aVi4Yy4J9g.png 552w, https://miro.medium.com/max/1280/1*7TJ_w-ThefC6aVi4Yy4J9g.png 640w, https://miro.medium.com/max/1400/1*7TJ_w-ThefC6aVi4Yy4J9g.png 700w"
         sizes="700px" />
+
+    
     <figcaption>Currencies and stock information scraped from third-party APIs</figcaption>
+    
+
+    
+
 </figure>
 <p><a href="https://github.com/denisidoro/rosebud/blob/e68671b/server/resources/example_log.edn">This</a> is a complete edn file specifying what currencies and stocks we should keep track of.</p>
 <h3 id="deploying">Deploying</h3>
@@ -298,8 +333,10 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
 <h3 id="conclusion">Conclusion</h3>
 <p>I’m very happy with the result because I was able to develop it quickly, without having to learn new tools. <a href="https://medium.com/@den.isidoro/microservice-size-and-splitting-dd9fc98a262e">The way the namespaces and models are organized</a> facilitates swapping backends or splitting the code into microservices, if the future demands it.</p>
 <div class="medium-first">
+
     This post first appeared on
     <a href="https://medium.com/@den.isidoro/using-grafana-for-personal-financial-management-ac0e4d0cb43" target="_blank">Medium</a>.
+
 </div>
 
             </div>

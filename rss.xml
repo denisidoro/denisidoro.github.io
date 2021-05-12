@@ -1,13 +1,148 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>Denis Isidoro</title>
+      <title>Denis Isidoro</title>
         <link>https://denisidoro.github.io</link>
         <description></description>
         <generator>Zola</generator>
         <language>en</language>
         <atom:link href="https://denisidoro.github.io/rss.xml" rel="self" type="application/rss+xml"/>
-        <lastBuildDate>Wed, 13 Jan 2021 00:00:00 +0000</lastBuildDate>
+        <lastBuildDate>Wed, 12 May 2021 00:00:00 +0000</lastBuildDate>
+        <item>
+            <title>Using a spreadsheet as a timeseries database for finance</title>
+            <pubDate>Wed, 12 May 2021 00:00:00 +0000</pubDate>
+            <link>https://denisidoro.github.io/posts/spreadsheet-tsdb-finance/</link>
+            <guid>https://denisidoro.github.io/posts/spreadsheet-tsdb-finance/</guid>
+            <description>&lt;h3 id=&quot;context&quot;&gt;Context&lt;&#x2F;h3&gt;
+&lt;p&gt;I have already tried using personal finance apps but there&#x27;s always a feature missing or an inconsistency in results. &lt;&#x2F;p&gt;
+&lt;p&gt;Unhappy with the experience, I created a simple spreadsheet half a decade ago. It lacked features and quickly became unmaintainable.&lt;&#x2F;p&gt;
+&lt;p&gt;I decided to build my own tool instead. I started with a React (Native) Clojurescript web&#x2F;mobile app. I never finished it. &lt;&#x2F;p&gt;
+&lt;p&gt;I created a &lt;a href=&quot;https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;grafana-personal-finance&#x2F;&quot;&gt;system using Clojure and Python, paired with Grafana&lt;&#x2F;a&gt;. It worked pretty well, actually, but I never managed to deploy it in a free&#x2F;cheap hosting service, because of JVM&#x27;s and pandas&#x27; requirements.&lt;&#x2F;p&gt;
+&lt;p&gt;I converted the codebase to Rust as a pet project. The memory and processing footprints became negligible. Cool! &lt;&#x2F;p&gt;
+&lt;p&gt;But every once in a while I need to perform a simple calculation on the data, or plot an ad-hoc graph, or explore something new. Cloning repositories, editing the source code and recompiling everything isn&#x27;t fun. &lt;&#x2F;p&gt;
+&lt;p&gt;Spreadsheets are good at that. Ironically, I decided to go back to Google Sheets. But this time for real. &lt;&#x2F;p&gt;
+&lt;h3 id=&quot;architecture-diagram&quot;&gt;Architecture diagram&lt;&#x2F;h3&gt;
+&lt;p&gt;Here&#x27;s the diagram of the complete system:&lt;&#x2F;p&gt;
+&lt;figure style=&quot;margin-left: 0; margin-right: 0&quot;&gt;
+    &lt;img src=&quot;&#x2F;posts&#x2F;sheet_diagram.png&quot; style=&quot;margin-top: -2em; margin-bottom: -0.5em&quot;&gt;
+&lt;&#x2F;figure&gt; 
+&lt;p&gt;I&#x27;ll cover each section in more details.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;using-google-sheets-for-input&quot;&gt;Using Google Sheets for input&lt;&#x2F;h1&gt;
+&lt;p&gt;One of the requirements was that, as before, input should be minimal. In this case, it should basically be an event log of money transfers: &lt;&#x2F;p&gt;
+&lt;figure style=&quot;margin-left: 0; margin-right: 0&quot;&gt;
+    &lt;img src=&quot;&#x2F;posts&#x2F;sheet_log.png&quot;&gt;
+    &lt;figcaption style=&quot;font-size: 0.8em&quot;&gt;The first 2 and last 2 columns are filled automatically&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;p&gt;An extra sheet was necessary to completely define some investments. &lt;code&gt;NASDAQ:APPL&lt;&#x2F;code&gt; is all the input you need to define Apple&#x27;s stock -- provided you get data externally --, but some fixed income investments have their own criteria -- e.g. rate of interest. &lt;&#x2F;p&gt;
+&lt;figure style=&quot;margin-left: 0; margin-right: 0&quot;&gt;
+    &lt;img src=&quot;&#x2F;posts&#x2F;sheet_config.png&quot;&gt;
+    &lt;figcaption style=&quot;font-size: 0.8em&quot;&gt;This sheet only contains data which isn&#x27;t possible to obtain otherwise&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt; 
+&lt;h3 id=&quot;using-google-sheets-for-processing&quot;&gt;Using Google sheets for processing&lt;&#x2F;h3&gt;
+&lt;p&gt;Handling input was the easy part. Fetching data from APIs and doing the math is &lt;strike&gt;complicated&lt;&#x2F;strike&gt; laborious.&lt;&#x2F;p&gt;
+&lt;p&gt;I can&#x27;t get my head around &lt;code&gt;=ARRAYFORMULA(IF..., VLOOKUP(...FILTER(...(INDEX...(MATCH...)))))&lt;&#x2F;code&gt; formulae. Fortunately, Google Sheets allows using Javascript for manipulating sheets. It&#x27;s not &lt;strike&gt;Rust&lt;&#x2F;strike&gt; my favorite language but at least it has &lt;code&gt;.map()&lt;&#x2F;code&gt;, &lt;code&gt;.filter()&lt;&#x2F;code&gt; and alike.&lt;&#x2F;p&gt;
+&lt;p&gt;After so many attempts building the same system, I came up with a mental model which I didn&#x27;t want to abandon so I replicated it once again.&lt;&#x2F;p&gt;
+&lt;p&gt;To implement a timeseries database, a single spreadsheet was used. The y-axis represents time; the x-axis, different vectors:&lt;&#x2F;p&gt;
+&lt;figure style=&quot;margin-left: 0; margin-right: 0&quot;&gt;
+    &lt;img src=&quot;&#x2F;posts&#x2F;sheet_tsdb.jpg&quot;&gt;
+    &lt;figcaption style=&quot;font-size: 0.8em&quot;&gt;This sheet contains all numeric data&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt; 
+&lt;p&gt;In Javascript we can read from and write to this sheet as if we were using a real timeseries database. Effectively, this made my new code look very similar to the previous ones:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;&#x2F;&#x2F; old 
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;influx&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;emit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;today&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;3.12&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;)
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;&#x2F;&#x2F; new
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;tsdbSheet&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;setValue&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;D67&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;3.12
+ 
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;&#x2F;&#x2F; old 
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;config &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;readFromFile&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;.&#x2F;config.yaml&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;foo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;config&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;foo
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;&#x2F;&#x2F; new
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;foo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;configSheet&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;getValue&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;A2&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h3 id=&quot;abstractions&quot;&gt;Abstractions&lt;&#x2F;h3&gt;
+&lt;p&gt;These low-level spreadsheet operations were abstracted away, in order to make the rest of the code agnostic to Google Sheets. Should I decide to port it elsewhere, I&#x27;ll only need to edit some parts from the &lt;code&gt;TSDB&lt;&#x2F;code&gt;, &lt;code&gt;EventLog&lt;&#x2F;code&gt; and &lt;code&gt;Config&lt;&#x2F;code&gt; classes.&lt;&#x2F;p&gt;
+&lt;p&gt;For example, calculating balances looks like this:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;config&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;assets&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5ebfcc;&quot;&gt;forEach&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;-&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;{
+   const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;balance &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;range&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;startDate&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;today&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;date &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;{
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;value &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;someMath&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;date&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;tsdb&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;)
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;date&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;value&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;] 
+   }
+   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;tsdb&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;save&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.id, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;balance&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;balance&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;)
+})
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Getting historical data for stocks isn&#x27;t any different:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;config&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;assets
+   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;filter&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;kind &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;stock&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;) 
+   .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5ebfcc;&quot;&gt;forEach&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;stock &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;{
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;price &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;callSomeApi&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.id)
+      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;tsdb&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;save&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.id, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;price&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;price&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;) 
+   }) 
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Similarly, to prevent some input, the following is executed on startup:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;config&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;assets
+   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;filter&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;-&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;reachedMaturity&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;())
+   .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5ebfcc;&quot;&gt;forEach&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;-&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;eventLog&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;save&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;sell&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.id, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;maturityDate&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;))
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Finally, this allowed me to achieve what I already had in the early designs but with 3 benefits:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;I can access it from anywhere, as long as the device supports Google Sheets&lt;&#x2F;li&gt;
+&lt;li&gt;I edit tabular data, instead of a difficult-to-maintain &lt;code&gt;.yml&lt;&#x2F;code&gt; file versioned in a private Github repository&lt;&#x2F;li&gt;
+&lt;li&gt;I can quickly run an ad-hoc &lt;code&gt;=SUM(FILTER(...)))&lt;&#x2F;code&gt; against my data if necessary &lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h1 id=&quot;dashboards&quot;&gt;Dashboards&lt;&#x2F;h1&gt;
+&lt;p&gt;Spreadsheet formulae are cool but I still like looking at dashboards and plotting graphs on the fly, so I reused the architecture I already had on top of Grafana. I don&#x27;t want to share screenshots here but the dashboard looks like any regular Grafana one:&lt;&#x2F;p&gt;
+&lt;figure style=&quot;margin-left: 0; margin-right: 0&quot;&gt;
+    &lt;img src=&quot;https:&#x2F;&#x2F;grafana.com&#x2F;static&#x2F;img&#x2F;grafana&#x2F;showcase_visualize-954.jpg&quot;&gt;
+    &lt;figcaption style=&quot;font-size: 0.8em&quot;&gt;Grafana dashboards normally look like this&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt; 
+&lt;p&gt;For example, I can quickly write a query to compare the portfolio performance against the &lt;a href=&quot;https:&#x2F;&#x2F;br.investing.com&#x2F;indices&#x2F;bovespa&quot;&gt;Ibovespa index&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;figure style=&quot;margin-left: 0; margin-right: 0&quot;&gt;
+    &lt;img src=&quot;&#x2F;posts&#x2F;sheet_grafana.jpg&quot;&gt;
+    &lt;figcaption style=&quot;font-size: 0.8em&quot;&gt;To get the performance of assets broken down by broker, &lt;code&gt;sum(...) by (broker)&lt;&#x2F;code&gt; would do the trick&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt; 
+&lt;h3 id=&quot;real-timeseries-database&quot;&gt;(Real) timeseries database&lt;&#x2F;h3&gt;
+&lt;p&gt;I decided to &lt;a href=&quot;https:&#x2F;&#x2F;victoriametrics.com&quot;&gt;VictoriaMetrics&lt;&#x2F;a&gt; this time. It&#x27;s fast and it has support for a much needed feature: backfilling. In other words, I&#x27;m able to emit values for timestamps in the past. &lt;&#x2F;p&gt;
+&lt;p&gt;Its query engine is called MetricsQL and is a superset of &lt;a href=&quot;https:&#x2F;&#x2F;prometheus.io&#x2F;docs&#x2F;prometheus&#x2F;latest&#x2F;querying&#x2F;basics&#x2F;&quot;&gt;PromQL&lt;&#x2F;a&gt;. &lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;d like to highlight 3 features from MetricsQL:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;keep_last_value&lt;&#x2F;code&gt;: only one data point per day per series is emitted. Anything above this would be redundant, since I don&#x27;t day trade. However, Grafana asks for &lt;code&gt;n&lt;&#x2F;code&gt; data points per day, &lt;code&gt;n&lt;&#x2F;code&gt; function of the width of the panel in pixels and is normally greater than 1. Without &lt;code&gt;keep_last_value&lt;&#x2F;code&gt; the plots would contain gaps. Summing metrics with gaps in different positions is erratic, because gaps are interpreted as 0.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;WITH&lt;&#x2F;code&gt; statement: this lets query aliasing, which is pretty handy. By the way, if you like &lt;code&gt;WITH&lt;&#x2F;code&gt; too, you may like &lt;a href=&quot;https:&#x2F;&#x2F;denisidoro.github.io&#x2F;pipers&#x2F;&quot;&gt;pipers&lt;&#x2F;a&gt;. &lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;range_first&lt;&#x2F;code&gt;: with this function I was able to normalize investment performances so that they all start with 1, making comparisons a breeze, as seen above. &lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h1 id=&quot;exporting-importing-data&quot;&gt;Exporting&#x2F;importing data&lt;&#x2F;h1&gt;
+&lt;p&gt;I added an &lt;code&gt;Export&lt;&#x2F;code&gt; button to Google Sheets which exports the contents from the spreadsheets to Grafana:&lt;&#x2F;p&gt;
+&lt;figure style=&quot;margin-left: 0; margin-right: 0&quot;&gt;
+    &lt;img src=&quot;&#x2F;posts&#x2F;sheet_button.png&quot;&gt;
+    &lt;figcaption style=&quot;font-size: 0.8em&quot;&gt;It&#x27;s easy to call custom scripts like this&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;  
+&lt;p&gt;It simply serializes the in-memory data structures as JSON text and sends it in a POST request.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;notes-on-performance&quot;&gt;Notes on performance&lt;&#x2F;h3&gt;
+&lt;p&gt;The Rust implementation was able to read the config file, make all requests in parallel, calculate everything and export all data to Grafana in ~5 seconds.&lt;&#x2F;p&gt;
+&lt;p&gt;I expected my first implementation in Google Sheets to be slower, or course. But I didn&#x27;t expect it to be SO SLOW. The first implementation took 45~60min to finish processing. At least that&#x27;s what I estimate, because I wasn&#x27;t patient enough to wait for it. &lt;&#x2F;p&gt;
+&lt;p&gt;The problem is that &lt;code&gt;sheet.setValue(...)&lt;&#x2F;code&gt; takes 500ms~3s for each cell. Also, switching between read and write modes takes about the same time. If you consider that each investment generates ~10 timeseries -- average price, balance, etc. -- and that each timeseries has 365 data points per year, then you&#x27;ll see that this quickly explodes.&lt;&#x2F;p&gt;
+&lt;p&gt;This reminded me of the problem that frameworks like React faced. Manipulating the DOM is slow, so they ended up creating a &lt;a href=&quot;https:&#x2F;&#x2F;reactjs.org&#x2F;docs&#x2F;faq-internals.html&quot;&gt;virtual representation of the DOM&lt;&#x2F;a&gt;. I did the same, but for spreadsheets. It sounds complicated, but it isn&#x27;t.&lt;&#x2F;p&gt;
+&lt;p&gt;Basically, &lt;code&gt;tsdb.save(...)&lt;&#x2F;code&gt; doesn&#x27;t manipulate the sheet directly but mutates an in-memory data structure instead. Later on, it sets the values for ranges instead of cells, in batch. The &amp;quot;public&amp;quot; APIs remained the same -- only the implementation details changed.&lt;&#x2F;p&gt;
+&lt;p&gt;After these optimizations, the script takes less than a minute to complete.&lt;&#x2F;p&gt;
+&lt;p&gt;This could be improved even further, but I don&#x27;t want to make the code more complex just to save a few seconds once a month. &lt;&#x2F;p&gt;
+&lt;h3 id=&quot;result&quot;&gt;Result&lt;&#x2F;h3&gt;
+&lt;p&gt;To be honest, it&#x27;s likely that a couple of &lt;strike&gt;months&lt;&#x2F;strike&gt; years from now I&#x27;ll decide to write everything from scratch yet again. &lt;&#x2F;p&gt;
+&lt;p&gt;It&#x27;s not you, project of mine. It&#x27;s me. &lt;&#x2F;p&gt;
+&lt;p&gt;But I&#x27;m sure of one thing: the system has never been so flexible and portable.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;codebase&quot;&gt;Codebase&lt;&#x2F;h3&gt;
+&lt;p&gt;The spreadsheet and the source code are currently private because it would require some effort to make them shareable -- from privacy, security and usability standpoints. &lt;&#x2F;p&gt;
+&lt;p&gt;Please reach out to me if you&#x27;re interested in it, though. Maybe I can come up with something! 👍&lt;&#x2F;p&gt;
+&lt;p&gt;In the meantime, I highly recommend &lt;a href=&quot;https:&#x2F;&#x2F;dlombelloplanilhas.com&#x2F;&quot;&gt;dlombello&#x27;s spreadsheets&lt;&#x2F;a&gt;, which should fit most people&#x27;s needs.&lt;&#x2F;p&gt;
+</description>
+        </item>
         <item>
             <title>Creating templates for CLIs</title>
             <pubDate>Wed, 13 Jan 2021 00:00:00 +0000</pubDate>
@@ -17,14 +152,14 @@
 &lt;p&gt;I&#x27;ve been using &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;yarpc&#x2F;yab&quot;&gt;yab&lt;&#x2F;a&gt; —a curl-like CLI— recently and I was surprised by how elegantly it solves a common problem.&lt;&#x2F;p&gt;
 &lt;p&gt;yab calls can get quite verbose. As an example, to get a &lt;code&gt;Customer&lt;&#x2F;code&gt; by its &lt;code&gt;id&lt;&#x2F;code&gt; from a &lt;code&gt;customer&lt;&#x2F;code&gt; microservice:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;yab&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; customer Customer::get \
+&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;yab&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; customer Customer::get \
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;    -t&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; &#x2F;path&#x2F;to&#x2F;idl&#x2F;some.company&#x2F;customer&#x2F;customer.thrift \
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;    -P&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; 131.144.23.5&#x2F;customer:tchannel \
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;    -r &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;{&amp;quot;request&amp;quot;: {&amp;quot;id&amp;quot;: 11}}&amp;#39;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;The call is pretty convoluted, but it can be simplified by storing params in a yaml file:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# customer_by_id.yaml
+&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# customer_by_id.yaml
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;service&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;customer
 procedure&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;Customer::get&amp;quot;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;thrift&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;&#x2F;path&#x2F;to&#x2F;idl&#x2F;some.company&#x2F;customer&#x2F;customer.thrift
@@ -36,11 +171,11 @@ request&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;:
 &lt;p&gt;The file takes a set of CLI flags in their long form, e.g. &lt;code&gt;--thrift&lt;&#x2F;code&gt; instead of &lt;code&gt;-t&lt;&#x2F;code&gt;, and their associated values.&lt;&#x2F;p&gt;
 &lt;p&gt;Then, the following call is equivalent to the beforementioned one:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;yab -y&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; customer_by_id.yaml
+&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;yab -y&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; customer_by_id.yaml
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Additional flags can be passed to yab to override the default values specified in the yaml file:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;yab -y&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; customer_by_id.yaml&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; --number&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; 42
+&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;yab -y&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; customer_by_id.yaml&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; --number&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; 42
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;I think this is pretty cool!&lt;&#x2F;p&gt;
 &lt;p&gt;It can save us lots of time. It also helps sharing knowledge between team members: we could have a git repo with a bunch of these &lt;code&gt;.yaml&lt;&#x2F;code&gt; files and a simple &lt;code&gt;git pull&lt;&#x2F;code&gt; would allow everyone to be on the same page.&lt;&#x2F;p&gt;
@@ -54,12 +189,12 @@ request&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;:
 &lt;p&gt;The tool I&#x27;m going to use is &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;navi&quot;&gt;navi&lt;&#x2F;a&gt;. It allows you to browse through cheatsheets —that you may write yourself or download from maintainers— and execute commands. &lt;&#x2F;p&gt;
 &lt;p&gt;navi encourages you to write &lt;code&gt;.cheat&lt;&#x2F;code&gt; files which break commands down into smaller, reusable pieces:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;%&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; httpie
+&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;%&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; httpie
 
 &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# make a request to a typicode microservice
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;http&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -v &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;method&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;https:&#x2F;&#x2F;&amp;lt;service&amp;gt;.typicode.com&#x2F;&amp;lt;endpoint&amp;gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;http-body&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;http&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -v &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;method&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;https:&#x2F;&#x2F;&amp;lt;service&amp;gt;.typicode.com&#x2F;&amp;lt;endpoint&amp;gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;http-body&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt;
 
-$ method: echo&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -e &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;GET\nPOST\nPUT&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;$ method: echo&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -e &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;GET\nPOST\nPUT&amp;#39;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; service: echo&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -e &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;jsonplaceholder\nanotherservice&amp;#39;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; endpoint: case &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;${&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;service&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;}:${&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;method&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;}&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; in&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;jsonplaceholder:post&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#5ebfcc;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;-e &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;e1\ne2\ne3&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;esac
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
@@ -67,12 +202,12 @@ $ method: echo&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -e
 &lt;p&gt;This &lt;code&gt;.cheat&lt;&#x2F;code&gt; enables us to very quickly make a request to any endpoint in our company, given that we somehow mapped all possible values to the corresponding variables. &lt;&#x2F;p&gt;
 &lt;p&gt;But an engineer who recently joined the team still wouldn&#x27;t know what service&#x2F;endpoint to request for creating a new &lt;code&gt;post&lt;&#x2F;code&gt;. We could then add another cheatsheet entry for more granular commands:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;%&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; httpie, endpoints
+&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;%&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; httpie, endpoints
 
 &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# create a post
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;http&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -v &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;method&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;https:&#x2F;&#x2F;&amp;lt;service&amp;gt;.typicode.com&#x2F;&amp;lt;endpoint&amp;gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; title=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; body=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; userId=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;userId&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;http&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -v &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;method&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;https:&#x2F;&#x2F;&amp;lt;service&amp;gt;.typicode.com&#x2F;&amp;lt;endpoint&amp;gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; title=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; body=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; userId=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;userId&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt;
 
-$ method: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;POST&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;$ method: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;POST&amp;#39;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; service: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;jsonplaceholder&amp;#39;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; endpoint: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;posts&amp;#39;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; title: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;foo&amp;#39;
@@ -84,11 +219,11 @@ $ method: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&a
 &lt;h3 id=&quot;preventing-user-interaction&quot;&gt;Preventing user interaction&lt;&#x2F;h3&gt;
 &lt;p&gt;If no interaction is wanted we could override values using environment variables and autoselect the desired command by using the &lt;code&gt;--best-match&lt;&#x2F;code&gt; flag:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;userId&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;12 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;navi --query &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;http endpoints create post&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; --best-match
+&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;userId&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;12 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;navi --query &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;http endpoints create post&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; --best-match
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Let&#x27;s say that we want to skip the &lt;code&gt;--query&lt;&#x2F;code&gt; and &lt;code&gt;--best-match&lt;&#x2F;code&gt; boilerplate and we know that we&#x27;re always gonna use this tool for &lt;code&gt;http endpoints&lt;&#x2F;code&gt;. A simple bash script  come to the rescue:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;export_var&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;() {
+&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;export_var&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;() {
    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;local &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;-r var&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;${&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;_}&amp;quot;
    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;export &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;var&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;}
@@ -107,7 +242,7 @@ $ method: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&a
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;And we could call it as follows:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;endpoint &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;create post&amp;#39;
+&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;endpoint &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;create post&amp;#39;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;endpoint &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;create post&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; --userId&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; 12
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
 &lt;p&gt;I hope that, with these tips, using the terminal becomes easier for you. &lt;&#x2F;p&gt;
@@ -185,11 +320,19 @@ $ method: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&a
             <link>https://denisidoro.github.io/posts/data-driven-programming/</link>
             <guid>https://denisidoro.github.io/posts/data-driven-programming/</guid>
             <description>&lt;figure class=&quot;medium-cover&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;t u v gh aj&quot; src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;11014&#x2F;0*43gbACYn_imJxYko&quot; srcSet=&quot; https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;0*43gbACYn_imJxYko 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;0*43gbACYn_imJxYko 552w,
     https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;0*43gbACYn_imJxYko 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;0*43gbACYn_imJxYko 700w&quot; sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;Photo by
         &lt;a href=&quot;https:&#x2F;&#x2F;unsplash.com&#x2F;@aaronburden?utm_source=medium&amp;utm_medium=referral&quot;&gt;aaronburden&lt;&#x2F;a&gt;
-        on &lt;a href=&quot;https:&#x2F;&#x2F;unsplash.com?utm_source=medium&amp;utm_medium=referral&quot;&gt;Unsplash&lt;&#x2F;a&gt; &lt;&#x2F;figcaption&gt;
+        on &lt;a href=&quot;https:&#x2F;&#x2F;unsplash.com?utm_source=medium&amp;utm_medium=referral&quot;&gt;Unsplash&lt;&#x2F;a&gt; 
+    &lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;p&gt;If there’s one thing that &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Functional_programming&quot;&gt;functional programming&lt;&#x2F;a&gt; has taught me is &lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=-6BsiVyC1kM&quot;&gt;the importance of values&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;Say we’re part of a startup’s founding team and are responsible for designing and building the core of its backend services. At its core, our job is to extract, transform and load values.&lt;&#x2F;p&gt;
@@ -237,11 +380,18 @@ $ method: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&a
 &lt;p&gt;By using a battle-tested solution we get everything for free plus support for all major IDEs.&lt;&#x2F;p&gt;
 &lt;p&gt;There are a lot of articles on the Internet about the benefits and capabilities of JSON Schema, so I won’t bother you with details. I’ll simply demonstrate it with a GIF:&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*Em1xMQgnAbMLMU9-jnAHAg.gif&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*Em1xMQgnAbMLMU9-jnAHAg.gif 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*Em1xMQgnAbMLMU9-jnAHAg.gif 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*Em1xMQgnAbMLMU9-jnAHAg.gif 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*Em1xMQgnAbMLMU9-jnAHAg.gif 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
+
+    
     &lt;figcaption&gt;The intern has just joined the company, but she already knows that someone, at some point in time, wrote a &lt;code&gt;billing_address&lt;&#x2F;code&gt; widget.&lt;&#x2F;figcaption&gt;
+    
+
 &lt;&#x2F;figure&gt;
 &lt;p&gt;The schema used in this demo was extracted from &lt;a href=&quot;https:&#x2F;&#x2F;rjsf-team.github.io&#x2F;react-jsonschema-form&#x2F;&quot;&gt;react-jsonschema-form&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;I know that having a popup window when we type sounds like a small benefit but, if you stop to think about it, the intern didn’t even have to leave the file buffer! She didn’t need to browse through the code implementation, or read documents — that are likely outdated or incomplete — or contact the people that contributed to the DSL.&lt;&#x2F;p&gt;
@@ -261,8 +411,10 @@ $ method: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&a
 &lt;p&gt;This is exactly what &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Kotlin&#x2F;anko&quot;&gt;Anko&lt;&#x2F;a&gt; does in order to build Android UIs, for example.&lt;&#x2F;p&gt;
 &lt;p&gt;Chances are that — assuming we wrote this in Kotlin — we have other developers in the company already familiar with Kotlin, so they will feel at home with this syntax. No extra level of indirection introduced.&lt;&#x2F;p&gt;
 &lt;div class=&quot;medium-first&quot;&gt;
+
     This post first appeared on
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;on-data-driven-programming-925e450525e3&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
+
 &lt;&#x2F;div&gt;
 </description>
         </item>
@@ -274,10 +426,16 @@ $ method: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&a
             <description>&lt;p&gt;I miss a REPL when coding in Golang. It turns out we can have a Go REPL connected to our IDE of choice.&lt;&#x2F;p&gt;
 &lt;p&gt;After developing in &lt;a href=&quot;https:&#x2F;&#x2F;clojure.org&#x2F;&quot;&gt;Clojure&lt;&#x2F;a&gt; for some time, I miss a &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Read%E2%80%93eval%E2%80%93print_loop&quot;&gt;REPL&lt;&#x2F;a&gt; when coding in &lt;a href=&quot;https:&#x2F;&#x2F;golang.org&#x2F;&quot;&gt;Golang&lt;&#x2F;a&gt;. It turns out we can have a Go REPL connected to our IDE of choice.&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*PYNPylp2BS_XSKYIlNrXyw.gif&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*PYNPylp2BS_XSKYIlNrXyw.gif 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*PYNPylp2BS_XSKYIlNrXyw.gif 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*PYNPylp2BS_XSKYIlNrXyw.gif 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*PYNPylp2BS_XSKYIlNrXyw.gif 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;h3 id=&quot;why-use-a-repl&quot;&gt;Why use a REPL?&lt;&#x2F;h3&gt;
 &lt;p&gt;Because it allows rapid experimentation and gives feedbacks instantaneously. Will my complex regex work? Instead of double-checking everything let’s just eval one case. When selecting a substring is the last index exclusive or not? Instead of reading the documentation let’s just try it out with an example.&lt;&#x2F;p&gt;
@@ -296,8 +454,10 @@ $ method: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&a
 &lt;h3 id=&quot;does-this-work-for-other-languages&quot;&gt;Does this work for other languages?&lt;&#x2F;h3&gt;
 &lt;p&gt;Yes! Your shell is a REPL in some sense. When writing long &lt;code&gt;for&lt;&#x2F;code&gt;s or commands with many pipes this may come in handy as well.&lt;&#x2F;p&gt;
 &lt;div class=&quot;medium-first&quot;&gt;
+
     This post first appeared on
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;quick-prototyping-with-a-golang-repl-547703885bd8&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
+
 &lt;&#x2F;div&gt;
 </description>
         </item>
@@ -330,8 +490,10 @@ $ method: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&a
 &lt;p&gt;If you’re sure that the platform which will run the script has something like &lt;a href=&quot;https:&#x2F;&#x2F;stedolan.github.io&#x2F;jq&#x2F;&quot;&gt;jq&lt;&#x2F;a&gt; then JSON is a good candidate!&lt;&#x2F;p&gt;
 &lt;p&gt;But if you want the script to be extremely portable, then a custom solution is required. Besides, the core of the library has ~30 lines of code, anyway.&lt;&#x2F;p&gt;
 &lt;div class=&quot;medium-first&quot;&gt;
+
     This post first appeared on
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;dictionaries-in-shell-scripts-61d34e1c91c6&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
+
 &lt;&#x2F;div&gt;
 </description>
         </item>
@@ -341,11 +503,19 @@ $ method: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&a
             <link>https://denisidoro.github.io/posts/monolithic-apps-graph-apis/</link>
             <guid>https://denisidoro.github.io/posts/monolithic-apps-graph-apis/</guid>
             <description>&lt;figure class=&quot;medium-cover&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;t u v gh aj&quot; src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;11014&#x2F;0*sbUufEe2m6a0hwbN&quot; srcSet=&quot; https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;0*sbUufEe2m6a0hwbN 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;0*sbUufEe2m6a0hwbN 552w,
     https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;0*sbUufEe2m6a0hwbN 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;0*sbUufEe2m6a0hwbN 700w&quot; sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;Honeycombs have many cells but they act together to fulfill the same purpose by
         &lt;a href=&quot;https:&#x2F;&#x2F;unsplash.com&#x2F;@matthew_t_rader?utm_source=medium&amp;utm_medium=referral&quot;&gt;matthew_t_rader&lt;&#x2F;a&gt;
-        on &lt;a href=&quot;https:&#x2F;&#x2F;unsplash.com?utm_source=medium&amp;utm_medium=referral&quot;&gt;Unsplash&lt;&#x2F;a&gt; &lt;&#x2F;figcaption&gt;
+        on &lt;a href=&quot;https:&#x2F;&#x2F;unsplash.com?utm_source=medium&amp;utm_medium=referral&quot;&gt;Unsplash&lt;&#x2F;a&gt; 
+    &lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;p&gt;Last year, I talked about monolithic architecture that enables easy microservice splitting later.&lt;&#x2F;p&gt;
 &lt;p&gt;After applying it for a large codebase, I’ve started using another approach: &lt;a href=&quot;https:&#x2F;&#x2F;zapier.com&#x2F;engineering&#x2F;graph-apis&#x2F;&quot;&gt;graph APIs&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
@@ -435,8 +605,10 @@ $ method: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&a
 &lt;p&gt;At the moment I have no open-source code to show, but if you’re really interested, contact me and we can work something out.&lt;&#x2F;p&gt;
 &lt;p&gt;If you’ve liked the ideas highlighted here regarding graph APIs, please check &lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=r3zywlNflJI&quot;&gt;this talk&lt;&#x2F;a&gt; from Pathom’s author.&lt;&#x2F;p&gt;
 &lt;div class=&quot;medium-first&quot;&gt;
+
     This post first appeared on
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;writing-multi-module-monolithic-apps-with-graph-apis-1c095cdaccdf&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
+
 &lt;&#x2F;div&gt;
 </description>
         </item>
@@ -446,11 +618,18 @@ $ method: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&a
             <link>https://denisidoro.github.io/posts/grafana-personal-finance/</link>
             <guid>https://denisidoro.github.io/posts/grafana-personal-finance/</guid>
             <description>&lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*tfGEp0dvIJ1_L3-D0rJSdw.jpeg&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*tfGEp0dvIJ1_L3-D0rJSdw.jpeg 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*tfGEp0dvIJ1_L3-D0rJSdw.jpeg 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*tfGEp0dvIJ1_L3-D0rJSdw.jpeg 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*tfGEp0dvIJ1_L3-D0rJSdw.jpeg 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;One of the dashboards provided by the system&lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;p&gt;This post is intended to be a brain dump with quick highlights of some technologies. If you’re somewhat familiar with the stack I’ve used, hopefully there will be something useful for you to learn or to base on. It will be fast paced.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;objective&quot;&gt;Objective&lt;&#x2F;h3&gt;
@@ -488,30 +667,51 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
 &lt;h3 id=&quot;visualizing-balances&quot;&gt;Visualizing balances&lt;&#x2F;h3&gt;
 &lt;p&gt;Graphite has a built-in renderer for data:&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*nLHgAwVpSW9veGmMp_-Rbg.png&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*nLHgAwVpSW9veGmMp_-Rbg.png 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*nLHgAwVpSW9veGmMp_-Rbg.png 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*nLHgAwVpSW9veGmMp_-Rbg.png 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*nLHgAwVpSW9veGmMp_-Rbg.png 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;This is really ugly&lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;p&gt;But we aren’t in the 90s anymore. I wanted to use something easier on the eyes: &lt;a href=&quot;https:&#x2F;&#x2F;grafana.com&#x2F;&quot;&gt;Grafana&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;Fortunately, Grafana works out of the box with Graphite, so it was a piece of cake to build beautiful dashboards:&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*FFPJW-tIF3967y3BcEoSoQ.png&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*FFPJW-tIF3967y3BcEoSoQ.png 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*FFPJW-tIF3967y3BcEoSoQ.png 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*FFPJW-tIF3967y3BcEoSoQ.png 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*FFPJW-tIF3967y3BcEoSoQ.png 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;The main dashboard&lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;h3 id=&quot;tabular-and-scalar-data&quot;&gt;Tabular and scalar data&lt;&#x2F;h3&gt;
 &lt;p&gt;Even though piping data to Graphite made my life easier, it limited possibilities. There’s no simple way to display in a table all the info for yielding investments. Or adding a single stat with the next investment maturity date.&lt;&#x2F;p&gt;
 &lt;p&gt;It became clear I had to add a second data source. Considering that some steps before I already had all the data in Clojure code, I decided to upgrade the Clojure scripts to an HTTP server.&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*274rN8NGm-TdaKmZXEwquA.png&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*274rN8NGm-TdaKmZXEwquA.png 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*274rN8NGm-TdaKmZXEwquA.png 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*274rN8NGm-TdaKmZXEwquA.png 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*274rN8NGm-TdaKmZXEwquA.png 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;InfluxDB can’t provide this tabular data&lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;p&gt;Grafana has support for &lt;a href=&quot;https:&#x2F;&#x2F;grafana.com&#x2F;plugins&#x2F;grafana-simple-json-datasource&quot;&gt;JSON APIs as data source&lt;&#x2F;a&gt;. Its serialization format is different from Graphite’s but I only had to write yet another pure, adapter function to get a result like this:&lt;&#x2F;p&gt;
 &lt;div &gt;
@@ -520,11 +720,18 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
 &lt;h3 id=&quot;extras&quot;&gt;Extras&lt;&#x2F;h3&gt;
 &lt;p&gt;After finishing all the groundwork, it became easy peasy to add new features, such as consuming external APIs for displaying stock values or currency history, to name a few.&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*7TJ_w-ThefC6aVi4Yy4J9g.png&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*7TJ_w-ThefC6aVi4Yy4J9g.png 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*7TJ_w-ThefC6aVi4Yy4J9g.png 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*7TJ_w-ThefC6aVi4Yy4J9g.png 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*7TJ_w-ThefC6aVi4Yy4J9g.png 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;Currencies and stock information scraped from third-party APIs&lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;rosebud&#x2F;blob&#x2F;e68671b&#x2F;server&#x2F;resources&#x2F;example_log.edn&quot;&gt;This&lt;&#x2F;a&gt; is a complete edn file specifying what currencies and stocks we should keep track of.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;deploying&quot;&gt;Deploying&lt;&#x2F;h3&gt;
@@ -536,8 +743,10 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
 &lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
 &lt;p&gt;I’m very happy with the result because I was able to develop it quickly, without having to learn new tools. &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;microservice-size-and-splitting-dd9fc98a262e&quot;&gt;The way the namespaces and models are organized&lt;&#x2F;a&gt; facilitates swapping backends or splitting the code into microservices, if the future demands it.&lt;&#x2F;p&gt;
 &lt;div class=&quot;medium-first&quot;&gt;
+
     This post first appeared on
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;using-grafana-for-personal-financial-management-ac0e4d0cb43&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
+
 &lt;&#x2F;div&gt;
 </description>
         </item>
@@ -547,11 +756,19 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
             <link>https://denisidoro.github.io/posts/microservice-splitting-code-refactoring/</link>
             <guid>https://denisidoro.github.io/posts/microservice-splitting-code-refactoring/</guid>
             <description>&lt;figure class=&quot;medium-cover&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;t u v gh aj&quot; src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;11014&#x2F;0*YzywaYKyaA6w-HcY&quot; srcSet=&quot; https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;0*YzywaYKyaA6w-HcY 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;0*YzywaYKyaA6w-HcY 552w,
     https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;0*YzywaYKyaA6w-HcY 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;0*YzywaYKyaA6w-HcY 700w&quot; sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;Photo by
         &lt;a href=&quot;https:&#x2F;&#x2F;unsplash.com&#x2F;@leliejens?utm_source=medium&amp;utm_medium=referral&quot;&gt;leliejens&lt;&#x2F;a&gt;
-        on &lt;a href=&quot;https:&#x2F;&#x2F;unsplash.com?utm_source=medium&amp;utm_medium=referral&quot;&gt;Unsplash&lt;&#x2F;a&gt; &lt;&#x2F;figcaption&gt;
+        on &lt;a href=&quot;https:&#x2F;&#x2F;unsplash.com?utm_source=medium&amp;utm_medium=referral&quot;&gt;Unsplash&lt;&#x2F;a&gt; 
+    &lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;p&gt;Let’s say that you work for a company that offers a platform for personal finance management. You were requested to add a feature whose input from the customer is a list of company × amount of stocks × investment date and the output is the customer’s total balance for a given point in time.&lt;&#x2F;p&gt;
 &lt;p&gt;How big or small should the microservice(s) be?&lt;&#x2F;p&gt;
@@ -608,8 +825,10 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
 &lt;h3 id=&quot;front-end-sidenote&quot;&gt;Front-end sidenote&lt;&#x2F;h3&gt;
 &lt;p&gt;Even though I focused on the back-end, this applies to front-end as well. Why make the &lt;code&gt;CompanyDetailsPage&lt;&#x2F;code&gt; receive an HTTP component and perform a request? It can simply receive a &lt;code&gt;CompanyRepository&lt;&#x2F;code&gt; and you can call &lt;code&gt;repository.getDetails()&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
 &lt;div class=&quot;medium-first&quot;&gt;
+
     This post first appeared on
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;microservice-size-and-splitting-dd9fc98a262e&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
+
 &lt;&#x2F;div&gt;
 </description>
         </item>
@@ -624,8 +843,10 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
 &lt;p&gt;The website includes an RSS feed as well.&lt;&#x2F;p&gt;
 &lt;p&gt;Again, if you want to check new posts, &lt;a href=&quot;https:&#x2F;&#x2F;denisidoro.github.io&#x2F;&quot;&gt;click here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;div class=&quot;medium-first&quot;&gt;
+
     This post first appeared on
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;new-posts-moving-from-medium-f4e9ae4acc19&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
+
 &lt;&#x2F;div&gt;
 </description>
         </item>
@@ -635,17 +856,24 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
             <link>https://denisidoro.github.io/posts/clojure-graalvm-shell-scripting/</link>
             <guid>https://denisidoro.github.io/posts/clojure-graalvm-shell-scripting/</guid>
             <description>&lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*gJm3BZcNrKoPOa2QO69p3Q.png&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*gJm3BZcNrKoPOa2QO69p3Q.png 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*gJm3BZcNrKoPOa2QO69p3Q.png 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*gJm3BZcNrKoPOa2QO69p3Q.png 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*gJm3BZcNrKoPOa2QO69p3Q.png 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;Part of a shell script written in Clojure&lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;h3 id=&quot;motivation&quot;&gt;Motivation&lt;&#x2F;h3&gt;
 &lt;p&gt;Objective: develop a shell script to ease the writing of XML files.&lt;&#x2F;p&gt;
 &lt;p&gt;Let’s say that the output to be generated is:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;grid&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&amp;gt;   
+&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;grid&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&amp;gt;   
   &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;row&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&amp;gt;   
      &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;label &lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;id&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;info&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&#x2F;&amp;gt;   
      &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;text&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&amp;gt;Now playing&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;text&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&amp;gt;   
@@ -657,7 +885,7 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;I’d like to write it as:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;:grid &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;:row &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;:label &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;{&lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;:id :info&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;}]   
+&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;:grid &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;:row &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;:label &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;{&lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;:id :info&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;}]   
              [&lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;:text &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;Now playing&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;]]   
        [&lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;:row &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;:button :onTap &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;mute&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;]]]
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
@@ -678,21 +906,23 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
 &lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.graalvm.org&#x2F;&quot;&gt;GraalVM&lt;&#x2F;a&gt; is a universal virtual machine for running applications written in JavaScript, Ruby, JVM-based languages and more.&lt;&#x2F;p&gt;
 &lt;p&gt;By using &lt;a href=&quot;https:&#x2F;&#x2F;www.graalvm.org&#x2F;docs&#x2F;reference-manual&#x2F;aot-compilation&#x2F;&quot;&gt;AOT compilation&lt;&#x2F;a&gt; we can compile our clj scripts to native code, which doesn’t rely on the JVM. The benefit? Let’s compare startup times:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;λ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;[:table]&amp;#39; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;time&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; clj&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -m&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; xml 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;table &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; 
-clj&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -m&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; xml 9.88s user 0.68s system 293% cpu 3.593 total 
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;λ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;[:table]&amp;#39; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;time&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; clj&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -m&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; xml 
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;table &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt; 
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;clj&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -m&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; xml 9.88s user 0.68s system 293% cpu 3.593 total 
 
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;λ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;[:table]&amp;#39; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;time&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; native-binary 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;table &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; 
-native-binary 0.01s user 0.01s system 79% cpu 0.019 total
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;table &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt; 
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;native-binary 0.01s user 0.01s system 79% cpu 0.019 total
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;That’s 200x faster!&lt;&#x2F;p&gt;
 &lt;p&gt;In addition, I can simply copy&#x2F;paste this binary to any other machine with the same architecture + OS and it will work regardless of JVM or Node.js being installed or not.&lt;&#x2F;p&gt;
 &lt;p&gt;Example scripts and helpers for clj and GraalVM can be found &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;dotfiles&#x2F;tree&#x2F;c4f656d6c83f34c106afc61f44568fcd4e3ea1b9&#x2F;scripts&#x2F;clojure&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;For other people’s experiences, click &lt;a href=&quot;https:&#x2F;&#x2F;www.innoq.com&#x2F;en&#x2F;blog&#x2F;native-clojure-and-graalvm&#x2F;&quot;&gt;here&lt;&#x2F;a&gt; or &lt;a href=&quot;https:&#x2F;&#x2F;www.astrecipes.net&#x2F;blog&#x2F;2018&#x2F;07&#x2F;20&#x2F;cmd-line-apps-with-clojure-and-graalvm&#x2F;&quot;&gt;there&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;div class=&quot;medium-first&quot;&gt;
+
     This post first appeared on
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;using-clojure-graalvm-for-shell-scripting-da0bcc8955d4&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
+
 &lt;&#x2F;div&gt;
 </description>
         </item>
@@ -702,11 +932,19 @@ native-binary 0.01s user 0.01s system 79% cpu 0.019 total
             <link>https://denisidoro.github.io/posts/tips-for-faster-development/</link>
             <guid>https://denisidoro.github.io/posts/tips-for-faster-development/</guid>
             <description>&lt;figure class=&quot;medium-cover&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;t u v gh aj&quot; src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;11014&#x2F;0*v2N2qF1dh5l_Gqgr&quot; srcSet=&quot; https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;0*v2N2qF1dh5l_Gqgr 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;0*v2N2qF1dh5l_Gqgr 552w,
     https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;0*v2N2qF1dh5l_Gqgr 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;0*v2N2qF1dh5l_Gqgr 700w&quot; sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;An hourglass with most of its sand on its bottom by
         &lt;a href=&quot;https:&#x2F;&#x2F;unsplash.com&#x2F;@neonbrand?utm_source=medium&amp;utm_medium=referral&quot;&gt;neonbrand&lt;&#x2F;a&gt;
-        on &lt;a href=&quot;https:&#x2F;&#x2F;unsplash.com?utm_source=medium&amp;utm_medium=referral&quot;&gt;Unsplash&lt;&#x2F;a&gt; &lt;&#x2F;figcaption&gt;
+        on &lt;a href=&quot;https:&#x2F;&#x2F;unsplash.com?utm_source=medium&amp;utm_medium=referral&quot;&gt;Unsplash&lt;&#x2F;a&gt; 
+    &lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;p&gt;I’m lazy!&lt;&#x2F;p&gt;
 &lt;p&gt;Working is satisfying but if I were to choose between, say, fixing broken integration tests vs watching Netflix, swimming or spending some quality time with my girlfriend, I would probably choose the latter.&lt;&#x2F;p&gt;
@@ -722,11 +960,11 @@ The purpose of this post isn’t simply about showing what I learned. Instead, i
 As an exercise, let’s &lt;em&gt;cd&lt;&#x2F;em&gt; to a mobile app from work. &lt;br &#x2F;&gt;
 This is a simple, tedious and time-consuming way to do it.&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#5ebfcc;&quot;&gt;cd &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;~&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&#x2F;dev&#x2F;work&#x2F;mobile
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#5ebfcc;&quot;&gt;cd &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;~&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&#x2F;dev&#x2F;work&#x2F;mobile
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Creating a simple &lt;strong&gt;alias function&lt;&#x2F;strong&gt; already saves us some keystrokes:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;cdw&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;() { &lt;&#x2F;span&gt;&lt;span style=&quot;color:#5ebfcc;&quot;&gt;cd &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;HOME&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&#x2F;dev&#x2F;work&#x2F;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;}  
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;cdw&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;() { &lt;&#x2F;span&gt;&lt;span style=&quot;color:#5ebfcc;&quot;&gt;cd &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;HOME&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&#x2F;dev&#x2F;work&#x2F;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;}  
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;cdw&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; mobile
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;But we still can do much better. An improved version of this could be achieved using the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;junegunn&#x2F;fzf&quot;&gt;&lt;strong&gt;fzf command&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;. fzf is a fuzzy-finder that allows you to interactively choose an input from &lt;em&gt;stdin&lt;&#x2F;em&gt;. I use it for everything and folder browsing isn’t an exception.&lt;&#x2F;p&gt;
@@ -737,7 +975,7 @@ This is a simple, tedious and time-consuming way to do it.&lt;&#x2F;p&gt;
 &lt;p&gt;A more generic approach would be using the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;clvv&#x2F;fasd&quot;&gt;&lt;strong&gt;fasd command&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;. Fasd keeps track of every folder you &lt;em&gt;cd&lt;&#x2F;em&gt; into and scores them by frecency: a metric based on frequency and recency, so it knows where you probably wanna go to.&lt;br &#x2F;&gt;
 This way, if I have already visited the mobile folder, I can simply type ‘’mob’’ and I’m done.&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;~&#x2F;Downloads  
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;~&#x2F;Downloads  
 λ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; j mob
 
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;~&#x2F;dev&#x2F;work&#x2F;mobile  
@@ -746,33 +984,54 @@ This way, if I have already visited the mobile folder, I can simply type ‘’m
 &lt;p&gt;From this, we can come up with a lot of interesting commands.&lt;br &#x2F;&gt;
 Using &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;dotfiles&#x2F;blob&#x2F;bebfcbd6c32e7a5a9dc151d6a9153ae010d8d32f&#x2F;shell&#x2F;aliases&#x2F;browsing.zsh#L100&quot;&gt;this command&lt;&#x2F;a&gt;, for example, I can quickly open in &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;neovim&#x2F;neovim&quot;&gt;vim&lt;&#x2F;a&gt; any file that is inside any subfolder of the folder I’m currently in. Likewise, if I input a substring to it, it opens the best match directly.&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*IeUQKixUrBM5xHp1vC_gog.gif&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*IeUQKixUrBM5xHp1vC_gog.gif 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*IeUQKixUrBM5xHp1vC_gog.gif 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*IeUQKixUrBM5xHp1vC_gog.gif 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*IeUQKixUrBM5xHp1vC_gog.gif 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;With simple scripts you don’t even need to launch a project in an IDE to quickly edit a file&lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;p&gt;A nice addition is &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ranger&#x2F;ranger&quot;&gt;&lt;strong&gt;ranger&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;, a file explorer for the terminal: we can quickly switch between folders, see previews and much more.&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*NILX79uV_jiYHh7AYeI-Dw.png&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*NILX79uV_jiYHh7AYeI-Dw.png 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*NILX79uV_jiYHh7AYeI-Dw.png 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*NILX79uV_jiYHh7AYeI-Dw.png 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*NILX79uV_jiYHh7AYeI-Dw.png 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;Ranger displays multiple columns so that you can view parent folders as well as file contents&lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;p&gt;Finally, I really recommend having an easy way to &lt;strong&gt;switch between&lt;&#x2F;strong&gt; the &lt;strong&gt;terminal&lt;&#x2F;strong&gt; and your OS’s &lt;strong&gt;explorer.&lt;&#x2F;strong&gt; Here, I’m using &lt;a href=&quot;https:&#x2F;&#x2F;www.alfredapp.com&#x2F;&quot;&gt;Alfred&lt;&#x2F;a&gt; to open the current folder in Finder in the terminal.&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*Pf1KlZXto2hEQe1lGZlPQg.png&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*Pf1KlZXto2hEQe1lGZlPQg.png 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*Pf1KlZXto2hEQe1lGZlPQg.png 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*Pf1KlZXto2hEQe1lGZlPQg.png 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*Pf1KlZXto2hEQe1lGZlPQg.png 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;With Alfred, I can quickly launch a terminal window in the same folder as Finder&lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;h3 id=&quot;git&quot;&gt;Git&lt;&#x2F;h3&gt;
 &lt;p&gt;The most straightforward tip is to use &lt;a href=&quot;https:&#x2F;&#x2F;gist.github.com&#x2F;mwhite&#x2F;6887990&quot;&gt;&lt;strong&gt;shell aliases&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;.&lt;br &#x2F;&gt;
 So, instead of typing the following…&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;git&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; checkout master  
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;git&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; checkout master  
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;git&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; pull  
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;git&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; checkout feature  
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;git&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; merge master  
@@ -780,7 +1039,7 @@ So, instead of typing the following…&lt;&#x2F;p&gt;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;…we can save lots and lots of keystrokes (and time) by using:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;gcom  
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;gcom  
 gl  
 gco&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; -  
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;gmm  
@@ -792,20 +1051,34 @@ This way, you have the guarantee that you’ll never ever commit again &lt;em&gt
 How many times have you committed a bad JSON, for example, then committed a “fix typo” immediately after? Git hooks for the rescue!&lt;br &#x2F;&gt;
 Simply validate JSON files in a pre-commit hook: if anything is incorrect, the commit may be aborted.&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*UrZP9iLjSNNClCvahNV3qg.gif&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*UrZP9iLjSNNClCvahNV3qg.gif 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*UrZP9iLjSNNClCvahNV3qg.gif 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*UrZP9iLjSNNClCvahNV3qg.gif 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*UrZP9iLjSNNClCvahNV3qg.gif 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;A git hook may prevent us from commiting bad code&lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;p&gt;I also use this for other file syntax validation as well as for preventing me from committing sensitive data, such as AWS keys.&lt;&#x2F;p&gt;
 &lt;p&gt;Write your &lt;strong&gt;own git helpers&lt;&#x2F;strong&gt;. This is how I git checkout:&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*Q2yCC9Dp730GcpXDXJsQ7A.gif&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*Q2yCC9Dp730GcpXDXJsQ7A.gif 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*Q2yCC9Dp730GcpXDXJsQ7A.gif 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*Q2yCC9Dp730GcpXDXJsQ7A.gif 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*Q2yCC9Dp730GcpXDXJsQ7A.gif 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;Remember fzf? I’m using it to select available branches&lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;p&gt;Using &lt;a href=&quot;https:&#x2F;&#x2F;git-scm.com&#x2F;book&#x2F;en&#x2F;v2&#x2F;Git-Tools-Rewriting-History&quot;&gt;&lt;strong&gt;git squash&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;  really changed my daily work.&lt;br &#x2F;&gt;
 First, let’s see what many people consider a nice, organized PR:&lt;&#x2F;p&gt;
@@ -835,35 +1108,62 @@ ab4fc fixes
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;When I open the PR I try to write a nice PR description. Finally, I simply squash everything into a single commit and merge it.&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*tFBVxqAGr-yOTX5G3aX5Tw.png&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*tFBVxqAGr-yOTX5G3aX5Tw.png 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*tFBVxqAGr-yOTX5G3aX5Tw.png 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*tFBVxqAGr-yOTX5G3aX5Tw.png 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*tFBVxqAGr-yOTX5G3aX5Tw.png 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;Even though the commit messages aren’t helpful, the PR description should be enough to give the necessary context&lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*wIsFO0z5cXTo9Te2LABH6g.png&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*wIsFO0z5cXTo9Te2LABH6g.png 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*wIsFO0z5cXTo9Te2LABH6g.png 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*wIsFO0z5cXTo9Te2LABH6g.png 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*wIsFO0z5cXTo9Te2LABH6g.png 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;GitHub offers a quick way to squash and merge&lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;p&gt;It’s time saving and we get a nice history for free, even on terminal!&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*xDRcpV31kRmAkSQgM7WZeg.png&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*xDRcpV31kRmAkSQgM7WZeg.png 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*xDRcpV31kRmAkSQgM7WZeg.png 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*xDRcpV31kRmAkSQgM7WZeg.png 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*xDRcpV31kRmAkSQgM7WZeg.png 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;By squashing, we don’t have useless commits&lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;h3 id=&quot;shell-scripting&quot;&gt;Shell scripting&lt;&#x2F;h3&gt;
 &lt;p&gt;Another fundamental skill to be efficient is to write shell scripts hassle-free.We studied programming and are usually hired to develop scalable, high-quality microservices or applications, not for performing tedious, easy tasks.&lt;br &#x2F;&gt;
 If it’s common for you to think that ‘’it would be nice to have a script for X, but the time it’ll take to write it isn’t worth it’’, then let’s think about it as a chemistry reaction:&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*K00n4FRXv0D7gpSeOOdMBg.png&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*K00n4FRXv0D7gpSeOOdMBg.png 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*K00n4FRXv0D7gpSeOOdMBg.png 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*K00n4FRXv0D7gpSeOOdMBg.png 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*K00n4FRXv0D7gpSeOOdMBg.png 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;p&gt;If the barrier for writing shell scripts is high, then you’ll stay on the left side, spending high energy to perform tasks.&lt;br &#x2F;&gt;
 However, if you have a catalyst, the equilibrium state will be on the right side. In other words, if it becomes cheaper or easier to write unit scripts, then you’ll spend less energy performing the tasks.&lt;&#x2F;p&gt;
@@ -888,7 +1188,7 @@ Using &lt;a href=&quot;http:&#x2F;&#x2F;docopt.org&#x2F;&quot;&gt;&lt;strong&gt;
 &lt;&#x2F;figure&gt;
 &lt;p&gt;&lt;strong&gt;Don’t throw away your scripts&lt;&#x2F;strong&gt;, even if they are simple. Instead, put them in a folder, document them and make them available to your disposal whenever you need. I never remember the command for spawning a new Android emulator, for example, but I can always remember how to type &lt;code&gt;dot android emu start&lt;&#x2F;code&gt;. In particular, I divide all my scripts into non-nested folders and make them callable by a &lt;code&gt;dot&lt;&#x2F;code&gt; command.&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;ANDROID_HOME&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&#x2F;tools&#x2F;emulator start     &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# is it like this?  
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;ANDROID_HOME&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&#x2F;tools&#x2F;emulator start     &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# is it like this?  
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;$ $&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;ANDROID_SDK&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&#x2F;tools&#x2F;emulator&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -avd&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; nexus &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# maybe like this?  
 # checks StackOverflow, other references or simply...  
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;$ dot android emu start                  &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# there you go!
@@ -900,14 +1200,14 @@ Use Python, Ruby or NodeJS.&lt;&#x2F;p&gt;
 &lt;p&gt;Use a &lt;strong&gt;window manager&lt;&#x2F;strong&gt;. Seriously, the time saved by not resizing, moving, minimizing and maximizing windows is huge. Let’s see a simple demonstration of what it can do:&lt;&#x2F;p&gt;
 &lt;figure&gt;
     &lt;div class=&quot;youtube&quot;&gt;
-    &lt;iframe src=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;embed&#x2F;U17CLayt_aA&quot; webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;&#x2F;iframe&gt;
+    &lt;iframe src=&quot;https:&#x2F;&#x2F;www.youtube-nocookie.com&#x2F;embed&#x2F;U17CLayt_aA&quot; webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;&#x2F;iframe&gt;
 &lt;&#x2F;div&gt;
     &lt;figcaption&gt;A demonstration showcasing bspwm&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;
 &lt;p&gt;For Linux, &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;i3&#x2F;i3&quot;&gt;i3wm&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;baskerville&#x2F;bspwm&quot;&gt;bspwm&lt;&#x2F;a&gt; are some options; for OSX, &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;koekeishiya&#x2F;chunkwm&quot;&gt;chunkwm&lt;&#x2F;a&gt; and spectacle; for Windows, &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;fuhsjr00&#x2F;bug.n&quot;&gt;bugn&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;Have a &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;dotfiles&quot;&gt;&lt;strong&gt;dotfiles repository&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt; on Github. This way, it’s easy to share your setup with your colleagues. But most importantly: all your setup becomes centralized and you’re always two commands away (or some minutes away) from having your ideal config:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;git&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; clone https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;dotfiles.git &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;~&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&#x2F;.dotfiles  
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;git&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; clone https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;dotfiles.git &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;~&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&#x2F;.dotfiles  
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;bash ~&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&#x2F;.dotfiles&#x2F;scripts&#x2F;environment&#x2F;init
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Use &lt;strong&gt;consistent keybindings&lt;&#x2F;strong&gt; across applications. My memory is limited, so it’s nice to memorize commands only once and extend them to other usages. &lt;code&gt;HJKL&lt;&#x2F;code&gt;, for example, is reserved for directions in my setup: cursor position and buffer selection on text editors, window selection and resizing on my window manager, scrolling on Chrome, moving between folders on ranger, etc. By the way, &lt;strong&gt;sequential keybindings&lt;&#x2F;strong&gt; help a lot. I can never remember commands like &lt;code&gt;cmd + option + shift + whatever&lt;&#x2F;code&gt;, but commands that follow a pattern are pretty straightforward:&lt;&#x2F;p&gt;
@@ -920,19 +1220,33 @@ Warp window right:   CapsLock + W, L
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Navigate through your shell &lt;strong&gt;history with ease.&lt;&#x2F;strong&gt; This becomes trivial with fzf:&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*NE-Mw0yyHJ19EmEq1UeAjg.png&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*NE-Mw0yyHJ19EmEq1UeAjg.png 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*NE-Mw0yyHJ19EmEq1UeAjg.png 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*NE-Mw0yyHJ19EmEq1UeAjg.png 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*NE-Mw0yyHJ19EmEq1UeAjg.png 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;fzf gives Ctrl+R steroids&lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;p&gt;Have a &lt;strong&gt;clipboard manager&lt;&#x2F;strong&gt;. Have you ever tried to paste some text just to realize that you overrode the clipboard with something else then you have to go back to the original application to copy it again? Well, if a clipboard manager this problem is past!&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*M4FsZ1eGCrIABCeusSY9lA.png&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*M4FsZ1eGCrIABCeusSY9lA.png 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*M4FsZ1eGCrIABCeusSY9lA.png 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*M4FsZ1eGCrIABCeusSY9lA.png 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*M4FsZ1eGCrIABCeusSY9lA.png 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;With a clipboard manager you have at your fingertips all your recently copied content&lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;p&gt;&lt;strong&gt;Master&lt;&#x2F;strong&gt; whatever tools you use: terminal emulators, text editors, IDEs, OS, etc.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;sum-up&quot;&gt;Sum up&lt;&#x2F;h3&gt;
@@ -941,8 +1255,10 @@ Warp window right:   CapsLock + W, L
 &lt;p&gt;But what I really recommend is… &lt;strong&gt;excel at being lazy&lt;&#x2F;strong&gt;!&lt;br &#x2F;&gt;
 If you’re lazy, you’ll get uncomfortable with time-demanding processes and it will become natural to optimize your workflow.&lt;&#x2F;p&gt;
 &lt;div class=&quot;medium-first&quot;&gt;
+
     This post first appeared on
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;save-15min-a-day-tips-for-faster-development-67a31f3498bf&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
+
 &lt;&#x2F;div&gt;
 </description>
         </item>
@@ -952,8 +1268,14 @@ If you’re lazy, you’ll get uncomfortable with time-demanding processes and i
             <link>https://denisidoro.github.io/posts/react-native-kotlinjs/</link>
             <guid>https://denisidoro.github.io/posts/react-native-kotlinjs/</guid>
             <description>&lt;figure class=&quot;medium-cover&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;t u v gh aj&quot; src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;11014&#x2F;0*EnXaEGp3rgRz7NS4.&quot; srcSet=&quot; https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;0*EnXaEGp3rgRz7NS4. 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;0*EnXaEGp3rgRz7NS4. 552w,
     https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;0*EnXaEGp3rgRz7NS4. 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;0*EnXaEGp3rgRz7NS4. 700w&quot; sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;p&gt;Kotlin is an awesome language. It is functional and offers &lt;a href=&quot;https:&#x2F;&#x2F;kotlinlang.org&#x2F;docs&#x2F;reference&#x2F;extensions.html&quot;&gt;extension functions&lt;&#x2F;a&gt;, &lt;a href=&quot;https:&#x2F;&#x2F;kotlinlang.org&#x2F;docs&#x2F;reference&#x2F;null-safety.html&quot;&gt;null safety&lt;&#x2F;a&gt;, &lt;a href=&quot;https:&#x2F;&#x2F;www.callicoder.com&#x2F;kotlin-type-checks-smart-casts&#x2F;&quot;&gt;smart casting&lt;&#x2F;a&gt;, &lt;a href=&quot;https:&#x2F;&#x2F;kotlinlang.org&#x2F;docs&#x2F;reference&#x2F;type-safe-builders.html&quot;&gt;type-safe builders&lt;&#x2F;a&gt;, &lt;a href=&quot;https:&#x2F;&#x2F;www.callicoder.com&#x2F;kotlin-functions&#x2F;&quot;&gt;default and named arguments&lt;&#x2F;a&gt;, &lt;a href=&quot;https:&#x2F;&#x2F;www.callicoder.com&#x2F;kotlin-functions&#x2F;&quot;&gt;data classes&lt;&#x2F;a&gt; and much more. It is arguably the language of choice for Android developers and &lt;a href=&quot;http:&#x2F;&#x2F;nilhcem.com&#x2F;swift-is-like-kotlin&#x2F;&quot;&gt;very familiar&lt;&#x2F;a&gt; to iOS developers.&lt;&#x2F;p&gt;
 &lt;p&gt;React Native enables us to write only once for multiple platforms, has a simpler API than native development and a smooth learning curve. Steve Yegg, a former Google engineer, conjectures in &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@steve.yegge&#x2F;who-will-steal-android-from-google-af3622b6252e&quot;&gt;his blog post&lt;&#x2F;a&gt; that hybrid frameworks are likely to become even more popular. And the framework from Facebook is the major player at the moment.&lt;&#x2F;p&gt;
@@ -975,11 +1297,18 @@ An example repository can be found &lt;a href=&quot;https:&#x2F;&#x2F;github.com
 &lt;&#x2F;div&gt;
 &lt;p&gt;…would render the following output:&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*QGZmQ_Zq7_jTQXXiBWFILg.png&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*QGZmQ_Zq7_jTQXXiBWFILg.png 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*QGZmQ_Zq7_jTQXXiBWFILg.png 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*QGZmQ_Zq7_jTQXXiBWFILg.png 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*QGZmQ_Zq7_jTQXXiBWFILg.png 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;Our first application with Kotlin and React Native&lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;p&gt;Thanks to the Kotlin language features, we can write the view using a builder DSL similar to &lt;a href=&quot;https:&#x2F;&#x2F;reactjs.org&#x2F;docs&#x2F;jsx-in-depth.html&quot;&gt;JSX&lt;&#x2F;a&gt;, instead of manually calling React.createElement(…, React.createElement(…)).&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;creating-our-first-component&quot;&gt;Creating our first component&lt;&#x2F;h3&gt;
@@ -1044,11 +1373,18 @@ An example repository can be found &lt;a href=&quot;https:&#x2F;&#x2F;github.com
 &lt;&#x2F;div&gt;
 &lt;p&gt;And the final result is:&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
+
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*EDiObUxyPdrQpEFEKovdKQ.png&quot;
         srcSet=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;1*EDiObUxyPdrQpEFEKovdKQ.png 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;1*EDiObUxyPdrQpEFEKovdKQ.png 552w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;1*EDiObUxyPdrQpEFEKovdKQ.png 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;1*EDiObUxyPdrQpEFEKovdKQ.png 700w&quot;
         sizes=&quot;700px&quot; &#x2F;&gt;
+
+    
     &lt;figcaption&gt;Our final application&lt;&#x2F;figcaption&gt;
+    
+
+    
+
 &lt;&#x2F;figure&gt;
 &lt;h3 id=&quot;so-is-kotlin-with-react-native-production-ready&quot;&gt;So… Is Kotlin with React Native production-ready?&lt;&#x2F;h3&gt;
 &lt;p&gt;Possibly, but there are still some improvements to be made to the whole ecosystem. The interoperability with JavaScript isn’t effortless and has some pitfalls. For example, passing the store via props to the component won’t work because the state will become immutable. Also, using data classes for the props directly will return an error from React because apparently the serialization contains some metadata. In addition, you’re supposed to write your own type definitions, which is a huge productivity killer.&lt;&#x2F;p&gt;
@@ -1056,8 +1392,10 @@ An example repository can be found &lt;a href=&quot;https:&#x2F;&#x2F;github.com
 &lt;p&gt;In the meantime, another alternative to JavaScript is &lt;a href=&quot;https:&#x2F;&#x2F;clojurescript.org&#x2F;&quot;&gt;Clojurescript&lt;&#x2F;a&gt;, which is awesome with &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Day8&#x2F;re-frame&quot;&gt;re-frame&lt;&#x2F;a&gt; and in my opinion offers the best development experience out there. However, it’s not for the faint-hearted.&lt;&#x2F;p&gt;
 &lt;p&gt;I hope that with this article and the example repository, the community can reconsider Kotlin as a language for React Native. Feel free to &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;korn&quot;&gt;fork the code&lt;&#x2F;a&gt;!&lt;&#x2F;p&gt;
 &lt;div class=&quot;medium-first&quot;&gt;
+
     This post first appeared on
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;writing-multi-platform-mobile-apps-with-react-native-and-kotlin-50f486b53462&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
+
 &lt;&#x2F;div&gt;
 </description>
         </item>

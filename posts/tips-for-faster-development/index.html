@@ -215,11 +215,19 @@
             <hr/>
             <div class="content has-text-justified">
               <figure class="medium-cover">
+
     <img alt="Image for post" class="t u v gh aj" src="https://miro.medium.com/max/11014/0*v2N2qF1dh5l_Gqgr" srcSet=" https://miro.medium.com/max/552/0*v2N2qF1dh5l_Gqgr 276w, https://miro.medium.com/max/1104/0*v2N2qF1dh5l_Gqgr 552w,
     https://miro.medium.com/max/1280/0*v2N2qF1dh5l_Gqgr 640w, https://miro.medium.com/max/1400/0*v2N2qF1dh5l_Gqgr 700w" sizes="700px" />
+
+    
     <figcaption>An hourglass with most of its sand on its bottom by
         <a href="https://unsplash.com/@neonbrand?utm_source=medium&utm_medium=referral">neonbrand</a>
-        on <a href="https://unsplash.com?utm_source=medium&utm_medium=referral">Unsplash</a> </figcaption>
+        on <a href="https://unsplash.com?utm_source=medium&utm_medium=referral">Unsplash</a> 
+    </figcaption>
+    
+
+    
+
 </figure>
 <p>I’m lazy!</p>
 <p>Working is satisfying but if I were to choose between, say, fixing broken integration tests vs watching Netflix, swimming or spending some quality time with my girlfriend, I would probably choose the latter.</p>
@@ -235,11 +243,11 @@ The purpose of this post isn’t simply about showing what I learned. Instead, i
 As an exercise, let’s <em>cd</em> to a mobile app from work. <br />
 This is a simple, tedious and time-consuming way to do it.</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#5ebfcc;">cd </span><span style="color:#eb6772;">~</span><span style="color:#abb2bf;">/dev/work/mobile
+<code class="language-bash" data-lang="bash"><span style="color:#5ebfcc;">cd </span><span style="color:#eb6772;">~</span><span style="color:#abb2bf;">/dev/work/mobile
 </span></code></pre>
 <p>Creating a simple <strong>alias function</strong> already saves us some keystrokes:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#5cb3fa;">cdw</span><span style="color:#abb2bf;">() { </span><span style="color:#5ebfcc;">cd </span><span style="color:#9acc76;">&quot;$</span><span style="color:#eb6772;">HOME</span><span style="color:#9acc76;">/dev/work/$</span><span style="color:#eb6772;">1</span><span style="color:#9acc76;">&quot;</span><span style="color:#adb7c9;">; </span><span style="color:#abb2bf;">}  
+<code class="language-bash" data-lang="bash"><span style="color:#5cb3fa;">cdw</span><span style="color:#abb2bf;">() { </span><span style="color:#5ebfcc;">cd </span><span style="color:#9acc76;">&quot;$</span><span style="color:#eb6772;">HOME</span><span style="color:#9acc76;">/dev/work/$</span><span style="color:#eb6772;">1</span><span style="color:#9acc76;">&quot;</span><span style="color:#adb7c9;">; </span><span style="color:#abb2bf;">}  
 </span><span style="color:#eb6772;">cdw</span><span style="color:#abb2bf;"> mobile
 </span></code></pre>
 <p>But we still can do much better. An improved version of this could be achieved using the <a href="https://github.com/junegunn/fzf"><strong>fzf command</strong></a>. fzf is a fuzzy-finder that allows you to interactively choose an input from <em>stdin</em>. I use it for everything and folder browsing isn’t an exception.</p>
@@ -250,7 +258,7 @@ This is a simple, tedious and time-consuming way to do it.</p>
 <p>A more generic approach would be using the <a href="https://github.com/clvv/fasd"><strong>fasd command</strong></a>. Fasd keeps track of every folder you <em>cd</em> into and scores them by frecency: a metric based on frequency and recency, so it knows where you probably wanna go to.<br />
 This way, if I have already visited the mobile folder, I can simply type ‘’mob’’ and I’m done.</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#eb6772;">~/Downloads  
+<code class="language-bash" data-lang="bash"><span style="color:#eb6772;">~/Downloads  
 λ</span><span style="color:#abb2bf;"> j mob
 
 </span><span style="color:#eb6772;">~/dev/work/mobile  
@@ -259,33 +267,54 @@ This way, if I have already visited the mobile folder, I can simply type ‘’m
 <p>From this, we can come up with a lot of interesting commands.<br />
 Using <a href="https://github.com/denisidoro/dotfiles/blob/bebfcbd6c32e7a5a9dc151d6a9153ae010d8d32f/shell/aliases/browsing.zsh#L100">this command</a>, for example, I can quickly open in <a href="https://github.com/neovim/neovim">vim</a> any file that is inside any subfolder of the folder I’m currently in. Likewise, if I input a substring to it, it opens the best match directly.</p>
 <figure class="medium-image">
+
     <img alt="Image for post" class="medium-image"
         src="https://miro.medium.com/max/2160/1*IeUQKixUrBM5xHp1vC_gog.gif"
         srcSet="https://miro.medium.com/max/552/1*IeUQKixUrBM5xHp1vC_gog.gif 276w, https://miro.medium.com/max/1104/1*IeUQKixUrBM5xHp1vC_gog.gif 552w, https://miro.medium.com/max/1280/1*IeUQKixUrBM5xHp1vC_gog.gif 640w, https://miro.medium.com/max/1400/1*IeUQKixUrBM5xHp1vC_gog.gif 700w"
         sizes="700px" />
+
+    
     <figcaption>With simple scripts you don’t even need to launch a project in an IDE to quickly edit a file</figcaption>
+    
+
+    
+
 </figure>
 <p>A nice addition is <a href="https://github.com/ranger/ranger"><strong>ranger</strong></a>, a file explorer for the terminal: we can quickly switch between folders, see previews and much more.</p>
 <figure class="medium-image">
+
     <img alt="Image for post" class="medium-image"
         src="https://miro.medium.com/max/2160/1*NILX79uV_jiYHh7AYeI-Dw.png"
         srcSet="https://miro.medium.com/max/552/1*NILX79uV_jiYHh7AYeI-Dw.png 276w, https://miro.medium.com/max/1104/1*NILX79uV_jiYHh7AYeI-Dw.png 552w, https://miro.medium.com/max/1280/1*NILX79uV_jiYHh7AYeI-Dw.png 640w, https://miro.medium.com/max/1400/1*NILX79uV_jiYHh7AYeI-Dw.png 700w"
         sizes="700px" />
+
+    
     <figcaption>Ranger displays multiple columns so that you can view parent folders as well as file contents</figcaption>
+    
+
+    
+
 </figure>
 <p>Finally, I really recommend having an easy way to <strong>switch between</strong> the <strong>terminal</strong> and your OS’s <strong>explorer.</strong> Here, I’m using <a href="https://www.alfredapp.com/">Alfred</a> to open the current folder in Finder in the terminal.</p>
 <figure class="medium-image">
+
     <img alt="Image for post" class="medium-image"
         src="https://miro.medium.com/max/2160/1*Pf1KlZXto2hEQe1lGZlPQg.png"
         srcSet="https://miro.medium.com/max/552/1*Pf1KlZXto2hEQe1lGZlPQg.png 276w, https://miro.medium.com/max/1104/1*Pf1KlZXto2hEQe1lGZlPQg.png 552w, https://miro.medium.com/max/1280/1*Pf1KlZXto2hEQe1lGZlPQg.png 640w, https://miro.medium.com/max/1400/1*Pf1KlZXto2hEQe1lGZlPQg.png 700w"
         sizes="700px" />
+
+    
     <figcaption>With Alfred, I can quickly launch a terminal window in the same folder as Finder</figcaption>
+    
+
+    
+
 </figure>
 <h3 id="git">Git</h3>
 <p>The most straightforward tip is to use <a href="https://gist.github.com/mwhite/6887990"><strong>shell aliases</strong></a>.<br />
 So, instead of typing the following…</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#eb6772;">git</span><span style="color:#abb2bf;"> checkout master  
+<code class="language-bash" data-lang="bash"><span style="color:#eb6772;">git</span><span style="color:#abb2bf;"> checkout master  
 </span><span style="color:#eb6772;">git</span><span style="color:#abb2bf;"> pull  
 </span><span style="color:#eb6772;">git</span><span style="color:#abb2bf;"> checkout feature  
 </span><span style="color:#eb6772;">git</span><span style="color:#abb2bf;"> merge master  
@@ -293,7 +322,7 @@ So, instead of typing the following…</p>
 </span></code></pre>
 <p>…we can save lots and lots of keystrokes (and time) by using:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#eb6772;">gcom  
+<code class="language-bash" data-lang="bash"><span style="color:#eb6772;">gcom  
 gl  
 gco</span><span style="color:#abb2bf;"> -  
 </span><span style="color:#eb6772;">gmm  
@@ -305,20 +334,34 @@ This way, you have the guarantee that you’ll never ever commit again <em>node_
 How many times have you committed a bad JSON, for example, then committed a “fix typo” immediately after? Git hooks for the rescue!<br />
 Simply validate JSON files in a pre-commit hook: if anything is incorrect, the commit may be aborted.</p>
 <figure class="medium-image">
+
     <img alt="Image for post" class="medium-image"
         src="https://miro.medium.com/max/2160/1*UrZP9iLjSNNClCvahNV3qg.gif"
         srcSet="https://miro.medium.com/max/552/1*UrZP9iLjSNNClCvahNV3qg.gif 276w, https://miro.medium.com/max/1104/1*UrZP9iLjSNNClCvahNV3qg.gif 552w, https://miro.medium.com/max/1280/1*UrZP9iLjSNNClCvahNV3qg.gif 640w, https://miro.medium.com/max/1400/1*UrZP9iLjSNNClCvahNV3qg.gif 700w"
         sizes="700px" />
+
+    
     <figcaption>A git hook may prevent us from commiting bad code</figcaption>
+    
+
+    
+
 </figure>
 <p>I also use this for other file syntax validation as well as for preventing me from committing sensitive data, such as AWS keys.</p>
 <p>Write your <strong>own git helpers</strong>. This is how I git checkout:</p>
 <figure class="medium-image">
+
     <img alt="Image for post" class="medium-image"
         src="https://miro.medium.com/max/2160/1*Q2yCC9Dp730GcpXDXJsQ7A.gif"
         srcSet="https://miro.medium.com/max/552/1*Q2yCC9Dp730GcpXDXJsQ7A.gif 276w, https://miro.medium.com/max/1104/1*Q2yCC9Dp730GcpXDXJsQ7A.gif 552w, https://miro.medium.com/max/1280/1*Q2yCC9Dp730GcpXDXJsQ7A.gif 640w, https://miro.medium.com/max/1400/1*Q2yCC9Dp730GcpXDXJsQ7A.gif 700w"
         sizes="700px" />
+
+    
     <figcaption>Remember fzf? I’m using it to select available branches</figcaption>
+    
+
+    
+
 </figure>
 <p>Using <a href="https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History"><strong>git squash</strong></a>  really changed my daily work.<br />
 First, let’s see what many people consider a nice, organized PR:</p>
@@ -348,35 +391,62 @@ ab4fc fixes
 </span></code></pre>
 <p>When I open the PR I try to write a nice PR description. Finally, I simply squash everything into a single commit and merge it.</p>
 <figure class="medium-image">
+
     <img alt="Image for post" class="medium-image"
         src="https://miro.medium.com/max/2160/1*tFBVxqAGr-yOTX5G3aX5Tw.png"
         srcSet="https://miro.medium.com/max/552/1*tFBVxqAGr-yOTX5G3aX5Tw.png 276w, https://miro.medium.com/max/1104/1*tFBVxqAGr-yOTX5G3aX5Tw.png 552w, https://miro.medium.com/max/1280/1*tFBVxqAGr-yOTX5G3aX5Tw.png 640w, https://miro.medium.com/max/1400/1*tFBVxqAGr-yOTX5G3aX5Tw.png 700w"
         sizes="700px" />
+
+    
     <figcaption>Even though the commit messages aren’t helpful, the PR description should be enough to give the necessary context</figcaption>
+    
+
+    
+
 </figure>
 <figure class="medium-image">
+
     <img alt="Image for post" class="medium-image"
         src="https://miro.medium.com/max/2160/1*wIsFO0z5cXTo9Te2LABH6g.png"
         srcSet="https://miro.medium.com/max/552/1*wIsFO0z5cXTo9Te2LABH6g.png 276w, https://miro.medium.com/max/1104/1*wIsFO0z5cXTo9Te2LABH6g.png 552w, https://miro.medium.com/max/1280/1*wIsFO0z5cXTo9Te2LABH6g.png 640w, https://miro.medium.com/max/1400/1*wIsFO0z5cXTo9Te2LABH6g.png 700w"
         sizes="700px" />
+
+    
     <figcaption>GitHub offers a quick way to squash and merge</figcaption>
+    
+
+    
+
 </figure>
 <p>It’s time saving and we get a nice history for free, even on terminal!</p>
 <figure class="medium-image">
+
     <img alt="Image for post" class="medium-image"
         src="https://miro.medium.com/max/2160/1*xDRcpV31kRmAkSQgM7WZeg.png"
         srcSet="https://miro.medium.com/max/552/1*xDRcpV31kRmAkSQgM7WZeg.png 276w, https://miro.medium.com/max/1104/1*xDRcpV31kRmAkSQgM7WZeg.png 552w, https://miro.medium.com/max/1280/1*xDRcpV31kRmAkSQgM7WZeg.png 640w, https://miro.medium.com/max/1400/1*xDRcpV31kRmAkSQgM7WZeg.png 700w"
         sizes="700px" />
+
+    
     <figcaption>By squashing, we don’t have useless commits</figcaption>
+    
+
+    
+
 </figure>
 <h3 id="shell-scripting">Shell scripting</h3>
 <p>Another fundamental skill to be efficient is to write shell scripts hassle-free.We studied programming and are usually hired to develop scalable, high-quality microservices or applications, not for performing tedious, easy tasks.<br />
 If it’s common for you to think that ‘’it would be nice to have a script for X, but the time it’ll take to write it isn’t worth it’’, then let’s think about it as a chemistry reaction:</p>
 <figure class="medium-image">
+
     <img alt="Image for post" class="medium-image"
         src="https://miro.medium.com/max/2160/1*K00n4FRXv0D7gpSeOOdMBg.png"
         srcSet="https://miro.medium.com/max/552/1*K00n4FRXv0D7gpSeOOdMBg.png 276w, https://miro.medium.com/max/1104/1*K00n4FRXv0D7gpSeOOdMBg.png 552w, https://miro.medium.com/max/1280/1*K00n4FRXv0D7gpSeOOdMBg.png 640w, https://miro.medium.com/max/1400/1*K00n4FRXv0D7gpSeOOdMBg.png 700w"
         sizes="700px" />
+
+    
+
+    
+
 </figure>
 <p>If the barrier for writing shell scripts is high, then you’ll stay on the left side, spending high energy to perform tasks.<br />
 However, if you have a catalyst, the equilibrium state will be on the right side. In other words, if it becomes cheaper or easier to write unit scripts, then you’ll spend less energy performing the tasks.</p>
@@ -401,7 +471,7 @@ Using <a href="http://docopt.org/"><strong>docopt</strong></a> is a must-have, s
 </figure>
 <p><strong>Don’t throw away your scripts</strong>, even if they are simple. Instead, put them in a folder, document them and make them available to your disposal whenever you need. I never remember the command for spawning a new Android emulator, for example, but I can always remember how to type <code>dot android emu start</code>. In particular, I divide all my scripts into non-nested folders and make them callable by a <code>dot</code> command.</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#eb6772;">$ </span><span style="color:#abb2bf;">$</span><span style="color:#eb6772;">ANDROID_HOME</span><span style="color:#abb2bf;">/tools/emulator start     </span><span style="font-style:italic;color:#5f697a;"># is it like this?  
+<code class="language-bash" data-lang="bash"><span style="color:#eb6772;">$ </span><span style="color:#abb2bf;">$</span><span style="color:#eb6772;">ANDROID_HOME</span><span style="color:#abb2bf;">/tools/emulator start     </span><span style="font-style:italic;color:#5f697a;"># is it like this?  
 </span><span style="color:#abb2bf;">$ $</span><span style="color:#eb6772;">ANDROID_SDK</span><span style="color:#abb2bf;">/tools/emulator</span><span style="color:#eb6772;"> -avd</span><span style="color:#abb2bf;"> nexus </span><span style="font-style:italic;color:#5f697a;"># maybe like this?  
 # checks StackOverflow, other references or simply...  
 </span><span style="color:#abb2bf;">$ dot android emu start                  </span><span style="font-style:italic;color:#5f697a;"># there you go!
@@ -413,14 +483,14 @@ Use Python, Ruby or NodeJS.</p>
 <p>Use a <strong>window manager</strong>. Seriously, the time saved by not resizing, moving, minimizing and maximizing windows is huge. Let’s see a simple demonstration of what it can do:</p>
 <figure>
     <div class="youtube">
-    <iframe src="https://www.youtube.com/embed/U17CLayt_aA" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    <iframe src="https://www.youtube-nocookie.com/embed/U17CLayt_aA" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 </div>
     <figcaption>A demonstration showcasing bspwm</figcaption>
 </figure>
 <p>For Linux, <a href="https://github.com/i3/i3">i3wm</a> and <a href="https://github.com/baskerville/bspwm">bspwm</a> are some options; for OSX, <a href="https://github.com/koekeishiya/chunkwm">chunkwm</a> and spectacle; for Windows, <a href="https://github.com/fuhsjr00/bug.n">bugn</a>.</p>
 <p>Have a <a href="https://github.com/denisidoro/dotfiles"><strong>dotfiles repository</strong></a> on Github. This way, it’s easy to share your setup with your colleagues. But most importantly: all your setup becomes centralized and you’re always two commands away (or some minutes away) from having your ideal config:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#eb6772;">git</span><span style="color:#abb2bf;"> clone https://github.com/denisidoro/dotfiles.git </span><span style="color:#eb6772;">~</span><span style="color:#abb2bf;">/.dotfiles  
+<code class="language-bash" data-lang="bash"><span style="color:#eb6772;">git</span><span style="color:#abb2bf;"> clone https://github.com/denisidoro/dotfiles.git </span><span style="color:#eb6772;">~</span><span style="color:#abb2bf;">/.dotfiles  
 </span><span style="color:#eb6772;">bash ~</span><span style="color:#abb2bf;">/.dotfiles/scripts/environment/init
 </span></code></pre>
 <p>Use <strong>consistent keybindings</strong> across applications. My memory is limited, so it’s nice to memorize commands only once and extend them to other usages. <code>HJKL</code>, for example, is reserved for directions in my setup: cursor position and buffer selection on text editors, window selection and resizing on my window manager, scrolling on Chrome, moving between folders on ranger, etc. By the way, <strong>sequential keybindings</strong> help a lot. I can never remember commands like <code>cmd + option + shift + whatever</code>, but commands that follow a pattern are pretty straightforward:</p>
@@ -433,19 +503,33 @@ Warp window right:   CapsLock + W, L
 </span></code></pre>
 <p>Navigate through your shell <strong>history with ease.</strong> This becomes trivial with fzf:</p>
 <figure class="medium-image">
+
     <img alt="Image for post" class="medium-image"
         src="https://miro.medium.com/max/2160/1*NE-Mw0yyHJ19EmEq1UeAjg.png"
         srcSet="https://miro.medium.com/max/552/1*NE-Mw0yyHJ19EmEq1UeAjg.png 276w, https://miro.medium.com/max/1104/1*NE-Mw0yyHJ19EmEq1UeAjg.png 552w, https://miro.medium.com/max/1280/1*NE-Mw0yyHJ19EmEq1UeAjg.png 640w, https://miro.medium.com/max/1400/1*NE-Mw0yyHJ19EmEq1UeAjg.png 700w"
         sizes="700px" />
+
+    
     <figcaption>fzf gives Ctrl+R steroids</figcaption>
+    
+
+    
+
 </figure>
 <p>Have a <strong>clipboard manager</strong>. Have you ever tried to paste some text just to realize that you overrode the clipboard with something else then you have to go back to the original application to copy it again? Well, if a clipboard manager this problem is past!</p>
 <figure class="medium-image">
+
     <img alt="Image for post" class="medium-image"
         src="https://miro.medium.com/max/2160/1*M4FsZ1eGCrIABCeusSY9lA.png"
         srcSet="https://miro.medium.com/max/552/1*M4FsZ1eGCrIABCeusSY9lA.png 276w, https://miro.medium.com/max/1104/1*M4FsZ1eGCrIABCeusSY9lA.png 552w, https://miro.medium.com/max/1280/1*M4FsZ1eGCrIABCeusSY9lA.png 640w, https://miro.medium.com/max/1400/1*M4FsZ1eGCrIABCeusSY9lA.png 700w"
         sizes="700px" />
+
+    
     <figcaption>With a clipboard manager you have at your fingertips all your recently copied content</figcaption>
+    
+
+    
+
 </figure>
 <p><strong>Master</strong> whatever tools you use: terminal emulators, text editors, IDEs, OS, etc.</p>
 <h3 id="sum-up">Sum up</h3>
@@ -454,8 +538,10 @@ Warp window right:   CapsLock + W, L
 <p>But what I really recommend is… <strong>excel at being lazy</strong>!<br />
 If you’re lazy, you’ll get uncomfortable with time-demanding processes and it will become natural to optimize your workflow.</p>
 <div class="medium-first">
+
     This post first appeared on
     <a href="https://medium.com/@den.isidoro/save-15min-a-day-tips-for-faster-development-67a31f3498bf" target="_blank">Medium</a>.
+
 </div>
 
             </div>

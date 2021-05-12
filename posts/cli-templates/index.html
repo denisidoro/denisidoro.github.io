@@ -204,14 +204,14 @@
 <p>I've been using <a href="https://github.com/yarpc/yab">yab</a> —a curl-like CLI— recently and I was surprised by how elegantly it solves a common problem.</p>
 <p>yab calls can get quite verbose. As an example, to get a <code>Customer</code> by its <code>id</code> from a <code>customer</code> microservice:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#eb6772;">yab</span><span style="color:#abb2bf;"> customer Customer::get \
+<code class="language-sh" data-lang="sh"><span style="color:#eb6772;">yab</span><span style="color:#abb2bf;"> customer Customer::get \
 </span><span style="color:#eb6772;">    -t</span><span style="color:#abb2bf;"> /path/to/idl/some.company/customer/customer.thrift \
 </span><span style="color:#eb6772;">    -P</span><span style="color:#abb2bf;"> 131.144.23.5/customer:tchannel \
 </span><span style="color:#eb6772;">    -r </span><span style="color:#9acc76;">&#39;{&quot;request&quot;: {&quot;id&quot;: 11}}&#39;
 </span></code></pre>
 <p>The call is pretty convoluted, but it can be simplified by storing params in a yaml file:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="font-style:italic;color:#5f697a;"># customer_by_id.yaml
+<code class="language-yaml" data-lang="yaml"><span style="font-style:italic;color:#5f697a;"># customer_by_id.yaml
 </span><span style="color:#eb6772;">service</span><span style="color:#abb2bf;">: </span><span style="color:#eb6772;">customer
 procedure</span><span style="color:#abb2bf;">: </span><span style="color:#9acc76;">&quot;Customer::get&quot;
 </span><span style="color:#eb6772;">thrift</span><span style="color:#abb2bf;">: </span><span style="color:#eb6772;">/path/to/idl/some.company/customer/customer.thrift
@@ -223,11 +223,11 @@ request</span><span style="color:#abb2bf;">:
 <p>The file takes a set of CLI flags in their long form, e.g. <code>--thrift</code> instead of <code>-t</code>, and their associated values.</p>
 <p>Then, the following call is equivalent to the beforementioned one:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#eb6772;">yab -y</span><span style="color:#abb2bf;"> customer_by_id.yaml
+<code class="language-sh" data-lang="sh"><span style="color:#eb6772;">yab -y</span><span style="color:#abb2bf;"> customer_by_id.yaml
 </span></code></pre>
 <p>Additional flags can be passed to yab to override the default values specified in the yaml file:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#eb6772;">yab -y</span><span style="color:#abb2bf;"> customer_by_id.yaml</span><span style="color:#eb6772;"> --number</span><span style="color:#abb2bf;"> 42
+<code class="language-sh" data-lang="sh"><span style="color:#eb6772;">yab -y</span><span style="color:#abb2bf;"> customer_by_id.yaml</span><span style="color:#eb6772;"> --number</span><span style="color:#abb2bf;"> 42
 </span></code></pre>
 <p>I think this is pretty cool!</p>
 <p>It can save us lots of time. It also helps sharing knowledge between team members: we could have a git repo with a bunch of these <code>.yaml</code> files and a simple <code>git pull</code> would allow everyone to be on the same page.</p>
@@ -241,12 +241,12 @@ request</span><span style="color:#abb2bf;">:
 <p>The tool I'm going to use is <a href="https://github.com/denisidoro/navi">navi</a>. It allows you to browse through cheatsheets —that you may write yourself or download from maintainers— and execute commands. </p>
 <p>navi encourages you to write <code>.cheat</code> files which break commands down into smaller, reusable pieces:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#eb6772;">%</span><span style="color:#abb2bf;"> httpie
+<code class="language-sh" data-lang="sh"><span style="color:#eb6772;">%</span><span style="color:#abb2bf;"> httpie
 
 </span><span style="font-style:italic;color:#5f697a;"># make a request to a typicode microservice
-</span><span style="color:#abb2bf;">http</span><span style="color:#eb6772;"> -v </span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">method</span><span style="color:#adb7c9;">&gt; </span><span style="color:#9acc76;">&quot;https://&lt;service&gt;.typicode.com/&lt;endpoint&gt;&quot; </span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">http-body</span><span style="color:#adb7c9;">&gt;</span><span style="color:#abb2bf;">
+</span><span style="color:#abb2bf;">http</span><span style="color:#eb6772;"> -v </span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">method</span><span style="color:#adb7c9;">&gt; </span><span style="color:#9acc76;">&quot;https://&lt;service&gt;.typicode.com/&lt;endpoint&gt;&quot; </span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">http-body</span><span style="color:#adb7c9;">&gt;
 
-$ method: echo</span><span style="color:#eb6772;"> -e </span><span style="color:#9acc76;">&#39;GET\nPOST\nPUT&#39;
+</span><span style="color:#abb2bf;">$ method: echo</span><span style="color:#eb6772;"> -e </span><span style="color:#9acc76;">&#39;GET\nPOST\nPUT&#39;
 </span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> service: echo</span><span style="color:#eb6772;"> -e </span><span style="color:#9acc76;">&#39;jsonplaceholder\nanotherservice&#39;
 </span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> endpoint: case </span><span style="color:#9acc76;">&quot;${</span><span style="color:#eb6772;">service</span><span style="color:#9acc76;">}:${</span><span style="color:#eb6772;">method</span><span style="color:#9acc76;">}&quot;</span><span style="color:#abb2bf;"> in</span><span style="color:#adb7c9;">; </span><span style="color:#9acc76;">&quot;jsonplaceholder:post&quot;</span><span style="color:#abb2bf;">) </span><span style="color:#5ebfcc;">echo </span><span style="color:#eb6772;">-e </span><span style="color:#9acc76;">&#39;e1\ne2\ne3&#39;</span><span style="color:#abb2bf;">;</span><span style="color:#adb7c9;">; </span><span style="color:#cd74e8;">esac
 </span></code></pre>
@@ -254,12 +254,12 @@ $ method: echo</span><span style="color:#eb6772;"> -e </span><span style="color:
 <p>This <code>.cheat</code> enables us to very quickly make a request to any endpoint in our company, given that we somehow mapped all possible values to the corresponding variables. </p>
 <p>But an engineer who recently joined the team still wouldn't know what service/endpoint to request for creating a new <code>post</code>. We could then add another cheatsheet entry for more granular commands:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#eb6772;">%</span><span style="color:#abb2bf;"> httpie, endpoints
+<code class="language-sh" data-lang="sh"><span style="color:#eb6772;">%</span><span style="color:#abb2bf;"> httpie, endpoints
 
 </span><span style="font-style:italic;color:#5f697a;"># create a post
-</span><span style="color:#abb2bf;">http</span><span style="color:#eb6772;"> -v </span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">method</span><span style="color:#adb7c9;">&gt; </span><span style="color:#9acc76;">&quot;https://&lt;service&gt;.typicode.com/&lt;endpoint&gt;&quot;</span><span style="color:#abb2bf;"> title=</span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">title</span><span style="color:#adb7c9;">&gt;</span><span style="color:#abb2bf;"> body=</span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">body</span><span style="color:#adb7c9;">&gt;</span><span style="color:#abb2bf;"> userId=</span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">userId</span><span style="color:#adb7c9;">&gt;</span><span style="color:#abb2bf;">
+</span><span style="color:#abb2bf;">http</span><span style="color:#eb6772;"> -v </span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">method</span><span style="color:#adb7c9;">&gt; </span><span style="color:#9acc76;">&quot;https://&lt;service&gt;.typicode.com/&lt;endpoint&gt;&quot;</span><span style="color:#abb2bf;"> title=</span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">title</span><span style="color:#adb7c9;">&gt;</span><span style="color:#abb2bf;"> body=</span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">body</span><span style="color:#adb7c9;">&gt;</span><span style="color:#abb2bf;"> userId=</span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">userId</span><span style="color:#adb7c9;">&gt;
 
-$ method: echo </span><span style="color:#9acc76;">&#39;POST&#39;
+</span><span style="color:#abb2bf;">$ method: echo </span><span style="color:#9acc76;">&#39;POST&#39;
 </span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> service: echo </span><span style="color:#9acc76;">&#39;jsonplaceholder&#39;
 </span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> endpoint: echo </span><span style="color:#9acc76;">&#39;posts&#39;
 </span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> title: echo </span><span style="color:#9acc76;">&#39;foo&#39;
@@ -271,11 +271,11 @@ $ method: echo </span><span style="color:#9acc76;">&#39;POST&#39;
 <h3 id="preventing-user-interaction">Preventing user interaction</h3>
 <p>If no interaction is wanted we could override values using environment variables and autoselect the desired command by using the <code>--best-match</code> flag:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#eb6772;">userId</span><span style="color:#adb7c9;">=</span><span style="color:#9acc76;">12 </span><span style="color:#eb6772;">navi --query </span><span style="color:#9acc76;">&#39;http endpoints create post&#39;</span><span style="color:#eb6772;"> --best-match
+<code class="language-sh" data-lang="sh"><span style="color:#eb6772;">userId</span><span style="color:#adb7c9;">=</span><span style="color:#9acc76;">12 </span><span style="color:#eb6772;">navi --query </span><span style="color:#9acc76;">&#39;http endpoints create post&#39;</span><span style="color:#eb6772;"> --best-match
 </span></code></pre>
 <p>Let's say that we want to skip the <code>--query</code> and <code>--best-match</code> boilerplate and we know that we're always gonna use this tool for <code>http endpoints</code>. A simple bash script  come to the rescue:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#5cb3fa;">export_var</span><span style="color:#abb2bf;">() {
+<code class="language-sh" data-lang="sh"><span style="color:#5cb3fa;">export_var</span><span style="color:#abb2bf;">() {
    </span><span style="color:#cd74e8;">local </span><span style="color:#eb6772;">-r var</span><span style="color:#adb7c9;">=</span><span style="color:#9acc76;">&quot;${</span><span style="color:#eb6772;">1</span><span style="color:#adb7c9;">/</span><span style="color:#eb6772;">/</span><span style="color:#9acc76;">-</span><span style="color:#adb7c9;">/</span><span style="color:#9acc76;">_}&quot;
    </span><span style="color:#cd74e8;">export </span><span style="color:#9acc76;">&quot;$</span><span style="color:#eb6772;">var</span><span style="color:#9acc76;">&quot;</span><span style="color:#adb7c9;">=</span><span style="color:#9acc76;">&quot;$</span><span style="color:#eb6772;">2</span><span style="color:#9acc76;">&quot;
 </span><span style="color:#abb2bf;">}
@@ -294,7 +294,7 @@ $ method: echo </span><span style="color:#9acc76;">&#39;POST&#39;
 </span></code></pre>
 <p>And we could call it as follows:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#eb6772;">endpoint </span><span style="color:#9acc76;">&#39;create post&#39;
+<code class="language-sh" data-lang="sh"><span style="color:#eb6772;">endpoint </span><span style="color:#9acc76;">&#39;create post&#39;
 </span><span style="color:#eb6772;">endpoint </span><span style="color:#9acc76;">&#39;create post&#39;</span><span style="color:#eb6772;"> --userId</span><span style="color:#abb2bf;"> 12
 </span></code></pre><h3 id="conclusion">Conclusion</h3>
 <p>I hope that, with these tips, using the terminal becomes easier for you. </p>
@@ -368,6 +368,15 @@ $ method: echo </span><span style="color:#9acc76;">&#39;POST&#39;
           
             <nav class="level mt-2">
               
+                <div class="level-item has-text-centered">
+                  <a class="button is-black is-outlined" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;spreadsheet-tsdb-finance&#x2F;'>
+                    <span class="icon mr-2">
+                      <i class="fas fa-arrow-circle-left"></i>
+                    </span>
+                    Using a spreadsheet as a timeseries database for finance
+                  </a>
+                </div>
+              
               
                 <div class="level-item has-text-centered">
                   <a class="button is-black is-outlined" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;mind-maps&#x2F;'>
@@ -419,7 +428,7 @@ $ method: echo </span><span style="color:#9acc76;">&#39;POST&#39;
   <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;search_index.en.js'></script>
   <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;js&#x2F;site.js'></script>
   
-  <!-- force refresh. this should be removed in the future -->
+  
 
 </body>
 

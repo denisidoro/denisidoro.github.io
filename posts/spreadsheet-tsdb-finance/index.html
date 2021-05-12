@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#ffffff" name="theme-color" />
+  <meta content="#da532c" name="msapplication-TileColor" />
+  <meta name="google-site-verification" content="kCkEw_7g3u9-z3dP2MXtD-SNMTXjEUdoI9fRUbPB7Ks" />
+
+  
+    <link rel="icon" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+    <link rel="apple-touch-icon" sizes="48x48"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+    <link rel="apple-touch-icon" sizes="72x72"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;919926a10d297a1500.jpg" />
+    <link rel="apple-touch-icon" sizes="96x96"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;6c2aa64354c1ad0e00.jpg" />
+    <link rel="apple-touch-icon" sizes="144x144"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;f15f82763548a03000.jpg" />
+    <link rel="apple-touch-icon" sizes="192x192"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;60ba6917360f159900.jpg" />
+    <link rel="apple-touch-icon" sizes="256x256"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;be09d2da8b7096cc00.jpg" />
+    <link rel="apple-touch-icon" sizes="384x384"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;165598e81aa1737500.jpg" />
+    <link rel="apple-touch-icon" sizes="512x512"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;ca26ad195d4a364c00.jpg" />
+  
+
+  
+  
+  
+  
+  
+  <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" rel="stylesheet" />
+  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.css"
+    rel="stylesheet" /> 
+  <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" /> -->
+  <link href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;site.css' rel="stylesheet" /> 
+  <title>
+    
+  Using a spreadsheet as a timeseries database for finance
+
+  </title>
+  <script crossorigin="anonymous" src="https://kit.fontawesome.com/201b8d5e05.js"></script>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168912661-1"></script>
+  <script type="text/javascript">
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-168912661-1");
+  </script>
+  
+</head>
+
+<body class="has-background-light">
+  
+  <nav aria-label="main navigation" class="navbar is-light" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item has-text-weight-bold" href="/">Denis Isidoro</a>
+        <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navMenu">
+        <div class="navbar-end has-text-centered">
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;'>
+            Home
+          </a>
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts'>
+            Posts
+          </a>
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags'>
+            Tags
+          </a>
+          
+          <a class="navbar-item" id="nav-search" title="Search" data-target="#search-modal">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </a>
+          <a class="navbar-item" id="dark-mode" title="Switch to dark theme">
+            <span class="icon">
+              <i class="fas fa-adjust"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="modal" id="search-modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="field">
+        <p class="control has-icons-right">
+          <input class="input" id="search" placeholder="Search this website." type="search" />
+          <span class="icon is-small is-right">
+            <i class="fas fa-search"></i>
+          </span>
+        </p>
+      </div>
+      <div class="search-results">
+        <div class="search-results__items"></div>
+      </div>
+    </div>
+    <button aria-label="close" class="modal-close is-large"></button>
+  </div>
+  
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="example.com" />
+
+
+<meta name="og:title" content="Using a spreadsheet as a timeseries database for finance" />
+
+
+
+
+  
+  <main class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-10 is-offset-1">
+          <article>
+            <h1 class="title">Using a spreadsheet as a timeseries database for finance</h1>
+            <h2 class="subtitle"></h2>
+            <div class="columns mb-0">
+              <div class="column">
+                
+<p class="has-text-grey">
+  <!-- CUSTOM 
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  Denis Isidoro published on 
+  -->
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <time datetime='2021-05-12'>May 12, 2021</time>
+</p>
+
+              </div>
+              <div class="column has-text-right-desktop">
+                
+<p class="has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  8 min,
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  1452 words
+</p>
+
+              </div>
+              <div class="column has-text-right-desktop">
+                
+                  
+<p>
+  <span class="has-text-black has-text-weight-normal">Tags:</span>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;sheets&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    sheets
+  </a>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;grafana&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    grafana
+  </a>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;finance&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    finance
+  </a>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;js&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    js
+  </a>
+  
+</p>
+
+                
+              </div>
+            </div>
+            <!-- CUSTOM 
+            <div class="columns mb-0">
+              <div class="column">
+                
+              </div>
+            </div>
+            -->
+            
+            <hr/>
+            <div class="content has-text-justified">
+              <h3 id="context">Context</h3>
+<p>I have already tried using personal finance apps but there's always a feature missing or an inconsistency in results. </p>
+<p>Unhappy with the experience, I created a simple spreadsheet half a decade ago. It lacked features and quickly became unmaintainable.</p>
+<p>I decided to build my own tool instead. I started with a React (Native) Clojurescript web/mobile app. I never finished it. </p>
+<p>I created a <a href="https://denisidoro.github.io/posts/grafana-personal-finance/">system using Clojure and Python, paired with Grafana</a>. It worked pretty well, actually, but I never managed to deploy it in a free/cheap hosting service, because of JVM's and pandas' requirements.</p>
+<p>I converted the codebase to Rust as a pet project. The memory and processing footprints became negligible. Cool! </p>
+<p>But every once in a while I need to perform a simple calculation on the data, or plot an ad-hoc graph, or explore something new. Cloning repositories, editing the source code and recompiling everything isn't fun. </p>
+<p>Spreadsheets are good at that. Ironically, I decided to go back to Google Sheets. But this time for real. </p>
+<h3 id="architecture-diagram">Architecture diagram</h3>
+<p>Here's the diagram of the complete system:</p>
+<figure style="margin-left: 0; margin-right: 0">
+    <img src="/posts/sheet_diagram.png" style="margin-top: -2em; margin-bottom: -0.5em">
+</figure> 
+<p>I'll cover each section in more details.</p>
+<h1 id="using-google-sheets-for-input">Using Google Sheets for input</h1>
+<p>One of the requirements was that, as before, input should be minimal. In this case, it should basically be an event log of money transfers: </p>
+<figure style="margin-left: 0; margin-right: 0">
+    <img src="/posts/sheet_log.png">
+    <figcaption style="font-size: 0.8em">The first 2 and last 2 columns are filled automatically</figcaption>
+</figure>
+<p>An extra sheet was necessary to completely define some investments. <code>NASDAQ:APPL</code> is all the input you need to define Apple's stock -- provided you get data externally --, but some fixed income investments have their own criteria -- e.g. rate of interest. </p>
+<figure style="margin-left: 0; margin-right: 0">
+    <img src="/posts/sheet_config.png">
+    <figcaption style="font-size: 0.8em">This sheet only contains data which isn't possible to obtain otherwise</figcaption>
+</figure> 
+<h3 id="using-google-sheets-for-processing">Using Google sheets for processing</h3>
+<p>Handling input was the easy part. Fetching data from APIs and doing the math is <strike>complicated</strike> laborious.</p>
+<p>I can't get my head around <code>=ARRAYFORMULA(IF..., VLOOKUP(...FILTER(...(INDEX...(MATCH...)))))</code> formulae. Fortunately, Google Sheets allows using Javascript for manipulating sheets. It's not <strike>Rust</strike> my favorite language but at least it has <code>.map()</code>, <code>.filter()</code> and alike.</p>
+<p>After so many attempts building the same system, I came up with a mental model which I didn't want to abandon so I replicated it once again.</p>
+<p>To implement a timeseries database, a single spreadsheet was used. The y-axis represents time; the x-axis, different vectors:</p>
+<figure style="margin-left: 0; margin-right: 0">
+    <img src="/posts/sheet_tsdb.jpg">
+    <figcaption style="font-size: 0.8em">This sheet contains all numeric data</figcaption>
+</figure> 
+<p>In Javascript we can read from and write to this sheet as if we were using a real timeseries database. Effectively, this made my new code look very similar to the previous ones:</p>
+<pre style="background-color:#2b303b;">
+<code class="language-js" data-lang="js"><span style="font-style:italic;color:#5f697a;">// old 
+</span><span style="color:#eb6772;">influx</span><span style="color:#abb2bf;">.</span><span style="color:#5cb3fa;">emit</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">today</span><span style="color:#abb2bf;">, </span><span style="color:#db9d63;">3.12</span><span style="color:#abb2bf;">)
+</span><span style="font-style:italic;color:#5f697a;">// new
+</span><span style="color:#eb6772;">tsdbSheet</span><span style="color:#abb2bf;">.</span><span style="color:#5cb3fa;">setValue</span><span style="color:#abb2bf;">(</span><span style="color:#9acc76;">&#39;D67&#39;</span><span style="color:#abb2bf;">) </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">3.12
+ 
+</span><span style="font-style:italic;color:#5f697a;">// old 
+</span><span style="color:#eb6772;">config </span><span style="color:#adb7c9;">= </span><span style="color:#5cb3fa;">readFromFile</span><span style="color:#abb2bf;">(</span><span style="color:#9acc76;">&#39;./config.yaml&#39;</span><span style="color:#abb2bf;">)
+</span><span style="color:#eb6772;">foo </span><span style="color:#adb7c9;">= </span><span style="color:#eb6772;">config</span><span style="color:#abb2bf;">.</span><span style="color:#eb6772;">foo
+</span><span style="font-style:italic;color:#5f697a;">// new
+</span><span style="color:#eb6772;">foo </span><span style="color:#adb7c9;">= </span><span style="color:#eb6772;">configSheet</span><span style="color:#abb2bf;">.</span><span style="color:#5cb3fa;">getValue</span><span style="color:#abb2bf;">(</span><span style="color:#9acc76;">&#39;A2&#39;</span><span style="color:#abb2bf;">)
+</span></code></pre><h3 id="abstractions">Abstractions</h3>
+<p>These low-level spreadsheet operations were abstracted away, in order to make the rest of the code agnostic to Google Sheets. Should I decide to port it elsewhere, I'll only need to edit some parts from the <code>TSDB</code>, <code>EventLog</code> and <code>Config</code> classes.</p>
+<p>For example, calculating balances looks like this:</p>
+<pre style="background-color:#2b303b;">
+<code class="language-js" data-lang="js"><span style="color:#eb6772;">config</span><span style="color:#abb2bf;">.</span><span style="color:#eb6772;">assets</span><span style="color:#abb2bf;">.</span><span style="color:#5ebfcc;">forEach</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">asset </span><span style="color:#adb7c9;">-&gt; </span><span style="color:#abb2bf;">{
+   const </span><span style="color:#eb6772;">balance </span><span style="color:#adb7c9;">= </span><span style="color:#5cb3fa;">range</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">startDate</span><span style="color:#abb2bf;">, </span><span style="color:#eb6772;">today</span><span style="color:#abb2bf;">).</span><span style="color:#5cb3fa;">map</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">date </span><span style="color:#cd74e8;">=&gt; </span><span style="color:#abb2bf;">{
+      </span><span style="color:#cd74e8;">const </span><span style="color:#eb6772;">value </span><span style="color:#adb7c9;">= </span><span style="color:#5cb3fa;">someMath</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">asset</span><span style="color:#abb2bf;">, </span><span style="color:#eb6772;">date</span><span style="color:#abb2bf;">, </span><span style="color:#eb6772;">tsdb</span><span style="color:#abb2bf;">)
+      </span><span style="color:#cd74e8;">return </span><span style="color:#abb2bf;">[</span><span style="color:#eb6772;">date</span><span style="color:#abb2bf;">, </span><span style="color:#eb6772;">value</span><span style="color:#abb2bf;">] 
+   }
+   </span><span style="color:#eb6772;">tsdb</span><span style="color:#abb2bf;">.</span><span style="color:#5cb3fa;">save</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">asset</span><span style="color:#abb2bf;">.id, </span><span style="color:#9acc76;">&#39;balance&#39;</span><span style="color:#abb2bf;">, </span><span style="color:#eb6772;">balance</span><span style="color:#abb2bf;">)
+})
+</span></code></pre>
+<p>Getting historical data for stocks isn't any different:</p>
+<pre style="background-color:#2b303b;">
+<code class="language-js" data-lang="js"><span style="color:#eb6772;">config</span><span style="color:#abb2bf;">.</span><span style="color:#eb6772;">assets
+   </span><span style="color:#abb2bf;">.</span><span style="color:#5cb3fa;">filter</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">asset </span><span style="color:#cd74e8;">=&gt; </span><span style="color:#eb6772;">asset</span><span style="color:#abb2bf;">.</span><span style="color:#eb6772;">kind </span><span style="color:#adb7c9;">== </span><span style="color:#9acc76;">&#39;stock&#39;</span><span style="color:#abb2bf;">) 
+   .</span><span style="color:#5ebfcc;">forEach</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">stock </span><span style="color:#cd74e8;">=&gt; </span><span style="color:#abb2bf;">{
+      </span><span style="color:#cd74e8;">const </span><span style="color:#eb6772;">price </span><span style="color:#adb7c9;">= </span><span style="color:#5cb3fa;">callSomeApi</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">asset</span><span style="color:#abb2bf;">.id)
+      </span><span style="color:#eb6772;">tsdb</span><span style="color:#abb2bf;">.</span><span style="color:#5cb3fa;">save</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">asset</span><span style="color:#abb2bf;">.id, </span><span style="color:#9acc76;">&#39;price&#39;</span><span style="color:#abb2bf;">, </span><span style="color:#eb6772;">price</span><span style="color:#abb2bf;">) 
+   }) 
+</span></code></pre>
+<p>Similarly, to prevent some input, the following is executed on startup:</p>
+<pre style="background-color:#2b303b;">
+<code class="language-js" data-lang="js"><span style="color:#eb6772;">config</span><span style="color:#abb2bf;">.</span><span style="color:#eb6772;">assets
+   </span><span style="color:#abb2bf;">.</span><span style="color:#5cb3fa;">filter</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">asset </span><span style="color:#adb7c9;">-&gt; </span><span style="color:#eb6772;">asset</span><span style="color:#abb2bf;">.</span><span style="color:#5cb3fa;">reachedMaturity</span><span style="color:#abb2bf;">())
+   .</span><span style="color:#5ebfcc;">forEach</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">asset </span><span style="color:#adb7c9;">-&gt; </span><span style="color:#eb6772;">eventLog</span><span style="color:#abb2bf;">.</span><span style="color:#5cb3fa;">save</span><span style="color:#abb2bf;">(</span><span style="color:#9acc76;">&#39;sell&#39;</span><span style="color:#abb2bf;">, </span><span style="color:#eb6772;">asset</span><span style="color:#abb2bf;">.id, </span><span style="color:#eb6772;">asset</span><span style="color:#abb2bf;">.</span><span style="color:#eb6772;">maturityDate</span><span style="color:#abb2bf;">))
+</span></code></pre>
+<p>Finally, this allowed me to achieve what I already had in the early designs but with 3 benefits:</p>
+<ul>
+<li>I can access it from anywhere, as long as the device supports Google Sheets</li>
+<li>I edit tabular data, instead of a difficult-to-maintain <code>.yml</code> file versioned in a private Github repository</li>
+<li>I can quickly run an ad-hoc <code>=SUM(FILTER(...)))</code> against my data if necessary </li>
+</ul>
+<h1 id="dashboards">Dashboards</h1>
+<p>Spreadsheet formulae are cool but I still like looking at dashboards and plotting graphs on the fly, so I reused the architecture I already had on top of Grafana. I don't want to share screenshots here but the dashboard looks like any regular Grafana one:</p>
+<figure style="margin-left: 0; margin-right: 0">
+    <img src="https://grafana.com/static/img/grafana/showcase_visualize-954.jpg">
+    <figcaption style="font-size: 0.8em">Grafana dashboards normally look like this</figcaption>
+</figure> 
+<p>For example, I can quickly write a query to compare the portfolio performance against the <a href="https://br.investing.com/indices/bovespa">Ibovespa index</a>.</p>
+<figure style="margin-left: 0; margin-right: 0">
+    <img src="/posts/sheet_grafana.jpg">
+    <figcaption style="font-size: 0.8em">To get the performance of assets broken down by broker, <code>sum(...) by (broker)</code> would do the trick</figcaption>
+</figure> 
+<h3 id="real-timeseries-database">(Real) timeseries database</h3>
+<p>I decided to <a href="https://victoriametrics.com">VictoriaMetrics</a> this time. It's fast and it has support for a much needed feature: backfilling. In other words, I'm able to emit values for timestamps in the past. </p>
+<p>Its query engine is called MetricsQL and is a superset of <a href="https://prometheus.io/docs/prometheus/latest/querying/basics/">PromQL</a>. </p>
+<p>I'd like to highlight 3 features from MetricsQL:</p>
+<ul>
+<li>
+<p><code>keep_last_value</code>: only one data point per day per series is emitted. Anything above this would be redundant, since I don't day trade. However, Grafana asks for <code>n</code> data points per day, <code>n</code> function of the width of the panel in pixels and is normally greater than 1. Without <code>keep_last_value</code> the plots would contain gaps. Summing metrics with gaps in different positions is erratic, because gaps are interpreted as 0.</p>
+</li>
+<li>
+<p><code>WITH</code> statement: this lets query aliasing, which is pretty handy. By the way, if you like <code>WITH</code> too, you may like <a href="https://denisidoro.github.io/pipers/">pipers</a>. </p>
+</li>
+<li>
+<p><code>range_first</code>: with this function I was able to normalize investment performances so that they all start with 1, making comparisons a breeze, as seen above. </p>
+</li>
+</ul>
+<h1 id="exporting-importing-data">Exporting/importing data</h1>
+<p>I added an <code>Export</code> button to Google Sheets which exports the contents from the spreadsheets to Grafana:</p>
+<figure style="margin-left: 0; margin-right: 0">
+    <img src="/posts/sheet_button.png">
+    <figcaption style="font-size: 0.8em">It's easy to call custom scripts like this</figcaption>
+</figure>  
+<p>It simply serializes the in-memory data structures as JSON text and sends it in a POST request.</p>
+<h3 id="notes-on-performance">Notes on performance</h3>
+<p>The Rust implementation was able to read the config file, make all requests in parallel, calculate everything and export all data to Grafana in ~5 seconds.</p>
+<p>I expected my first implementation in Google Sheets to be slower, or course. But I didn't expect it to be SO SLOW. The first implementation took 45~60min to finish processing. At least that's what I estimate, because I wasn't patient enough to wait for it. </p>
+<p>The problem is that <code>sheet.setValue(...)</code> takes 500ms~3s for each cell. Also, switching between read and write modes takes about the same time. If you consider that each investment generates ~10 timeseries -- average price, balance, etc. -- and that each timeseries has 365 data points per year, then you'll see that this quickly explodes.</p>
+<p>This reminded me of the problem that frameworks like React faced. Manipulating the DOM is slow, so they ended up creating a <a href="https://reactjs.org/docs/faq-internals.html">virtual representation of the DOM</a>. I did the same, but for spreadsheets. It sounds complicated, but it isn't.</p>
+<p>Basically, <code>tsdb.save(...)</code> doesn't manipulate the sheet directly but mutates an in-memory data structure instead. Later on, it sets the values for ranges instead of cells, in batch. The &quot;public&quot; APIs remained the same -- only the implementation details changed.</p>
+<p>After these optimizations, the script takes less than a minute to complete.</p>
+<p>This could be improved even further, but I don't want to make the code more complex just to save a few seconds once a month. </p>
+<h3 id="result">Result</h3>
+<p>To be honest, it's likely that a couple of <strike>months</strike> years from now I'll decide to write everything from scratch yet again. </p>
+<p>It's not you, project of mine. It's me. </p>
+<p>But I'm sure of one thing: the system has never been so flexible and portable.</p>
+<h3 id="codebase">Codebase</h3>
+<p>The spreadsheet and the source code are currently private because it would require some effort to make them shareable -- from privacy, security and usability standpoints. </p>
+<p>Please reach out to me if you're interested in it, though. Maybe I can come up with something! 👍</p>
+<p>In the meantime, I highly recommend <a href="https://dlombelloplanilhas.com/">dlombello's spreadsheets</a>, which should fit most people's needs.</p>
+
+            </div>
+            <!-- CUSTOM <div id="mapid"></div> -->
+
+            <div class="disclaimer">
+              Note: opinions expressed here are solely my own and do not necessarily express the views or experiences of my employer or past employers.
+            </div>
+            
+            <div class="container has-text-centered mt-6">
+              
+<!-- CUSTOM
+<p class="is-size-5">
+  Share:
+  <a class="link" data-sharer="facebook" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;spreadsheet-tsdb-finance&#x2F;' href="javascript:void(0);"
+    title="Share on facebook">
+    <span class="icon">
+      <i class="fab fa-facebook-square"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="twitter" data-title='Using a spreadsheet as a timeseries database for finance' data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;spreadsheet-tsdb-finance&#x2F;'
+    href="javascript:void(0);" title="Share on twitter">
+    <span class="icon">
+      <i class="fab fa-twitter"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="linkedin" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;spreadsheet-tsdb-finance&#x2F;' href="javascript:void(0);"
+    title="Share on linkedin">
+    <span class="icon">
+      <i class="fab fa-linkedin"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="reddit" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;spreadsheet-tsdb-finance&#x2F;' href="javascript:void(0);"
+    title="Share on reddit">
+    <span class="icon">
+      <i class="fab fa-reddit"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="hackernews" data-title="Using a spreadsheet as a timeseries database for finance" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;spreadsheet-tsdb-finance&#x2F;'
+    href="javascript:void(0);" title="Share on hackernews">
+    <span class="icon">
+      <i class="fab fa-hacker-news"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="whatsapp" data-title="Using a spreadsheet as a timeseries database for finance" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;spreadsheet-tsdb-finance&#x2F;'
+    href="javascript:void(0);" title="Share on whatsapp">
+    <span class="icon">
+      <i class="fab fa-whatsapp-square"></i>
+    </span>
+  </a>
+</p>
+-->
+
+            </div>
+
+            <div class="comment-section">
+              <script src="https://utteranc.es/client.js"
+                repo="denisidoro/blog"
+                issue-term="og:title"
+                label="comment"
+                crossorigin="anonymous"
+                async>
+              </script>
+            </div>
+          </article>
+          <hr/>
+          
+            <nav class="level mt-2">
+              
+              
+                <div class="level-item has-text-centered">
+                  <a class="button is-black is-outlined" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;cli-templates&#x2F;'>
+                    Creating templates for CLIs<span class="icon ml-2">
+                      <i class="fas fa-arrow-circle-right"></i>
+                    </span>
+                  </a>
+                </div>
+              
+              
+              
+            </nav>
+          
+          
+        </div>
+      </div>
+    </div>
+  </main>
+
+  
+  <!--<footer class="py-2">
+    <p class="has-text-centered">
+      Built with
+      <span class="icon is-small">
+        <i class="fas fa-code fa-xs"></i>
+      </span>
+      code and
+      <span class="icon is-small">
+        <i class="fas fa-heart fa-xs"></i>
+      </span>
+      love <br /> Powered By
+      <span class="icon is-small">
+        <i class="fas fa-power-off fa-xs"></i>
+      </span>
+      Zola
+    </p>
+  </footer>-->
+  
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <!-- 
+    <script src="https://cdn.jsdelivr.net/npm/sharer.js@latest/sharer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/galleria.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1/dist/chart.xkcd.min.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.js"></script>
+  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/elasticlunr/0.9.6/elasticlunr.min.js"></script>
+  <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;search_index.en.js'></script>
+  <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;js&#x2F;site.js'></script>
+  
+  
+
+</body>
+
+</html>
