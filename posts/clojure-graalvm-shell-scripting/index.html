@@ -208,17 +208,24 @@
             <hr/>
             <div class="content has-text-justified">
               <figure class="medium-image">
+
     <img alt="Image for post" class="medium-image"
         src="https://miro.medium.com/max/2160/1*gJm3BZcNrKoPOa2QO69p3Q.png"
         srcSet="https://miro.medium.com/max/552/1*gJm3BZcNrKoPOa2QO69p3Q.png 276w, https://miro.medium.com/max/1104/1*gJm3BZcNrKoPOa2QO69p3Q.png 552w, https://miro.medium.com/max/1280/1*gJm3BZcNrKoPOa2QO69p3Q.png 640w, https://miro.medium.com/max/1400/1*gJm3BZcNrKoPOa2QO69p3Q.png 700w"
         sizes="700px" />
+
+    
     <figcaption>Part of a shell script written in Clojure</figcaption>
+    
+
+    
+
 </figure>
 <h3 id="motivation">Motivation</h3>
 <p>Objective: develop a shell script to ease the writing of XML files.</p>
 <p>Let’s say that the output to be generated is:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#abb2bf;">&lt;</span><span style="color:#eb6772;">grid</span><span style="color:#abb2bf;">&gt;   
+<code class="language-xml" data-lang="xml"><span style="color:#abb2bf;">&lt;</span><span style="color:#eb6772;">grid</span><span style="color:#abb2bf;">&gt;   
   &lt;</span><span style="color:#eb6772;">row</span><span style="color:#abb2bf;">&gt;   
      &lt;</span><span style="color:#eb6772;">label </span><span style="color:#db9d63;">id</span><span style="color:#abb2bf;">=</span><span style="color:#9acc76;">&quot;info&quot; </span><span style="color:#abb2bf;">/&gt;   
      &lt;</span><span style="color:#eb6772;">text</span><span style="color:#abb2bf;">&gt;Now playing&lt;/</span><span style="color:#eb6772;">text</span><span style="color:#abb2bf;">&gt;   
@@ -230,7 +237,7 @@
 </span></code></pre>
 <p>I’d like to write it as:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#abb2bf;">[</span><span style="color:#db9d63;">:grid </span><span style="color:#abb2bf;">[</span><span style="color:#db9d63;">:row </span><span style="color:#abb2bf;">[</span><span style="color:#db9d63;">:label </span><span style="color:#abb2bf;">{</span><span style="color:#db9d63;">:id :info</span><span style="color:#abb2bf;">}]   
+<code class="language-clojure" data-lang="clojure"><span style="color:#abb2bf;">[</span><span style="color:#db9d63;">:grid </span><span style="color:#abb2bf;">[</span><span style="color:#db9d63;">:row </span><span style="color:#abb2bf;">[</span><span style="color:#db9d63;">:label </span><span style="color:#abb2bf;">{</span><span style="color:#db9d63;">:id :info</span><span style="color:#abb2bf;">}]   
              [</span><span style="color:#db9d63;">:text </span><span style="color:#9acc76;">&quot;Now playing&quot;</span><span style="color:#abb2bf;">]]   
        [</span><span style="color:#db9d63;">:row </span><span style="color:#abb2bf;">[</span><span style="color:#db9d63;">:button :onTap </span><span style="color:#9acc76;">&quot;mute&quot;</span><span style="color:#abb2bf;">]]]
 </span></code></pre>
@@ -251,21 +258,23 @@
 <p><a href="https://www.graalvm.org/">GraalVM</a> is a universal virtual machine for running applications written in JavaScript, Ruby, JVM-based languages and more.</p>
 <p>By using <a href="https://www.graalvm.org/docs/reference-manual/aot-compilation/">AOT compilation</a> we can compile our clj scripts to native code, which doesn’t rely on the JVM. The benefit? Let’s compare startup times:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#eb6772;">λ</span><span style="color:#abb2bf;"> echo </span><span style="color:#9acc76;">&#39;[:table]&#39; </span><span style="color:#adb7c9;">| </span><span style="color:#eb6772;">time</span><span style="color:#abb2bf;"> clj</span><span style="color:#eb6772;"> -m</span><span style="color:#abb2bf;"> xml 
-</span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">table </span><span style="color:#eb6772;">/</span><span style="color:#adb7c9;">&gt;</span><span style="color:#abb2bf;"> 
-clj</span><span style="color:#eb6772;"> -m</span><span style="color:#abb2bf;"> xml 9.88s user 0.68s system 293% cpu 3.593 total 
+<code class="language-bash" data-lang="bash"><span style="color:#eb6772;">λ</span><span style="color:#abb2bf;"> echo </span><span style="color:#9acc76;">&#39;[:table]&#39; </span><span style="color:#adb7c9;">| </span><span style="color:#eb6772;">time</span><span style="color:#abb2bf;"> clj</span><span style="color:#eb6772;"> -m</span><span style="color:#abb2bf;"> xml 
+</span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">table </span><span style="color:#eb6772;">/</span><span style="color:#adb7c9;">&gt; 
+</span><span style="color:#abb2bf;">clj</span><span style="color:#eb6772;"> -m</span><span style="color:#abb2bf;"> xml 9.88s user 0.68s system 293% cpu 3.593 total 
 
 </span><span style="color:#eb6772;">λ</span><span style="color:#abb2bf;"> echo </span><span style="color:#9acc76;">&#39;[:table]&#39; </span><span style="color:#adb7c9;">| </span><span style="color:#eb6772;">time</span><span style="color:#abb2bf;"> native-binary 
-</span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">table </span><span style="color:#eb6772;">/</span><span style="color:#adb7c9;">&gt;</span><span style="color:#abb2bf;"> 
-native-binary 0.01s user 0.01s system 79% cpu 0.019 total
+</span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">table </span><span style="color:#eb6772;">/</span><span style="color:#adb7c9;">&gt; 
+</span><span style="color:#abb2bf;">native-binary 0.01s user 0.01s system 79% cpu 0.019 total
 </span></code></pre>
 <p>That’s 200x faster!</p>
 <p>In addition, I can simply copy/paste this binary to any other machine with the same architecture + OS and it will work regardless of JVM or Node.js being installed or not.</p>
 <p>Example scripts and helpers for clj and GraalVM can be found <a href="https://github.com/denisidoro/dotfiles/tree/c4f656d6c83f34c106afc61f44568fcd4e3ea1b9/scripts/clojure">here</a>.</p>
 <p>For other people’s experiences, click <a href="https://www.innoq.com/en/blog/native-clojure-and-graalvm/">here</a> or <a href="https://www.astrecipes.net/blog/2018/07/20/cmd-line-apps-with-clojure-and-graalvm/">there</a>.</p>
 <div class="medium-first">
+
     This post first appeared on
     <a href="https://medium.com/@den.isidoro/using-clojure-graalvm-for-shell-scripting-da0bcc8955d4" target="_blank">Medium</a>.
+
 </div>
 
             </div>

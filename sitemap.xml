@@ -57,6 +57,10 @@
         <lastmod>2018-04-23</lastmod>
     </url>
     <url>
+        <loc>https://denisidoro.github.io/posts/spreadsheet-tsdb-finance/</loc>
+        <lastmod>2021-05-12</lastmod>
+    </url>
+    <url>
         <loc>https://denisidoro.github.io/posts/tips-for-faster-development/</loc>
         <lastmod>2018-08-07</lastmod>
     </url>
@@ -140,6 +144,12 @@
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/react/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/sheets/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/sheets/page/1/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/shell/</loc>
