@@ -7,7 +7,88 @@
         <generator>Zola</generator>
         <language>en</language>
         <atom:link href="https://denisidoro.github.io/rss.xml" rel="self" type="application/rss+xml"/>
-        <lastBuildDate>Wed, 12 May 2021 00:00:00 +0000</lastBuildDate>
+        <lastBuildDate>Mon, 07 Jun 2021 00:00:00 +0000</lastBuildDate>
+        <item>
+            <title>Working around Google Photos limitation</title>
+            <pubDate>Mon, 07 Jun 2021 00:00:00 +0000</pubDate>
+            <link>https://denisidoro.github.io/posts/working-around-google-photos-limitation/</link>
+            <guid>https://denisidoro.github.io/posts/working-around-google-photos-limitation/</guid>
+            <description>&lt;h3 id=&quot;context&quot;&gt;Context&lt;&#x2F;h3&gt;
+&lt;p&gt;As of June 1, 2021, Google Photos &lt;a href=&quot;https:&#x2F;&#x2F;www.theverge.com&#x2F;2020&#x2F;11&#x2F;11&#x2F;21560810&#x2F;google-photos-unlimited-cap-free-uploads-15gb-ending&quot;&gt;started limiting&lt;&#x2F;a&gt; the storage for new photos and videos to 15GB&#x2F;account.&lt;&#x2F;p&gt;
+&lt;p&gt;15GB isn&#x27;t much nowadays, so I looked for alternatives. &lt;&#x2F;p&gt;
+&lt;p&gt;Signing up for paid storage is an option which I discarded: &lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;first, because I don&#x27;t want to yet another lifetime subscription&lt;&#x2F;li&gt;
+&lt;li&gt;second, because I don&#x27;t want to be tied to a ecosystem. What if prices double overnight? What if I reach the storage limit and need to upgrade to the next tier?&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;That said, I love Google Photos and its machine learning wizardry.&lt;&#x2F;p&gt;
+&lt;p&gt;A suboptimal experience, yet better than nothing, would be to:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;upload low quality photos to Google Photos&lt;&#x2F;li&gt;
+&lt;li&gt;upload high&#x2F;original quality photos to alternative storages&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;This way, Google Photos will still keep me reminding me of past trips or allow me to search for &amp;quot;bridge&amp;quot; or &amp;quot;Rio de Janeiro&amp;quot; against my 1000s of photos. Given an image ID&#x2F;date, I can download the high&#x2F;original quality photo elsewhere.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;alternatives&quot;&gt;Alternatives&lt;&#x2F;h3&gt;
+&lt;p&gt;Whatever the solution would turn out to be, I wanted it to last at least 3.5 years. If we assume 10 photos&#x2F;day in average, we&#x27;re talking about ~13k photos here.&lt;&#x2F;p&gt;
+&lt;p&gt;I ended up creating&#x2F;reusing the following accounts:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th align=&quot;center&quot;&gt;Provider&lt;&#x2F;th&gt;&lt;th align=&quot;center&quot;&gt;Available storage&lt;&#x2F;th&gt;&lt;th align=&quot;center&quot;&gt;Photo size&lt;&#x2F;th&gt;&lt;th align=&quot;center&quot;&gt;Trust?&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;photos.google.com&quot;&gt;Google Photos&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;6GB&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;450KB&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;Yes&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;box.com&quot;&gt;Box&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;7GB&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;550KB&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;Yes&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pcloud.com&quot;&gt;pCloud&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;10GB&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;750KB&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;No&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;degoo.com&quot;&gt;Degoo&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;100GB&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;7MB&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;No&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;terabox.com&quot;&gt;Terabox&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;1TB&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;irrelevant&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;No&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;telegram.org&quot;&gt;Telegram&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;∞&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;irrelevant&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;Yes&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;I&#x27;ve never heard about &lt;a href=&quot;https:&#x2F;&#x2F;pcloud.com&quot;&gt;pCloud&lt;&#x2F;a&gt;, &lt;a href=&quot;https:&#x2F;&#x2F;degoo.com&quot;&gt;Degoo&lt;&#x2F;a&gt; or &lt;a href=&quot;https:&#x2F;&#x2F;terabox.com&quot;&gt;Terabox&lt;&#x2F;a&gt; before so I&#x27;m not uploading my photos in a &amp;quot;human-readable&amp;quot; format to these services.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;&#x2F;h3&gt;
+&lt;p&gt;I won&#x27;t get into too much implementation details, but I basically used &lt;a href=&quot;https:&#x2F;&#x2F;play.google.com&#x2F;store&#x2F;apps&#x2F;details?id=net.dinglisch.android.taskerm&amp;amp;hl=en&amp;amp;gl=US&quot;&gt;Tasker&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;play.google.com&#x2F;store&#x2F;apps&#x2F;details?id=com.termux&amp;amp;hl=en&amp;amp;gl=US&quot;&gt;Termux&lt;&#x2F;a&gt;. I also installed the packages for &lt;a href=&quot;https:&#x2F;&#x2F;linux.die.net&#x2F;man&#x2F;1&#x2F;file&quot;&gt;file&lt;&#x2F;a&gt;, &lt;a href=&quot;https:&#x2F;&#x2F;exiftool.org&quot;&gt;exiftool&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;rclone.org&quot;&gt;rclone&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;The pseudo-code is as follows:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;every day at 2am:
+    for each photo in &#x2F;sdcard&#x2F;DCIM:
+        compress photo to &#x2F;sdcard&#x2F;Cloud&#x2F;GooglePhotos&#x2F;⋯.jpg
+        compress and zip photo to &#x2F;sdcard&#x2F;Cloud&#x2F;pCloud&#x2F;⋯.jpg.7z
+        ...
+        zip photo to &#x2F;sdcard&#x2F;Cloud&#x2F;Terabox&#x2F;⋯.jpg.7z
+        move photo to &#x2F;sdcard&#x2F;Cloud&#x2F;Telegram&#x2F;⋯.jpg
+
+every day at 3am, if wifi is connected:
+    for each file in &#x2F;sdcard&#x2F;Cloud&#x2F;&amp;lt;provider&amp;gt;:
+        move file to &amp;lt;provider&amp;gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h3 id=&quot;compression&quot;&gt;Compression&lt;&#x2F;h3&gt;
+&lt;p&gt;A photo is compressed for each storage provider accordingly.&lt;&#x2F;p&gt;
+&lt;p&gt;The output image will be limited by &lt;code&gt;Photo size&lt;&#x2F;code&gt; and, if &lt;code&gt;Trust?&lt;&#x2F;code&gt; is &lt;code&gt;false&lt;&#x2F;code&gt;, it will be 7zipped using a password.&lt;&#x2F;p&gt;
+&lt;p&gt;The output image size is limited by playing with the properties for image resizing inside Tasker (&lt;code&gt;max dimension&lt;&#x2F;code&gt; and &lt;code&gt;compression quality&lt;&#x2F;code&gt;). These are estimated based on the &lt;code&gt;Photo size&lt;&#x2F;code&gt; input and the original image properties, retrived by &lt;code&gt;file&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;One caveat is that, for some reason, Tasker doesn&#x27;t preserve the EXIF attributes when resizing images, so I needed to use &lt;code&gt;exiftool&lt;&#x2F;code&gt; to overwrite the new file EXIF attributes with the original ones.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;uploading-files-to-decent-real-storage-providers&quot;&gt;Uploading files to decent, real storage providers&lt;&#x2F;h3&gt;
+&lt;p&gt;This was very straightforward and was automated using &lt;a href=&quot;https:&#x2F;&#x2F;rclone.org&quot;&gt;rclone&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;uploading-files-to-bad-real-storage-providers&quot;&gt;Uploading files to bad, real storage providers&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;degoo.com&quot;&gt;Degoo&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;terabox.com&quot;&gt;Terabox&lt;&#x2F;a&gt; don&#x27;t have support for WebDAV or similar protocols. In other words, I need to open their app and manually move files.&lt;&#x2F;p&gt;
+&lt;p&gt;I plan to do that once a month.&lt;&#x2F;p&gt;
+&lt;p&gt;The good news is that all files will already be easily located in &lt;code&gt;&#x2F;sdcard&#x2F;Cloud&#x2F;Degoo&lt;&#x2F;code&gt;, for example.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;uploading-files-to-telegram&quot;&gt;Uploading files to Telegram&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;telegram.org&quot;&gt;Telegram&lt;&#x2F;a&gt; isn&#x27;t a storage provider but, to my knowledge, a given chat can have infinite attachments. 🤷&lt;&#x2F;p&gt;
+&lt;p&gt;Its API allows file uploads using a simple POST request. The response body contains a &lt;code&gt;file_id&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;We can download the attachment by making a request to &lt;code&gt;https:&#x2F;&#x2F;⋯.telegram.org&#x2F;⋯?file_id=&amp;lt;file_id&amp;gt;&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;We thus need to keep this &lt;code&gt;file_id&lt;&#x2F;code&gt; in a database. My Tasker task stores this in &lt;code&gt;&#x2F;sdcard&#x2F;Tasker&#x2F;db&#x2F;telegram_uploads.txt&lt;&#x2F;code&gt; and its contents look like this:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
+&lt;code class=&quot;language-txt&quot; data-lang=&quot;txt&quot;&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&#x2F;Pictures&#x2F;IMG_00.jpg;123456
+&#x2F;Pictures&#x2F;IMG_01.jpg;789012
+&#x2F;Pictures&#x2F;IMG_02.jpg;654321
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Having this database in hand, we can even design a primitive web-based file manager, for example.&lt;&#x2F;p&gt;
+&lt;p&gt;The database is replicated across all other storage providers, using the aforementioned methods.&lt;&#x2F;p&gt;
+&lt;figure style=&quot;margin-left: 0; margin-right: 0&quot;&gt;
+    &lt;img src=&quot;&#x2F;posts&#x2F;gphotos_telegram.jpg&quot;&gt;
+    &lt;figcaption style=&quot;font-size: 0.8em&quot;&gt;My chat with my bot will ultimately contain thousands of messages like this&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt; 
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
+&lt;p&gt;I&#x27;m happy with the solution because Google Photos will still keep doing its magic and photos are replicated. If one storage provider goes down (I&#x27;m sure that down the road at least one of them will), I won&#x27;t lose my photos.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;code&quot;&gt;Code&lt;&#x2F;h3&gt;
+&lt;p&gt;The Tasker tasks aren&#x27;t public because they rely on a very specific setup (and because I&#x27;ve never met anyone in person who uses Tasker - or Termux, for that matter).&lt;&#x2F;p&gt;
+&lt;p&gt;In the unexpected scenario I get requests to do it, I&#x27;ll share them in &lt;a href=&quot;https:&#x2F;&#x2F;taskernet.com&#x2F;shares&#x2F;&quot;&gt;Taskernet&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+</description>
+        </item>
         <item>
             <title>Using a spreadsheet as a timeseries database for finance</title>
             <pubDate>Wed, 12 May 2021 00:00:00 +0000</pubDate>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#ffffff" name="theme-color" />
+  <meta content="#da532c" name="msapplication-TileColor" />
+  <meta name="google-site-verification" content="kCkEw_7g3u9-z3dP2MXtD-SNMTXjEUdoI9fRUbPB7Ks" />
+
+  
+    <link rel="icon" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+    <link rel="apple-touch-icon" sizes="48x48"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+    <link rel="apple-touch-icon" sizes="72x72"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;919926a10d297a1500.jpg" />
+    <link rel="apple-touch-icon" sizes="96x96"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;6c2aa64354c1ad0e00.jpg" />
+    <link rel="apple-touch-icon" sizes="144x144"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;f15f82763548a03000.jpg" />
+    <link rel="apple-touch-icon" sizes="192x192"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;60ba6917360f159900.jpg" />
+    <link rel="apple-touch-icon" sizes="256x256"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;be09d2da8b7096cc00.jpg" />
+    <link rel="apple-touch-icon" sizes="384x384"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;165598e81aa1737500.jpg" />
+    <link rel="apple-touch-icon" sizes="512x512"
+      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;ca26ad195d4a364c00.jpg" />
+  
+
+  
+  
+  
+  
+  
+  <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" rel="stylesheet" />
+  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.css"
+    rel="stylesheet" /> 
+  <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" /> -->
+  <link href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;site.css' rel="stylesheet" /> 
+  <title>
+    
+  Working around Google Photos limitation
+
+  </title>
+  <script crossorigin="anonymous" src="https://kit.fontawesome.com/201b8d5e05.js"></script>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168912661-1"></script>
+  <script type="text/javascript">
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-168912661-1");
+  </script>
+  
+</head>
+
+<body class="has-background-light">
+  
+  <nav aria-label="main navigation" class="navbar is-light" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item has-text-weight-bold" href="/">Denis Isidoro</a>
+        <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navMenu">
+        <div class="navbar-end has-text-centered">
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;'>
+            Home
+          </a>
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts'>
+            Posts
+          </a>
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags'>
+            Tags
+          </a>
+          
+          <a class="navbar-item" id="nav-search" title="Search" data-target="#search-modal">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </a>
+          <a class="navbar-item" id="dark-mode" title="Switch to dark theme">
+            <span class="icon">
+              <i class="fas fa-adjust"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="modal" id="search-modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="field">
+        <p class="control has-icons-right">
+          <input class="input" id="search" placeholder="Search this website." type="search" />
+          <span class="icon is-small is-right">
+            <i class="fas fa-search"></i>
+          </span>
+        </p>
+      </div>
+      <div class="search-results">
+        <div class="search-results__items"></div>
+      </div>
+    </div>
+    <button aria-label="close" class="modal-close is-large"></button>
+  </div>
+  
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="example.com" />
+
+
+<meta name="og:title" content="Working around Google Photos limitation" />
+
+
+
+
+  
+  <main class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-10 is-offset-1">
+          <article>
+            <h1 class="title">Working around Google Photos limitation</h1>
+            <h2 class="subtitle"></h2>
+            <div class="columns mb-0">
+              <div class="column">
+                
+<p class="has-text-grey">
+  <!-- CUSTOM 
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  Denis Isidoro published on 
+  -->
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <time datetime='2021-06-07'>June 07, 2021</time>
+</p>
+
+              </div>
+              <div class="column has-text-right-desktop">
+                
+<p class="has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  5 min,
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  852 words
+</p>
+
+              </div>
+              <div class="column has-text-right-desktop">
+                
+                  
+<p>
+  <span class="has-text-black has-text-weight-normal">Tags:</span>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;cloud&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    cloud
+  </a>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;android&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    android
+  </a>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;tasker&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    tasker
+  </a>
+  
+  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;termux&#x2F;'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    termux
+  </a>
+  
+</p>
+
+                
+              </div>
+            </div>
+            <!-- CUSTOM 
+            <div class="columns mb-0">
+              <div class="column">
+                
+              </div>
+            </div>
+            -->
+            
+            <hr/>
+            <div class="content has-text-justified">
+              <h3 id="context">Context</h3>
+<p>As of June 1, 2021, Google Photos <a href="https://www.theverge.com/2020/11/11/21560810/google-photos-unlimited-cap-free-uploads-15gb-ending">started limiting</a> the storage for new photos and videos to 15GB/account.</p>
+<p>15GB isn't much nowadays, so I looked for alternatives. </p>
+<p>Signing up for paid storage is an option which I discarded: </p>
+<ul>
+<li>first, because I don't want to yet another lifetime subscription</li>
+<li>second, because I don't want to be tied to a ecosystem. What if prices double overnight? What if I reach the storage limit and need to upgrade to the next tier?</li>
+</ul>
+<p>That said, I love Google Photos and its machine learning wizardry.</p>
+<p>A suboptimal experience, yet better than nothing, would be to:</p>
+<ul>
+<li>upload low quality photos to Google Photos</li>
+<li>upload high/original quality photos to alternative storages</li>
+</ul>
+<p>This way, Google Photos will still keep me reminding me of past trips or allow me to search for &quot;bridge&quot; or &quot;Rio de Janeiro&quot; against my 1000s of photos. Given an image ID/date, I can download the high/original quality photo elsewhere.</p>
+<h3 id="alternatives">Alternatives</h3>
+<p>Whatever the solution would turn out to be, I wanted it to last at least 3.5 years. If we assume 10 photos/day in average, we're talking about ~13k photos here.</p>
+<p>I ended up creating/reusing the following accounts:</p>
+<table><thead><tr><th align="center">Provider</th><th align="center">Available storage</th><th align="center">Photo size</th><th align="center">Trust?</th></tr></thead><tbody>
+<tr><td align="center"><a href="https://photos.google.com">Google Photos</a></td><td align="center">6GB</td><td align="center">450KB</td><td align="center">Yes</td></tr>
+<tr><td align="center"><a href="https://box.com">Box</a></td><td align="center">7GB</td><td align="center">550KB</td><td align="center">Yes</td></tr>
+<tr><td align="center"><a href="https://pcloud.com">pCloud</a></td><td align="center">10GB</td><td align="center">750KB</td><td align="center">No</td></tr>
+<tr><td align="center"><a href="https://degoo.com">Degoo</a></td><td align="center">100GB</td><td align="center">7MB</td><td align="center">No</td></tr>
+<tr><td align="center"><a href="https://terabox.com">Terabox</a></td><td align="center">1TB</td><td align="center">irrelevant</td><td align="center">No</td></tr>
+<tr><td align="center"><a href="https://telegram.org">Telegram</a></td><td align="center">∞</td><td align="center">irrelevant</td><td align="center">Yes</td></tr>
+</tbody></table>
+<p>I've never heard about <a href="https://pcloud.com">pCloud</a>, <a href="https://degoo.com">Degoo</a> or <a href="https://terabox.com">Terabox</a> before so I'm not uploading my photos in a &quot;human-readable&quot; format to these services.</p>
+<h3 id="solution">Solution</h3>
+<p>I won't get into too much implementation details, but I basically used <a href="https://play.google.com/store/apps/details?id=net.dinglisch.android.taskerm&amp;hl=en&amp;gl=US">Tasker</a> and <a href="https://play.google.com/store/apps/details?id=com.termux&amp;hl=en&amp;gl=US">Termux</a>. I also installed the packages for <a href="https://linux.die.net/man/1/file">file</a>, <a href="https://exiftool.org">exiftool</a> and <a href="https://rclone.org">rclone</a>.</p>
+<p>The pseudo-code is as follows:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#abb2bf;">every day at 2am:
+    for each photo in /sdcard/DCIM:
+        compress photo to /sdcard/Cloud/GooglePhotos/⋯.jpg
+        compress and zip photo to /sdcard/Cloud/pCloud/⋯.jpg.7z
+        ...
+        zip photo to /sdcard/Cloud/Terabox/⋯.jpg.7z
+        move photo to /sdcard/Cloud/Telegram/⋯.jpg
+
+every day at 3am, if wifi is connected:
+    for each file in /sdcard/Cloud/&lt;provider&gt;:
+        move file to &lt;provider&gt;
+</span></code></pre><h3 id="compression">Compression</h3>
+<p>A photo is compressed for each storage provider accordingly.</p>
+<p>The output image will be limited by <code>Photo size</code> and, if <code>Trust?</code> is <code>false</code>, it will be 7zipped using a password.</p>
+<p>The output image size is limited by playing with the properties for image resizing inside Tasker (<code>max dimension</code> and <code>compression quality</code>). These are estimated based on the <code>Photo size</code> input and the original image properties, retrived by <code>file</code>.</p>
+<p>One caveat is that, for some reason, Tasker doesn't preserve the EXIF attributes when resizing images, so I needed to use <code>exiftool</code> to overwrite the new file EXIF attributes with the original ones.</p>
+<h3 id="uploading-files-to-decent-real-storage-providers">Uploading files to decent, real storage providers</h3>
+<p>This was very straightforward and was automated using <a href="https://rclone.org">rclone</a>.</p>
+<h3 id="uploading-files-to-bad-real-storage-providers">Uploading files to bad, real storage providers</h3>
+<p><a href="https://degoo.com">Degoo</a> and <a href="https://terabox.com">Terabox</a> don't have support for WebDAV or similar protocols. In other words, I need to open their app and manually move files.</p>
+<p>I plan to do that once a month.</p>
+<p>The good news is that all files will already be easily located in <code>/sdcard/Cloud/Degoo</code>, for example.</p>
+<h3 id="uploading-files-to-telegram">Uploading files to Telegram</h3>
+<p><a href="https://telegram.org">Telegram</a> isn't a storage provider but, to my knowledge, a given chat can have infinite attachments. 🤷</p>
+<p>Its API allows file uploads using a simple POST request. The response body contains a <code>file_id</code>.</p>
+<p>We can download the attachment by making a request to <code>https://⋯.telegram.org/⋯?file_id=&lt;file_id&gt;</code>.</p>
+<p>We thus need to keep this <code>file_id</code> in a database. My Tasker task stores this in <code>/sdcard/Tasker/db/telegram_uploads.txt</code> and its contents look like this:</p>
+<pre style="background-color:#2b303b;">
+<code class="language-txt" data-lang="txt"><span style="color:#abb2bf;">/Pictures/IMG_00.jpg;123456
+/Pictures/IMG_01.jpg;789012
+/Pictures/IMG_02.jpg;654321
+</span></code></pre>
+<p>Having this database in hand, we can even design a primitive web-based file manager, for example.</p>
+<p>The database is replicated across all other storage providers, using the aforementioned methods.</p>
+<figure style="margin-left: 0; margin-right: 0">
+    <img src="/posts/gphotos_telegram.jpg">
+    <figcaption style="font-size: 0.8em">My chat with my bot will ultimately contain thousands of messages like this</figcaption>
+</figure> 
+<h3 id="conclusion">Conclusion</h3>
+<p>I'm happy with the solution because Google Photos will still keep doing its magic and photos are replicated. If one storage provider goes down (I'm sure that down the road at least one of them will), I won't lose my photos.</p>
+<h3 id="code">Code</h3>
+<p>The Tasker tasks aren't public because they rely on a very specific setup (and because I've never met anyone in person who uses Tasker - or Termux, for that matter).</p>
+<p>In the unexpected scenario I get requests to do it, I'll share them in <a href="https://taskernet.com/shares/">Taskernet</a>.</p>
+
+            </div>
+            <!-- CUSTOM <div id="mapid"></div> -->
+
+            <div class="disclaimer">
+              Note: opinions expressed here are solely my own and do not necessarily express the views or experiences of my employer or past employers.
+            </div>
+            
+            <div class="container has-text-centered mt-6">
+              
+<!-- CUSTOM
+<p class="is-size-5">
+  Share:
+  <a class="link" data-sharer="facebook" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;working-around-google-photos-limitation&#x2F;' href="javascript:void(0);"
+    title="Share on facebook">
+    <span class="icon">
+      <i class="fab fa-facebook-square"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="twitter" data-title='Working around Google Photos limitation' data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;working-around-google-photos-limitation&#x2F;'
+    href="javascript:void(0);" title="Share on twitter">
+    <span class="icon">
+      <i class="fab fa-twitter"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="linkedin" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;working-around-google-photos-limitation&#x2F;' href="javascript:void(0);"
+    title="Share on linkedin">
+    <span class="icon">
+      <i class="fab fa-linkedin"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="reddit" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;working-around-google-photos-limitation&#x2F;' href="javascript:void(0);"
+    title="Share on reddit">
+    <span class="icon">
+      <i class="fab fa-reddit"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="hackernews" data-title="Working around Google Photos limitation" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;working-around-google-photos-limitation&#x2F;'
+    href="javascript:void(0);" title="Share on hackernews">
+    <span class="icon">
+      <i class="fab fa-hacker-news"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="whatsapp" data-title="Working around Google Photos limitation" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;working-around-google-photos-limitation&#x2F;'
+    href="javascript:void(0);" title="Share on whatsapp">
+    <span class="icon">
+      <i class="fab fa-whatsapp-square"></i>
+    </span>
+  </a>
+</p>
+-->
+
+            </div>
+
+            <div class="comment-section">
+              <script src="https://utteranc.es/client.js"
+                repo="denisidoro/blog"
+                issue-term="og:title"
+                label="comment"
+                crossorigin="anonymous"
+                async>
+              </script>
+            </div>
+          </article>
+          <hr/>
+          
+            <nav class="level mt-2">
+              
+              
+                <div class="level-item has-text-centered">
+                  <a class="button is-black is-outlined" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;spreadsheet-tsdb-finance&#x2F;'>
+                    Using a spreadsheet as a timeseries database for finance<span class="icon ml-2">
+                      <i class="fas fa-arrow-circle-right"></i>
+                    </span>
+                  </a>
+                </div>
+              
+              
+              
+            </nav>
+          
+          
+        </div>
+      </div>
+    </div>
+  </main>
+
+  
+  <!--<footer class="py-2">
+    <p class="has-text-centered">
+      Built with
+      <span class="icon is-small">
+        <i class="fas fa-code fa-xs"></i>
+      </span>
+      code and
+      <span class="icon is-small">
+        <i class="fas fa-heart fa-xs"></i>
+      </span>
+      love <br /> Powered By
+      <span class="icon is-small">
+        <i class="fas fa-power-off fa-xs"></i>
+      </span>
+      Zola
+    </p>
+  </footer>-->
+  
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <!-- 
+    <script src="https://cdn.jsdelivr.net/npm/sharer.js@latest/sharer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/galleria.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1/dist/chart.xkcd.min.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.js"></script>
+  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/elasticlunr/0.9.6/elasticlunr.min.js"></script>
+  <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;search_index.en.js'></script>
+  <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;js&#x2F;site.js'></script>
+  
+  
+
+</body>
+
+</html>

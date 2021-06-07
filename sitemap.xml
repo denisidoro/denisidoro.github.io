@@ -65,7 +65,17 @@
         <lastmod>2018-08-07</lastmod>
     </url>
     <url>
+        <loc>https://denisidoro.github.io/posts/working-around-google-photos-limitation/</loc>
+        <lastmod>2021-06-07</lastmod>
+    </url>
+    <url>
         <loc>https://denisidoro.github.io/tags/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/android/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/android/page/1/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/architecture/</loc>
@@ -84,6 +94,12 @@
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/clojure/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/cloud/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/cloud/page/1/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/dev/</loc>
@@ -158,9 +174,21 @@
         <loc>https://denisidoro.github.io/tags/shell/page/1/</loc>
     </url>
     <url>
+        <loc>https://denisidoro.github.io/tags/tasker/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/tasker/page/1/</loc>
+    </url>
+    <url>
         <loc>https://denisidoro.github.io/tags/terminal/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/terminal/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/termux/</loc>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/tags/termux/page/1/</loc>
     </url>
 </urlset>
