@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#ffffff" name="theme-color" />
+  <meta content="#da532c" name="msapplication-TileColor" />
+  <meta name="google-site-verification" content="kCkEw_7g3u9-z3dP2MXtD-SNMTXjEUdoI9fRUbPB7Ks" />
+
+  
+    <link rel="icon" href="[object]" />
+    <link rel="apple-touch-icon" sizes="48x48"
+      href="[object]" />
+    <link rel="apple-touch-icon" sizes="72x72"
+      href="[object]" />
+    <link rel="apple-touch-icon" sizes="96x96"
+      href="[object]" />
+    <link rel="apple-touch-icon" sizes="144x144"
+      href="[object]" />
+    <link rel="apple-touch-icon" sizes="192x192"
+      href="[object]" />
+    <link rel="apple-touch-icon" sizes="256x256"
+      href="[object]" />
+    <link rel="apple-touch-icon" sizes="384x384"
+      href="[object]" />
+    <link rel="apple-touch-icon" sizes="512x512"
+      href="[object]" />
+  
+
+  
+  
+  
+  
+  
+  <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" rel="stylesheet" />
+  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.css"
+    rel="stylesheet" /> 
+  <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" /> -->
+  <link href='https://denisidoro.github.io/site.css' rel="stylesheet" /> 
+  <title>
+    
+  Faster monorepo workflow with materialized views
+
+  </title>
+  <script crossorigin="anonymous" src="https://kit.fontawesome.com/201b8d5e05.js"></script>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168912661-1"></script>
+  <script type="text/javascript">
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-168912661-1");
+  </script>
+  
+</head>
+
+<body class="has-background-light">
+  
+  <nav aria-label="main navigation" class="navbar is-light" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item has-text-weight-bold" href="/">Denis Isidoro</a>
+        <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navMenu">
+        <div class="navbar-end has-text-centered">
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;'>
+            Home
+          </a>
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts'>
+            Posts
+          </a>
+          
+          <a class="navbar-item" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags'>
+            Tags
+          </a>
+          
+          <a class="navbar-item" id="nav-search" title="Search" data-target="#search-modal">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </a>
+          <a class="navbar-item" id="dark-mode" title="Switch to dark theme">
+            <span class="icon">
+              <i class="fas fa-adjust"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="modal" id="search-modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="field">
+        <p class="control has-icons-right">
+          <input class="input" id="search" placeholder="Search this website." type="search" />
+          <span class="icon is-small is-right">
+            <i class="fas fa-search"></i>
+          </span>
+        </p>
+      </div>
+      <div class="search-results">
+        <div class="search-results__items"></div>
+      </div>
+    </div>
+    <button aria-label="close" class="modal-close is-large"></button>
+  </div>
+  
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="example.com" />
+
+
+<meta name="og:title" content="Faster monorepo workflow with materialized views" />
+
+
+
+
+  
+  <main class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-10 is-offset-1">
+          <article>
+            <h1 class="title">Faster monorepo workflow with materialized views</h1>
+            <h2 class="subtitle"></h2>
+            <div class="columns mb-0">
+              <div class="column">
+                
+<p class="has-text-grey">
+  <!-- CUSTOM 
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  Denis Isidoro published on 
+  -->
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <time datetime='2021-12-13'>December 13, 2021</time>
+</p>
+
+              </div>
+              <div class="column has-text-right-desktop">
+                
+<p class="has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  8 min,
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  1418 words
+</p>
+
+              </div>
+              <div class="column has-text-right-desktop">
+                
+                  
+<p>
+  <span class="has-text-black has-text-weight-normal">Tags:</span>
+  
+  <a class="link has-text-weight-light" href='https://denisidoro.github.io/tags/git/'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    git
+  </a>
+  
+  <a class="link has-text-weight-light" href='https://denisidoro.github.io/tags/monorepo/'>
+    <span class="icon is-small">
+      <i class="fas fa-tag fa-xs"></i>
+    </span>
+    monorepo
+  </a>
+  
+</p>
+
+                
+              </div>
+            </div>
+            <!-- CUSTOM 
+            <div class="columns mb-0">
+              <div class="column">
+                
+              </div>
+            </div>
+            -->
+            
+            <hr/>
+            <div class="content has-text-justified">
+              <h3 id="context">Context</h3>
+<p>Monorepos have their pros and cons. </p>
+<p>A plethora of in-depth articles have already been written on this subject so I won't bother writing yet another one. <a href="https://github.com/joelparkerhenderson/monorepo-vs-polyrepo">This one</a> summarizes the trade-offs very well.</p>
+<p>In this post, I propose a solution for improving the dev experience for monorepos, by using microrepos as materialized views for subprojects and a bot as orchestrator.</p>
+<p>A <a href="https://github.com/denisidoro/git-monorepo">proof-of-concept CLI</a> for managing repositories is also provided, which can be used as base for a real-world tool set. </p>
+<h2 id="assumptions">Assumptions</h2>
+<p>To keep this post concise, I'll list some assumptions under which this solution was designed. </p>
+<p>Depending on your workflow or the requirements of the code base you're developing, alternative solutions should be considered. </p>
+<ol>
+<li>git must be used, as changing the SVN is too disruptive</li>
+<li>the main drawback of monorepos are slow git operations in dev machines</li>
+<li>if git were performant for large repos, monorepos would clearly be superior to microrepos, with few, if any, downsides </li>
+</ol>
+<h2 id="proposed-solution">Proposed solution</h2>
+<figure style="margin-left: 0; margin-right: 0">
+    <img src="/posts/git-monorepo-architecture.png">
+    <figcaption style="font-size: 0.8em">In a nutshell, devs work with materialized views an the bot propagates changes</figcaption>
+</figure> 
+<h3 id="repo-setup">Repo setup</h3>
+<ul>
+<li>0.a. Create a monorepo <code>mono</code> as the source of truth of our codebase. It should include all subprojects. Let's say it contains <code>proj1</code> and <code>proj2</code></li>
+<li>0.b. Create microrepos for <code>proj1</code> and <code>proj2</code>. They'll act as materialized views</li>
+<li>0.c. Protect the <code>master</code> branch of all microrepos. Only the bot should be able to commit to <code>master</code></li>
+</ul>
+<h3 id="workflow">Workflow</h3>
+<ol>
+<li>Instead of cloning <code>mono</code>, the dev should clone microrepos of interest. Let's say only <code>proj2</code></li>
+<li>The dev creates a branch <code>newfeature</code> in <code>proj2</code></li>
+<li>After making the necessary changes, the dev pushes this branch to <code>proj2</code>'s remote, not <code>mono</code>'s</li>
+<li>A bot creates a PR in <code>mono</code>, reflecting the changes of <code>proj2</code>'s <code>newfeature</code></li>
+<li>The dev hits the &quot;merge pull request&quot; button for the PR in <code>mono</code></li>
+<li>For each commit to <code>mono</code>'s <code>master</code>, the bot commits to the microrepos' <code>master</code> accordingly. In this case, <code>proj2</code>'s master will eventually include the changes from <code>newfeature</code></li>
+</ol>
+<h2 id="making-changes-to-multiple-repos-at-once">Making changes to multiple repos at once</h2>
+<p>The bot that creates the PR in <code>mono</code> must be able to aggregate related branches from multiple microrepos.</p>
+<p>In order for the bot to know if two branches are related or not, an identifier can be used. For example, if <code>newfeature</code> was used as a branch name in <code>proj1</code> and the feature requires changes to both projects, a namesake branch in <code>proj2</code> must be created.</p>
+<h2 id="why-this-solution-is-good">Why this solution is good</h2>
+<p>In a nutshell, because the advantages of monorepos are kept. The only practical difference is that devs don't need to run slow git operations on their machines. </p>
+<p>The good news is that all this can be abstracted away by a CLI. </p>
+<h2 id="does-this-solution-need-to-be-so-complex">Does this solution need to be so complex?</h2>
+<p>I think so. </p>
+<p>Multiple multi-billion dollar companies struggle with this problem. If there were a simple solution, I'm sure someone would already have figured it out.</p>
+<p>The only simple solution (from end-user's perspective) I can think of is to have an SVN performatic for monorepos out-of-the-box. </p>
+<p>Perhaps that's the case already, but a different SVN rejects our assumption <code>1.</code>.</p>
+<h2 id="rejected-solution">Rejected solution</h2>
+<h3 id="having-the-microrepos-as-source-of-truth-and-the-monorepo-as-materialized-view">Having the microrepos as source of truth and the monorepo as materialized view</h3>
+<p>The problem with this solution is that changes to <code>proj1</code> and <code>proj2</code> must be atomic, assuming a feature requires changes to both: we either want to commit a change to both projects or drop the commit altogether. </p>
+<p>git currently doesn't provide a solution for such transactions, so a mechanism for simulating atomicity would need to be designed, rendering the solution even more complex. </p>
+<p>For example, a change to <code>proj1</code> would need to be reverted in case we're not able to commit to <code>proj2</code>. </p>
+<p>As we all know, distributed systems can fail or become inconsistent for all sorts of reasons. If somehow <code>proj2</code> got corrupted or inconsistent, it's much easier and less error-prone to fix or reconstruct its materialized view than trying to agree upon the source of truth.</p>
+<h2 id="demo">Demo</h2>
+<p>To illustrate, I could've <a href="https://github.com/probot/probot">created a GitHub bot</a>. That would exceed the time budget I set for putting this article together, though. </p>
+<p>For demo purposes I've created a <a href="https://github.com/denisidoro/git-monorepo">proof-of-concept CLI</a> that simulates the flow locally. This won't simulate the interactions with PRs, as they don't exist in a local machine, but will give us a clear idea of how this flow works. </p>
+<p>In this example, all folders inside <code>~/github</code> represent repositories you would normally have hosted on GitHub; all folders inside <code>~/dev</code> represent the local clones. </p>
+<p>Once this CLI is available in your <code>$PATH</code> as git-monorepo, you can invoke it by running <code>git monorepo</code>. </p>
+<p>You can execute the commands below in your local machine if you want to follow along. The CLI prints all commands it's running for you to understand what's happening under the hood. </p>
+<p>Without further ado, let's get to it.</p>
+<h3 id="0-a-setting-up-the-monorepo">0.a. Setting up the monorepo</h3>
+<p>Let's create the remote <code>mono</code> repository:</p>
+<pre data-lang="sh" class="language-sh "><code class="language-sh" data-lang="sh">mkdir -p ~/github/mono
+cd ~/github/mono
+git init
+mkdir proj{1,2}
+for i in 1 2; do echo "console.log('proj${i}')" > proj${i}/file${i}.js; done
+git add . 
+git commit -am 'First commit' 
+</code></pre>
+<p>By the end of these steps, GitHub would host a monorepo like this:</p>
+<pre data-lang="sh" class="language-sh "><code class="language-sh" data-lang="sh">mono/
+   proj1/file1.js
+   proj2/file2.js
+</code></pre>
+<h3 id="0-b-setting-up-the-microrepos">0.b. Setting up the microrepos</h3>
+<p>Let's create the remote microrepos:</p>
+<pre data-lang="sh" class="language-sh "><code class="language-sh" data-lang="sh">for i in 1 2; do git monorepo extract proj${i} ~/github/proj${i}; done
+</code></pre>
+<p>The first argument is the path to the project inside <code>mono</code>; the second argument is where the remote microrepo will live.</p>
+<p>Normally, the second argument would look like <code>https://github.com/username/proj1</code> or <code>git@github.com:username/proj1</code></p>
+<p>By the end of these steps, GitHub would host repositories like this:</p>
+<pre><code>mono/
+   .gitmonorepo
+   proj1/file1.js
+   proj2/file2.js
+proj1/
+   file1.js
+proj2/
+   file2.js
+</code></pre>
+<p>The <code>.gitmonorepo</code> was automatically created to keep track of the microrepos. </p>
+<h3 id="1-cloning-a-microrepo">1. Cloning a microrepo</h3>
+<p>Let's clone <code>proj1</code>:</p>
+<pre data-lang="sh" class="language-sh "><code class="language-sh" data-lang="sh">mkdir -p ~/dev
+cd ~/dev
+git clone -b master ~/github/proj1
+</code></pre>
+<h3 id="2-making-changes">2. Making changes</h3>
+<p>Let's develop a new feature. </p>
+<pre><code>cd ~/dev/proj1
+git checkout master
+git pull origin master
+git checkout -b newfeature
+echo "console.log('newchange')" >> file1.js
+git add .
+git commit -am "proj1/newfeature: change file1.js"
+</code></pre>
+<h3 id="3-pushing-a-change-to-the-microrepo">3. Pushing a change to the microrepo</h3>
+<p>Let's push our changes to the remote <code>proj1</code>:</p>
+<pre data-lang="sh" class="language-sh "><code class="language-sh" data-lang="sh">git push origin newfeature
+</code></pre>
+<h3 id="4-propagating-the-changes-to-the-monorepo">4. Propagating the changes to the monorepo</h3>
+<p>The bot would automatically propagate the changes to <code>mono</code>, by running something like the following:</p>
+<pre data-lang="sh" class="language-sh "><code class="language-sh" data-lang="sh">cd ~/github/mono
+git monorepo pull newfeature
+</code></pre>
+<p>Now, <code>~/github/mono/proj1/file1.js</code> should have the <code>newchange</code> line on the <code>newfeature</code> branch, but not in <code>master</code>. </p>
+<h3 id="5-merging-a-pr">5. Merging a PR</h3>
+<p>Let's merge our branch:</p>
+<pre data-lang="sh" class="language-sh "><code class="language-sh" data-lang="sh">git checkout master 
+git merge newfeature
+</code></pre>
+<p>Now, <code>~/github/mono/proj1/file1.js</code> should have the <code>newchange</code> line on <code>master</code>. </p>
+<h3 id="6-propagating-the-change-back-to-the-microrepo">6. Propagating the change back to the microrepo</h3>
+<p>Finally, the bot would automatically update all microrepos accordingly, by running something like the following:</p>
+<pre data-lang="sh" class="language-sh "><code class="language-sh" data-lang="sh">git monorepo push
+</code></pre>
+<p>Now, <code>~/dev/proj1/file1.js</code> should also have the <code>newchange</code> line on <code>master</code>, ending the loop cycle. </p>
+<p>Please note that we were able to make changes to the remote monorepo having only cloned <code>proj1</code>. <code>proj2</code> and <code>mono</code> weren't cloned locally.</p>
+<h2 id="future-work">Future work</h2>
+<p>We've only covered the simple, happy path so far. </p>
+<p>Ideally, this system should also include:</p>
+<ul>
+<li>a dev-friendly git wrapper for working with multiple microrepos at once</li>
+<li>a UI for displaying how the microrepos and the monorepo are interacting with each other </li>
+<li>different resolution strategies, in case one of the propagation changes fails for some reason</li>
+<li>merge queues</li>
+<li>a mechanism for replicating the monorepo locally, but using the microrepos of interest instead </li>
+<li>cleanup routines, for deleting branches in microrepos whose PR in the monorepo is closed </li>
+<li>fixes to <a href="https://github.com/denisidoro/git-monorepo/search?q=TODO">these TODOs</a></li>
+<li>and much more. </li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>The purpose of this article was to simply brainstorm what a more performant workflow could look like. </p>
+<p>I hope that this will motivate someone out there willing to implement a system ready for real-world scenarios. </p>
+<p>In case you do, I'd really appreciate if you could add a link to this post somewhere in your README.md file! :) </p>
+
+            </div>
+            <!-- CUSTOM <div id="mapid"></div> -->
+
+            <div class="disclaimer">
+              Note: opinions expressed here are solely my own and do not necessarily express the views or experiences of my employer or past employers.
+            </div>
+            
+            <div class="container has-text-centered mt-6">
+              
+<!-- CUSTOM
+<p class="is-size-5">
+  Share:
+  <a class="link" data-sharer="facebook" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;faster-monorepo-workflow-with-materialized-views&#x2F;' href="javascript:void(0);"
+    title="Share on facebook">
+    <span class="icon">
+      <i class="fab fa-facebook-square"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="twitter" data-title='Faster monorepo workflow with materialized views' data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;faster-monorepo-workflow-with-materialized-views&#x2F;'
+    href="javascript:void(0);" title="Share on twitter">
+    <span class="icon">
+      <i class="fab fa-twitter"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="linkedin" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;faster-monorepo-workflow-with-materialized-views&#x2F;' href="javascript:void(0);"
+    title="Share on linkedin">
+    <span class="icon">
+      <i class="fab fa-linkedin"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="reddit" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;faster-monorepo-workflow-with-materialized-views&#x2F;' href="javascript:void(0);"
+    title="Share on reddit">
+    <span class="icon">
+      <i class="fab fa-reddit"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="hackernews" data-title="Faster monorepo workflow with materialized views" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;faster-monorepo-workflow-with-materialized-views&#x2F;'
+    href="javascript:void(0);" title="Share on hackernews">
+    <span class="icon">
+      <i class="fab fa-hacker-news"></i>
+    </span>
+  </a>
+  <a class="link" data-sharer="whatsapp" data-title="Faster monorepo workflow with materialized views" data-url='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;faster-monorepo-workflow-with-materialized-views&#x2F;'
+    href="javascript:void(0);" title="Share on whatsapp">
+    <span class="icon">
+      <i class="fab fa-whatsapp-square"></i>
+    </span>
+  </a>
+</p>
+-->
+
+            </div>
+
+            <div class="comment-section">
+              <script src="https://utteranc.es/client.js"
+                repo="denisidoro/blog"
+                issue-term="og:title"
+                label="comment"
+                crossorigin="anonymous"
+                async>
+              </script>
+            </div>
+          </article>
+          <hr/>
+          
+            <nav class="level mt-2">
+              
+              
+                <div class="level-item has-text-centered">
+                  <a class="button is-black is-outlined" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;working-around-google-photos-limitation&#x2F;'>
+                    Working around Google Photos limitation<span class="icon ml-2">
+                      <i class="fas fa-arrow-circle-right"></i>
+                    </span>
+                  </a>
+                </div>
+              
+              
+              
+            </nav>
+          
+          
+        </div>
+      </div>
+    </div>
+  </main>
+
+  
+  <!--<footer class="py-2">
+    <p class="has-text-centered">
+      Built with
+      <span class="icon is-small">
+        <i class="fas fa-code fa-xs"></i>
+      </span>
+      code and
+      <span class="icon is-small">
+        <i class="fas fa-heart fa-xs"></i>
+      </span>
+      love <br /> Powered By
+      <span class="icon is-small">
+        <i class="fas fa-power-off fa-xs"></i>
+      </span>
+      Zola
+    </p>
+  </footer>-->
+  
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <!-- 
+    <script src="https://cdn.jsdelivr.net/npm/sharer.js@latest/sharer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/galleria.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1/dist/chart.xkcd.min.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.js"></script>
+  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/elasticlunr/0.9.6/elasticlunr.min.js"></script>
+  <script src='https://denisidoro.github.io/search_index.en.js'></script>
+  <script src='https://denisidoro.github.io/js/site.js'></script>
+  
+  
+
+</body>
+
+</html>
