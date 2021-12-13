@@ -9,23 +9,23 @@
   <meta name="google-site-verification" content="kCkEw_7g3u9-z3dP2MXtD-SNMTXjEUdoI9fRUbPB7Ks" />
 
   
-    <link rel="icon" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+    <link rel="icon" href="[object]" />
     <link rel="apple-touch-icon" sizes="48x48"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="72x72"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;919926a10d297a1500.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="96x96"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;6c2aa64354c1ad0e00.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="144x144"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;f15f82763548a03000.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="192x192"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;60ba6917360f159900.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="256x256"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;be09d2da8b7096cc00.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="384x384"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;165598e81aa1737500.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="512x512"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;ca26ad195d4a364c00.jpg" />
+      href="[object]" />
   
 
   
@@ -37,7 +37,7 @@
   <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.css"
     rel="stylesheet" /> 
   <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" /> -->
-  <link href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;site.css' rel="stylesheet" /> 
+  <link href='https://denisidoro.github.io/site.css' rel="stylesheet" /> 
   <title>
     
   Using a spreadsheet as a timeseries database for finance
@@ -171,28 +171,28 @@
 <p>
   <span class="has-text-black has-text-weight-normal">Tags:</span>
   
-  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;sheets&#x2F;'>
+  <a class="link has-text-weight-light" href='https://denisidoro.github.io/tags/sheets/'>
     <span class="icon is-small">
       <i class="fas fa-tag fa-xs"></i>
     </span>
     sheets
   </a>
   
-  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;grafana&#x2F;'>
+  <a class="link has-text-weight-light" href='https://denisidoro.github.io/tags/grafana/'>
     <span class="icon is-small">
       <i class="fas fa-tag fa-xs"></i>
     </span>
     grafana
   </a>
   
-  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;finance&#x2F;'>
+  <a class="link has-text-weight-light" href='https://denisidoro.github.io/tags/finance/'>
     <span class="icon is-small">
       <i class="fas fa-tag fa-xs"></i>
     </span>
     finance
   </a>
   
-  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;js&#x2F;'>
+  <a class="link has-text-weight-light" href='https://denisidoro.github.io/tags/js/'>
     <span class="icon is-small">
       <i class="fas fa-tag fa-xs"></i>
     </span>
@@ -249,44 +249,41 @@
     <figcaption style="font-size: 0.8em">This sheet contains all numeric data</figcaption>
 </figure> 
 <p>In Javascript we can read from and write to this sheet as if we were using a real timeseries database. Effectively, this made my new code look very similar to the previous ones:</p>
-<pre style="background-color:#2b303b;">
-<code class="language-js" data-lang="js"><span style="font-style:italic;color:#5f697a;">// old 
-</span><span style="color:#eb6772;">influx</span><span style="color:#abb2bf;">.</span><span style="color:#5cb3fa;">emit</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">today</span><span style="color:#abb2bf;">, </span><span style="color:#db9d63;">3.12</span><span style="color:#abb2bf;">)
-</span><span style="font-style:italic;color:#5f697a;">// new
-</span><span style="color:#eb6772;">tsdbSheet</span><span style="color:#abb2bf;">.</span><span style="color:#5cb3fa;">setValue</span><span style="color:#abb2bf;">(</span><span style="color:#9acc76;">&#39;D67&#39;</span><span style="color:#abb2bf;">) </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">3.12
+<pre data-lang="js" class="language-js "><code class="language-js" data-lang="js">// old 
+influx.emit(today, 3.12)
+// new
+tsdbSheet.setValue('D67') = 3.12
  
-</span><span style="font-style:italic;color:#5f697a;">// old 
-</span><span style="color:#eb6772;">config </span><span style="color:#adb7c9;">= </span><span style="color:#5cb3fa;">readFromFile</span><span style="color:#abb2bf;">(</span><span style="color:#9acc76;">&#39;./config.yaml&#39;</span><span style="color:#abb2bf;">)
-</span><span style="color:#eb6772;">foo </span><span style="color:#adb7c9;">= </span><span style="color:#eb6772;">config</span><span style="color:#abb2bf;">.</span><span style="color:#eb6772;">foo
-</span><span style="font-style:italic;color:#5f697a;">// new
-</span><span style="color:#eb6772;">foo </span><span style="color:#adb7c9;">= </span><span style="color:#eb6772;">configSheet</span><span style="color:#abb2bf;">.</span><span style="color:#5cb3fa;">getValue</span><span style="color:#abb2bf;">(</span><span style="color:#9acc76;">&#39;A2&#39;</span><span style="color:#abb2bf;">)
-</span></code></pre><h3 id="abstractions">Abstractions</h3>
+// old 
+config = readFromFile('./config.yaml')
+foo = config.foo
+// new
+foo = configSheet.getValue('A2')
+</code></pre>
+<h3 id="abstractions">Abstractions</h3>
 <p>These low-level spreadsheet operations were abstracted away, in order to make the rest of the code agnostic to Google Sheets. Should I decide to port it elsewhere, I'll only need to edit some parts from the <code>TSDB</code>, <code>EventLog</code> and <code>Config</code> classes.</p>
 <p>For example, calculating balances looks like this:</p>
-<pre style="background-color:#2b303b;">
-<code class="language-js" data-lang="js"><span style="color:#eb6772;">config</span><span style="color:#abb2bf;">.</span><span style="color:#eb6772;">assets</span><span style="color:#abb2bf;">.</span><span style="color:#5ebfcc;">forEach</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">asset </span><span style="color:#adb7c9;">-&gt; </span><span style="color:#abb2bf;">{
-   const </span><span style="color:#eb6772;">balance </span><span style="color:#adb7c9;">= </span><span style="color:#5cb3fa;">range</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">startDate</span><span style="color:#abb2bf;">, </span><span style="color:#eb6772;">today</span><span style="color:#abb2bf;">).</span><span style="color:#5cb3fa;">map</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">date </span><span style="color:#cd74e8;">=&gt; </span><span style="color:#abb2bf;">{
-      </span><span style="color:#cd74e8;">const </span><span style="color:#eb6772;">value </span><span style="color:#adb7c9;">= </span><span style="color:#5cb3fa;">someMath</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">asset</span><span style="color:#abb2bf;">, </span><span style="color:#eb6772;">date</span><span style="color:#abb2bf;">, </span><span style="color:#eb6772;">tsdb</span><span style="color:#abb2bf;">)
-      </span><span style="color:#cd74e8;">return </span><span style="color:#abb2bf;">[</span><span style="color:#eb6772;">date</span><span style="color:#abb2bf;">, </span><span style="color:#eb6772;">value</span><span style="color:#abb2bf;">] 
+<pre data-lang="js" class="language-js "><code class="language-js" data-lang="js">config.assets.forEach(asset -> {
+   const balance = range(startDate, today).map(date => {
+      const value = someMath(asset, date, tsdb)
+      return [date, value] 
    }
-   </span><span style="color:#eb6772;">tsdb</span><span style="color:#abb2bf;">.</span><span style="color:#5cb3fa;">save</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">asset</span><span style="color:#abb2bf;">.id, </span><span style="color:#9acc76;">&#39;balance&#39;</span><span style="color:#abb2bf;">, </span><span style="color:#eb6772;">balance</span><span style="color:#abb2bf;">)
+   tsdb.save(asset.id, 'balance', balance)
 })
-</span></code></pre>
+</code></pre>
 <p>Getting historical data for stocks isn't any different:</p>
-<pre style="background-color:#2b303b;">
-<code class="language-js" data-lang="js"><span style="color:#eb6772;">config</span><span style="color:#abb2bf;">.</span><span style="color:#eb6772;">assets
-   </span><span style="color:#abb2bf;">.</span><span style="color:#5cb3fa;">filter</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">asset </span><span style="color:#cd74e8;">=&gt; </span><span style="color:#eb6772;">asset</span><span style="color:#abb2bf;">.</span><span style="color:#eb6772;">kind </span><span style="color:#adb7c9;">== </span><span style="color:#9acc76;">&#39;stock&#39;</span><span style="color:#abb2bf;">) 
-   .</span><span style="color:#5ebfcc;">forEach</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">stock </span><span style="color:#cd74e8;">=&gt; </span><span style="color:#abb2bf;">{
-      </span><span style="color:#cd74e8;">const </span><span style="color:#eb6772;">price </span><span style="color:#adb7c9;">= </span><span style="color:#5cb3fa;">callSomeApi</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">asset</span><span style="color:#abb2bf;">.id)
-      </span><span style="color:#eb6772;">tsdb</span><span style="color:#abb2bf;">.</span><span style="color:#5cb3fa;">save</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">asset</span><span style="color:#abb2bf;">.id, </span><span style="color:#9acc76;">&#39;price&#39;</span><span style="color:#abb2bf;">, </span><span style="color:#eb6772;">price</span><span style="color:#abb2bf;">) 
+<pre data-lang="js" class="language-js "><code class="language-js" data-lang="js">config.assets
+   .filter(asset => asset.kind == 'stock') 
+   .forEach(stock => {
+      const price = callSomeApi(asset.id)
+      tsdb.save(asset.id, 'price', price) 
    }) 
-</span></code></pre>
+</code></pre>
 <p>Similarly, to prevent some input, the following is executed on startup:</p>
-<pre style="background-color:#2b303b;">
-<code class="language-js" data-lang="js"><span style="color:#eb6772;">config</span><span style="color:#abb2bf;">.</span><span style="color:#eb6772;">assets
-   </span><span style="color:#abb2bf;">.</span><span style="color:#5cb3fa;">filter</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">asset </span><span style="color:#adb7c9;">-&gt; </span><span style="color:#eb6772;">asset</span><span style="color:#abb2bf;">.</span><span style="color:#5cb3fa;">reachedMaturity</span><span style="color:#abb2bf;">())
-   .</span><span style="color:#5ebfcc;">forEach</span><span style="color:#abb2bf;">(</span><span style="color:#eb6772;">asset </span><span style="color:#adb7c9;">-&gt; </span><span style="color:#eb6772;">eventLog</span><span style="color:#abb2bf;">.</span><span style="color:#5cb3fa;">save</span><span style="color:#abb2bf;">(</span><span style="color:#9acc76;">&#39;sell&#39;</span><span style="color:#abb2bf;">, </span><span style="color:#eb6772;">asset</span><span style="color:#abb2bf;">.id, </span><span style="color:#eb6772;">asset</span><span style="color:#abb2bf;">.</span><span style="color:#eb6772;">maturityDate</span><span style="color:#abb2bf;">))
-</span></code></pre>
+<pre data-lang="js" class="language-js "><code class="language-js" data-lang="js">config.assets
+   .filter(asset -> asset.reachedMaturity())
+   .forEach(asset -> eventLog.save('sell', asset.id, asset.maturityDate))
+</code></pre>
 <p>Finally, this allowed me to achieve what I already had in the early designs but with 3 benefits:</p>
 <ul>
 <li>I can access it from anywhere, as long as the device supports Google Sheets</li>
@@ -467,8 +464,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.js"></script>
   -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/elasticlunr/0.9.6/elasticlunr.min.js"></script>
-  <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;search_index.en.js'></script>
-  <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;js&#x2F;site.js'></script>
+  <script src='https://denisidoro.github.io/search_index.en.js'></script>
+  <script src='https://denisidoro.github.io/js/site.js'></script>
   
   
 

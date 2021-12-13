@@ -7,7 +7,158 @@
         <generator>Zola</generator>
         <language>en</language>
         <atom:link href="https://denisidoro.github.io/rss.xml" rel="self" type="application/rss+xml"/>
-        <lastBuildDate>Mon, 07 Jun 2021 00:00:00 +0000</lastBuildDate>
+        <lastBuildDate>Mon, 13 Dec 2021 00:00:00 +0000</lastBuildDate>
+        <item>
+            <title>Faster monorepo workflow with materialized views</title>
+            <pubDate>Mon, 13 Dec 2021 00:00:00 +0000</pubDate>
+            <link>https://denisidoro.github.io/posts/faster-monorepo-workflow-with-materialized-views/</link>
+            <guid>https://denisidoro.github.io/posts/faster-monorepo-workflow-with-materialized-views/</guid>
+            <description>&lt;h3 id=&quot;context&quot;&gt;Context&lt;&#x2F;h3&gt;
+&lt;p&gt;Monorepos have their pros and cons. &lt;&#x2F;p&gt;
+&lt;p&gt;A plethora of in-depth articles have already been written on this subject so I won&#x27;t bother writing yet another one. &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;joelparkerhenderson&#x2F;monorepo-vs-polyrepo&quot;&gt;This one&lt;&#x2F;a&gt; summarizes the trade-offs very well.&lt;&#x2F;p&gt;
+&lt;p&gt;In this post, I propose a solution for improving the dev experience for monorepos, by using microrepos as materialized views for subprojects and a bot as orchestrator.&lt;&#x2F;p&gt;
+&lt;p&gt;A &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;git-monorepo&quot;&gt;proof-of-concept CLI&lt;&#x2F;a&gt; for managing repositories is also provided, which can be used as base for a real-world tool set. &lt;&#x2F;p&gt;
+&lt;h2 id=&quot;assumptions&quot;&gt;Assumptions&lt;&#x2F;h2&gt;
+&lt;p&gt;To keep this post concise, I&#x27;ll list some assumptions under which this solution was designed. &lt;&#x2F;p&gt;
+&lt;p&gt;Depending on your workflow or the requirements of the code base you&#x27;re developing, alternative solutions should be considered. &lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;git must be used, as changing the SVN is too disruptive&lt;&#x2F;li&gt;
+&lt;li&gt;the main drawback of monorepos are slow git operations in dev machines&lt;&#x2F;li&gt;
+&lt;li&gt;if git were performant for large repos, monorepos would clearly be superior to microrepos, with few, if any, downsides &lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h2 id=&quot;proposed-solution&quot;&gt;Proposed solution&lt;&#x2F;h2&gt;
+&lt;figure style=&quot;margin-left: 0; margin-right: 0&quot;&gt;
+    &lt;img src=&quot;&#x2F;posts&#x2F;git-monorepo-architecture.png&quot;&gt;
+    &lt;figcaption style=&quot;font-size: 0.8em&quot;&gt;In a nutshell, devs work with materialized views an the bot propagates changes&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt; 
+&lt;h3 id=&quot;repo-setup&quot;&gt;Repo setup&lt;&#x2F;h3&gt;
+&lt;ul&gt;
+&lt;li&gt;0.a. Create a monorepo &lt;code&gt;mono&lt;&#x2F;code&gt; as the source of truth of our codebase. It should include all subprojects. Let&#x27;s say it contains &lt;code&gt;proj1&lt;&#x2F;code&gt; and &lt;code&gt;proj2&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;0.b. Create microrepos for &lt;code&gt;proj1&lt;&#x2F;code&gt; and &lt;code&gt;proj2&lt;&#x2F;code&gt;. They&#x27;ll act as materialized views&lt;&#x2F;li&gt;
+&lt;li&gt;0.c. Protect the &lt;code&gt;master&lt;&#x2F;code&gt; branch of all microrepos. Only the bot should be able to commit to &lt;code&gt;master&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h3 id=&quot;workflow&quot;&gt;Workflow&lt;&#x2F;h3&gt;
+&lt;ol&gt;
+&lt;li&gt;Instead of cloning &lt;code&gt;mono&lt;&#x2F;code&gt;, the dev should clone microrepos of interest. Let&#x27;s say only &lt;code&gt;proj2&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;The dev creates a branch &lt;code&gt;newfeature&lt;&#x2F;code&gt; in &lt;code&gt;proj2&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;After making the necessary changes, the dev pushes this branch to &lt;code&gt;proj2&lt;&#x2F;code&gt;&#x27;s remote, not &lt;code&gt;mono&lt;&#x2F;code&gt;&#x27;s&lt;&#x2F;li&gt;
+&lt;li&gt;A bot creates a PR in &lt;code&gt;mono&lt;&#x2F;code&gt;, reflecting the changes of &lt;code&gt;proj2&lt;&#x2F;code&gt;&#x27;s &lt;code&gt;newfeature&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;The dev hits the &amp;quot;merge pull request&amp;quot; button for the PR in &lt;code&gt;mono&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;For each commit to &lt;code&gt;mono&lt;&#x2F;code&gt;&#x27;s &lt;code&gt;master&lt;&#x2F;code&gt;, the bot commits to the microrepos&#x27; &lt;code&gt;master&lt;&#x2F;code&gt; accordingly. In this case, &lt;code&gt;proj2&lt;&#x2F;code&gt;&#x27;s master will eventually include the changes from &lt;code&gt;newfeature&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h2 id=&quot;making-changes-to-multiple-repos-at-once&quot;&gt;Making changes to multiple repos at once&lt;&#x2F;h2&gt;
+&lt;p&gt;The bot that creates the PR in &lt;code&gt;mono&lt;&#x2F;code&gt; must be able to aggregate related branches from multiple microrepos.&lt;&#x2F;p&gt;
+&lt;p&gt;In order for the bot to know if two branches are related or not, an identifier can be used. For example, if &lt;code&gt;newfeature&lt;&#x2F;code&gt; was used as a branch name in &lt;code&gt;proj1&lt;&#x2F;code&gt; and the feature requires changes to both projects, a namesake branch in &lt;code&gt;proj2&lt;&#x2F;code&gt; must be created.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;why-this-solution-is-good&quot;&gt;Why this solution is good&lt;&#x2F;h2&gt;
+&lt;p&gt;In a nutshell, because the advantages of monorepos are kept. The only practical difference is that devs don&#x27;t need to run slow git operations on their machines. &lt;&#x2F;p&gt;
+&lt;p&gt;The good news is that all this can be abstracted away by a CLI. &lt;&#x2F;p&gt;
+&lt;h2 id=&quot;does-this-solution-need-to-be-so-complex&quot;&gt;Does this solution need to be so complex?&lt;&#x2F;h2&gt;
+&lt;p&gt;I think so. &lt;&#x2F;p&gt;
+&lt;p&gt;Multiple multi-billion dollar companies struggle with this problem. If there were a simple solution, I&#x27;m sure someone would already have figured it out.&lt;&#x2F;p&gt;
+&lt;p&gt;The only simple solution (from end-user&#x27;s perspective) I can think of is to have an SVN performatic for monorepos out-of-the-box. &lt;&#x2F;p&gt;
+&lt;p&gt;Perhaps that&#x27;s the case already, but a different SVN rejects our assumption &lt;code&gt;1.&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;rejected-solution&quot;&gt;Rejected solution&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;having-the-microrepos-as-source-of-truth-and-the-monorepo-as-materialized-view&quot;&gt;Having the microrepos as source of truth and the monorepo as materialized view&lt;&#x2F;h3&gt;
+&lt;p&gt;The problem with this solution is that changes to &lt;code&gt;proj1&lt;&#x2F;code&gt; and &lt;code&gt;proj2&lt;&#x2F;code&gt; must be atomic, assuming a feature requires changes to both: we either want to commit a change to both projects or drop the commit altogether. &lt;&#x2F;p&gt;
+&lt;p&gt;git currently doesn&#x27;t provide a solution for such transactions, so a mechanism for simulating atomicity would need to be designed, rendering the solution even more complex. &lt;&#x2F;p&gt;
+&lt;p&gt;For example, a change to &lt;code&gt;proj1&lt;&#x2F;code&gt; would need to be reverted in case we&#x27;re not able to commit to &lt;code&gt;proj2&lt;&#x2F;code&gt;. &lt;&#x2F;p&gt;
+&lt;p&gt;As we all know, distributed systems can fail or become inconsistent for all sorts of reasons. If somehow &lt;code&gt;proj2&lt;&#x2F;code&gt; got corrupted or inconsistent, it&#x27;s much easier and less error-prone to fix or reconstruct its materialized view than trying to agree upon the source of truth.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;demo&quot;&gt;Demo&lt;&#x2F;h2&gt;
+&lt;p&gt;To illustrate, I could&#x27;ve &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;probot&#x2F;probot&quot;&gt;created a GitHub bot&lt;&#x2F;a&gt;. That would exceed the time budget I set for putting this article together, though. &lt;&#x2F;p&gt;
+&lt;p&gt;For demo purposes I&#x27;ve created a &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;git-monorepo&quot;&gt;proof-of-concept CLI&lt;&#x2F;a&gt; that simulates the flow locally. This won&#x27;t simulate the interactions with PRs, as they don&#x27;t exist in a local machine, but will give us a clear idea of how this flow works. &lt;&#x2F;p&gt;
+&lt;p&gt;In this example, all folders inside &lt;code&gt;~&#x2F;github&lt;&#x2F;code&gt; represent repositories you would normally have hosted on GitHub; all folders inside &lt;code&gt;~&#x2F;dev&lt;&#x2F;code&gt; represent the local clones. &lt;&#x2F;p&gt;
+&lt;p&gt;Once this CLI is available in your &lt;code&gt;$PATH&lt;&#x2F;code&gt; as git-monorepo, you can invoke it by running &lt;code&gt;git monorepo&lt;&#x2F;code&gt;. &lt;&#x2F;p&gt;
+&lt;p&gt;You can execute the commands below in your local machine if you want to follow along. The CLI prints all commands it&#x27;s running for you to understand what&#x27;s happening under the hood. &lt;&#x2F;p&gt;
+&lt;p&gt;Without further ado, let&#x27;s get to it.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;0-a-setting-up-the-monorepo&quot;&gt;0.a. Setting up the monorepo&lt;&#x2F;h3&gt;
+&lt;p&gt;Let&#x27;s create the remote &lt;code&gt;mono&lt;&#x2F;code&gt; repository:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;mkdir -p ~&#x2F;github&#x2F;mono
+cd ~&#x2F;github&#x2F;mono
+git init
+mkdir proj{1,2}
+for i in 1 2; do echo &quot;console.log(&#x27;proj${i}&#x27;)&quot; &gt; proj${i}&#x2F;file${i}.js; done
+git add . 
+git commit -am &#x27;First commit&#x27; 
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;By the end of these steps, GitHub would host a monorepo like this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;mono&#x2F;
+   proj1&#x2F;file1.js
+   proj2&#x2F;file2.js
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;0-b-setting-up-the-microrepos&quot;&gt;0.b. Setting up the microrepos&lt;&#x2F;h3&gt;
+&lt;p&gt;Let&#x27;s create the remote microrepos:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;for i in 1 2; do git monorepo extract proj${i} ~&#x2F;github&#x2F;proj${i}; done
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The first argument is the path to the project inside &lt;code&gt;mono&lt;&#x2F;code&gt;; the second argument is where the remote microrepo will live.&lt;&#x2F;p&gt;
+&lt;p&gt;Normally, the second argument would look like &lt;code&gt;https:&#x2F;&#x2F;github.com&#x2F;username&#x2F;proj1&lt;&#x2F;code&gt; or &lt;code&gt;git@github.com:username&#x2F;proj1&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;By the end of these steps, GitHub would host repositories like this:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;mono&#x2F;
+   .gitmonorepo
+   proj1&#x2F;file1.js
+   proj2&#x2F;file2.js
+proj1&#x2F;
+   file1.js
+proj2&#x2F;
+   file2.js
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The &lt;code&gt;.gitmonorepo&lt;&#x2F;code&gt; was automatically created to keep track of the microrepos. &lt;&#x2F;p&gt;
+&lt;h3 id=&quot;1-cloning-a-microrepo&quot;&gt;1. Cloning a microrepo&lt;&#x2F;h3&gt;
+&lt;p&gt;Let&#x27;s clone &lt;code&gt;proj1&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;mkdir -p ~&#x2F;dev
+cd ~&#x2F;dev
+git clone -b master ~&#x2F;github&#x2F;proj1
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;2-making-changes&quot;&gt;2. Making changes&lt;&#x2F;h3&gt;
+&lt;p&gt;Let&#x27;s develop a new feature. &lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code&gt;cd ~&#x2F;dev&#x2F;proj1
+git checkout master
+git pull origin master
+git checkout -b newfeature
+echo &quot;console.log(&#x27;newchange&#x27;)&quot; &gt;&gt; file1.js
+git add .
+git commit -am &quot;proj1&#x2F;newfeature: change file1.js&quot;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;3-pushing-a-change-to-the-microrepo&quot;&gt;3. Pushing a change to the microrepo&lt;&#x2F;h3&gt;
+&lt;p&gt;Let&#x27;s push our changes to the remote &lt;code&gt;proj1&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;git push origin newfeature
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;4-propagating-the-changes-to-the-monorepo&quot;&gt;4. Propagating the changes to the monorepo&lt;&#x2F;h3&gt;
+&lt;p&gt;The bot would automatically propagate the changes to &lt;code&gt;mono&lt;&#x2F;code&gt;, by running something like the following:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;cd ~&#x2F;github&#x2F;mono
+git monorepo pull newfeature
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Now, &lt;code&gt;~&#x2F;github&#x2F;mono&#x2F;proj1&#x2F;file1.js&lt;&#x2F;code&gt; should have the &lt;code&gt;newchange&lt;&#x2F;code&gt; line on the &lt;code&gt;newfeature&lt;&#x2F;code&gt; branch, but not in &lt;code&gt;master&lt;&#x2F;code&gt;. &lt;&#x2F;p&gt;
+&lt;h3 id=&quot;5-merging-a-pr&quot;&gt;5. Merging a PR&lt;&#x2F;h3&gt;
+&lt;p&gt;Let&#x27;s merge our branch:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;git checkout master 
+git merge newfeature
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Now, &lt;code&gt;~&#x2F;github&#x2F;mono&#x2F;proj1&#x2F;file1.js&lt;&#x2F;code&gt; should have the &lt;code&gt;newchange&lt;&#x2F;code&gt; line on &lt;code&gt;master&lt;&#x2F;code&gt;. &lt;&#x2F;p&gt;
+&lt;h3 id=&quot;6-propagating-the-change-back-to-the-microrepo&quot;&gt;6. Propagating the change back to the microrepo&lt;&#x2F;h3&gt;
+&lt;p&gt;Finally, the bot would automatically update all microrepos accordingly, by running something like the following:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;git monorepo push
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Now, &lt;code&gt;~&#x2F;dev&#x2F;proj1&#x2F;file1.js&lt;&#x2F;code&gt; should also have the &lt;code&gt;newchange&lt;&#x2F;code&gt; line on &lt;code&gt;master&lt;&#x2F;code&gt;, ending the loop cycle. &lt;&#x2F;p&gt;
+&lt;p&gt;Please note that we were able to make changes to the remote monorepo having only cloned &lt;code&gt;proj1&lt;&#x2F;code&gt;. &lt;code&gt;proj2&lt;&#x2F;code&gt; and &lt;code&gt;mono&lt;&#x2F;code&gt; weren&#x27;t cloned locally.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;future-work&quot;&gt;Future work&lt;&#x2F;h2&gt;
+&lt;p&gt;We&#x27;ve only covered the simple, happy path so far. &lt;&#x2F;p&gt;
+&lt;p&gt;Ideally, this system should also include:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;a dev-friendly git wrapper for working with multiple microrepos at once&lt;&#x2F;li&gt;
+&lt;li&gt;a UI for displaying how the microrepos and the monorepo are interacting with each other &lt;&#x2F;li&gt;
+&lt;li&gt;different resolution strategies, in case one of the propagation changes fails for some reason&lt;&#x2F;li&gt;
+&lt;li&gt;merge queues&lt;&#x2F;li&gt;
+&lt;li&gt;a mechanism for replicating the monorepo locally, but using the microrepos of interest instead &lt;&#x2F;li&gt;
+&lt;li&gt;cleanup routines, for deleting branches in microrepos whose PR in the monorepo is closed &lt;&#x2F;li&gt;
+&lt;li&gt;fixes to &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;git-monorepo&#x2F;search?q=TODO&quot;&gt;these TODOs&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;and much more. &lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
+&lt;p&gt;The purpose of this article was to simply brainstorm what a more performant workflow could look like. &lt;&#x2F;p&gt;
+&lt;p&gt;I hope that this will motivate someone out there willing to implement a system ready for real-world scenarios. &lt;&#x2F;p&gt;
+&lt;p&gt;In case you do, I&#x27;d really appreciate if you could add a link to this post somewhere in your README.md file! :) &lt;&#x2F;p&gt;
+</description>
+        </item>
         <item>
             <title>Working around Google Photos limitation</title>
             <pubDate>Mon, 07 Jun 2021 00:00:00 +0000</pubDate>
@@ -43,8 +194,7 @@
 &lt;h3 id=&quot;solution&quot;&gt;Solution&lt;&#x2F;h3&gt;
 &lt;p&gt;I won&#x27;t get into too much implementation details, but I basically used &lt;a href=&quot;https:&#x2F;&#x2F;play.google.com&#x2F;store&#x2F;apps&#x2F;details?id=net.dinglisch.android.taskerm&amp;amp;hl=en&amp;amp;gl=US&quot;&gt;Tasker&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;play.google.com&#x2F;store&#x2F;apps&#x2F;details?id=com.termux&amp;amp;hl=en&amp;amp;gl=US&quot;&gt;Termux&lt;&#x2F;a&gt;. I also installed the packages for &lt;a href=&quot;https:&#x2F;&#x2F;linux.die.net&#x2F;man&#x2F;1&#x2F;file&quot;&gt;file&lt;&#x2F;a&gt;, &lt;a href=&quot;https:&#x2F;&#x2F;exiftool.org&quot;&gt;exiftool&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;rclone.org&quot;&gt;rclone&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;The pseudo-code is as follows:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;every day at 2am:
+&lt;pre&gt;&lt;code&gt;every day at 2am:
     for each photo in &#x2F;sdcard&#x2F;DCIM:
         compress photo to &#x2F;sdcard&#x2F;Cloud&#x2F;GooglePhotos&#x2F;⋯.jpg
         compress and zip photo to &#x2F;sdcard&#x2F;Cloud&#x2F;pCloud&#x2F;⋯.jpg.7z
@@ -53,9 +203,10 @@
         move photo to &#x2F;sdcard&#x2F;Cloud&#x2F;Telegram&#x2F;⋯.jpg
 
 every day at 3am, if wifi is connected:
-    for each file in &#x2F;sdcard&#x2F;Cloud&#x2F;&amp;lt;provider&amp;gt;:
-        move file to &amp;lt;provider&amp;gt;
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h3 id=&quot;compression&quot;&gt;Compression&lt;&#x2F;h3&gt;
+    for each file in &#x2F;sdcard&#x2F;Cloud&#x2F;&lt;provider&gt;:
+        move file to &lt;provider&gt;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;compression&quot;&gt;Compression&lt;&#x2F;h3&gt;
 &lt;p&gt;A photo is compressed for each storage provider accordingly.&lt;&#x2F;p&gt;
 &lt;p&gt;The output image will be limited by &lt;code&gt;Photo size&lt;&#x2F;code&gt; and, if &lt;code&gt;Trust?&lt;&#x2F;code&gt; is &lt;code&gt;false&lt;&#x2F;code&gt;, it will be 7zipped using a password.&lt;&#x2F;p&gt;
 &lt;p&gt;The output image size is limited by playing with the properties for image resizing inside Tasker (&lt;code&gt;max dimension&lt;&#x2F;code&gt; and &lt;code&gt;compression quality&lt;&#x2F;code&gt;). These are estimated based on the &lt;code&gt;Photo size&lt;&#x2F;code&gt; input and the original image properties, retrived by &lt;code&gt;file&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
@@ -71,11 +222,10 @@ every day at 3am, if wifi is connected:
 &lt;p&gt;Its API allows file uploads using a simple POST request. The response body contains a &lt;code&gt;file_id&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;We can download the attachment by making a request to &lt;code&gt;https:&#x2F;&#x2F;⋯.telegram.org&#x2F;⋯?file_id=&amp;lt;file_id&amp;gt;&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;We thus need to keep this &lt;code&gt;file_id&lt;&#x2F;code&gt; in a database. My Tasker task stores this in &lt;code&gt;&#x2F;sdcard&#x2F;Tasker&#x2F;db&#x2F;telegram_uploads.txt&lt;&#x2F;code&gt; and its contents look like this:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-txt&quot; data-lang=&quot;txt&quot;&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&#x2F;Pictures&#x2F;IMG_00.jpg;123456
+&lt;pre data-lang=&quot;txt&quot; class=&quot;language-txt &quot;&gt;&lt;code class=&quot;language-txt&quot; data-lang=&quot;txt&quot;&gt;&#x2F;Pictures&#x2F;IMG_00.jpg;123456
 &#x2F;Pictures&#x2F;IMG_01.jpg;789012
 &#x2F;Pictures&#x2F;IMG_02.jpg;654321
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Having this database in hand, we can even design a primitive web-based file manager, for example.&lt;&#x2F;p&gt;
 &lt;p&gt;The database is replicated across all other storage providers, using the aforementioned methods.&lt;&#x2F;p&gt;
 &lt;figure style=&quot;margin-left: 0; margin-right: 0&quot;&gt;
@@ -129,44 +279,41 @@ every day at 3am, if wifi is connected:
     &lt;figcaption style=&quot;font-size: 0.8em&quot;&gt;This sheet contains all numeric data&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt; 
 &lt;p&gt;In Javascript we can read from and write to this sheet as if we were using a real timeseries database. Effectively, this made my new code look very similar to the previous ones:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;&#x2F;&#x2F; old 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;influx&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;emit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;today&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;3.12&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;)
-&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;&#x2F;&#x2F; new
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;tsdbSheet&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;setValue&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;D67&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;3.12
+&lt;pre data-lang=&quot;js&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&#x2F;&#x2F; old 
+influx.emit(today, 3.12)
+&#x2F;&#x2F; new
+tsdbSheet.setValue(&#x27;D67&#x27;) = 3.12
  
-&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;&#x2F;&#x2F; old 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;config &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;readFromFile&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;.&#x2F;config.yaml&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;)
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;foo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;config&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;foo
-&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;&#x2F;&#x2F; new
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;foo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;configSheet&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;getValue&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;A2&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;)
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h3 id=&quot;abstractions&quot;&gt;Abstractions&lt;&#x2F;h3&gt;
+&#x2F;&#x2F; old 
+config = readFromFile(&#x27;.&#x2F;config.yaml&#x27;)
+foo = config.foo
+&#x2F;&#x2F; new
+foo = configSheet.getValue(&#x27;A2&#x27;)
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;abstractions&quot;&gt;Abstractions&lt;&#x2F;h3&gt;
 &lt;p&gt;These low-level spreadsheet operations were abstracted away, in order to make the rest of the code agnostic to Google Sheets. Should I decide to port it elsewhere, I&#x27;ll only need to edit some parts from the &lt;code&gt;TSDB&lt;&#x2F;code&gt;, &lt;code&gt;EventLog&lt;&#x2F;code&gt; and &lt;code&gt;Config&lt;&#x2F;code&gt; classes.&lt;&#x2F;p&gt;
 &lt;p&gt;For example, calculating balances looks like this:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;config&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;assets&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5ebfcc;&quot;&gt;forEach&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;-&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;{
-   const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;balance &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;range&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;startDate&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;today&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;date &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;{
-      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;value &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;someMath&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;date&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;tsdb&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;)
-      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;date&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;value&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;] 
+&lt;pre data-lang=&quot;js&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;config.assets.forEach(asset -&gt; {
+   const balance = range(startDate, today).map(date =&gt; {
+      const value = someMath(asset, date, tsdb)
+      return [date, value] 
    }
-   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;tsdb&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;save&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.id, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;balance&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;balance&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;)
+   tsdb.save(asset.id, &#x27;balance&#x27;, balance)
 })
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Getting historical data for stocks isn&#x27;t any different:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;config&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;assets
-   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;filter&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;kind &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;stock&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;) 
-   .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5ebfcc;&quot;&gt;forEach&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;stock &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;{
-      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;price &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;callSomeApi&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.id)
-      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;tsdb&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;save&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.id, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;price&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;price&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;) 
+&lt;pre data-lang=&quot;js&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;config.assets
+   .filter(asset =&gt; asset.kind == &#x27;stock&#x27;) 
+   .forEach(stock =&gt; {
+      const price = callSomeApi(asset.id)
+      tsdb.save(asset.id, &#x27;price&#x27;, price) 
    }) 
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Similarly, to prevent some input, the following is executed on startup:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;config&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;assets
-   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;filter&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;-&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;reachedMaturity&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;())
-   .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5ebfcc;&quot;&gt;forEach&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;-&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;eventLog&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;save&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;sell&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.id, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;asset&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;maturityDate&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;))
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;pre data-lang=&quot;js&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;config.assets
+   .filter(asset -&gt; asset.reachedMaturity())
+   .forEach(asset -&gt; eventLog.save(&#x27;sell&#x27;, asset.id, asset.maturityDate))
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Finally, this allowed me to achieve what I already had in the early designs but with 3 benefits:&lt;&#x2F;p&gt;
 &lt;ul&gt;
 &lt;li&gt;I can access it from anywhere, as long as the device supports Google Sheets&lt;&#x2F;li&gt;
@@ -232,100 +379,91 @@ every day at 3am, if wifi is connected:
             <description>&lt;h3 id=&quot;inspiration&quot;&gt;Inspiration&lt;&#x2F;h3&gt;
 &lt;p&gt;I&#x27;ve been using &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;yarpc&#x2F;yab&quot;&gt;yab&lt;&#x2F;a&gt; —a curl-like CLI— recently and I was surprised by how elegantly it solves a common problem.&lt;&#x2F;p&gt;
 &lt;p&gt;yab calls can get quite verbose. As an example, to get a &lt;code&gt;Customer&lt;&#x2F;code&gt; by its &lt;code&gt;id&lt;&#x2F;code&gt; from a &lt;code&gt;customer&lt;&#x2F;code&gt; microservice:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;yab&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; customer Customer::get \
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;    -t&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; &#x2F;path&#x2F;to&#x2F;idl&#x2F;some.company&#x2F;customer&#x2F;customer.thrift \
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;    -P&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; 131.144.23.5&#x2F;customer:tchannel \
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;    -r &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;{&amp;quot;request&amp;quot;: {&amp;quot;id&amp;quot;: 11}}&amp;#39;
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;yab customer Customer::get \
+    -t &#x2F;path&#x2F;to&#x2F;idl&#x2F;some.company&#x2F;customer&#x2F;customer.thrift \
+    -P 131.144.23.5&#x2F;customer:tchannel \
+    -r &#x27;{&quot;request&quot;: {&quot;id&quot;: 11}}&#x27;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;The call is pretty convoluted, but it can be simplified by storing params in a yaml file:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# customer_by_id.yaml
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;service&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;customer
-procedure&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;Customer::get&amp;quot;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;thrift&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;&#x2F;path&#x2F;to&#x2F;idl&#x2F;some.company&#x2F;customer&#x2F;customer.thrift
-peer-list&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;131.144.23.5&#x2F;customer:tchannel
-request&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;:
-  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;request&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;:
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;id&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;${number:11}
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;pre data-lang=&quot;yaml&quot; class=&quot;language-yaml &quot;&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;# customer_by_id.yaml
+service: customer
+procedure: &quot;Customer::get&quot;
+thrift: &#x2F;path&#x2F;to&#x2F;idl&#x2F;some.company&#x2F;customer&#x2F;customer.thrift
+peer-list: 131.144.23.5&#x2F;customer:tchannel
+request:
+  request:
+    id: ${number:11}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;The file takes a set of CLI flags in their long form, e.g. &lt;code&gt;--thrift&lt;&#x2F;code&gt; instead of &lt;code&gt;-t&lt;&#x2F;code&gt;, and their associated values.&lt;&#x2F;p&gt;
 &lt;p&gt;Then, the following call is equivalent to the beforementioned one:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;yab -y&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; customer_by_id.yaml
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;yab -y customer_by_id.yaml
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Additional flags can be passed to yab to override the default values specified in the yaml file:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;yab -y&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; customer_by_id.yaml&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; --number&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; 42
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;yab -y customer_by_id.yaml --number 42
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;I think this is pretty cool!&lt;&#x2F;p&gt;
 &lt;p&gt;It can save us lots of time. It also helps sharing knowledge between team members: we could have a git repo with a bunch of these &lt;code&gt;.yaml&lt;&#x2F;code&gt; files and a simple &lt;code&gt;git pull&lt;&#x2F;code&gt; would allow everyone to be on the same page.&lt;&#x2F;p&gt;
 &lt;p&gt;My immediate thought was &amp;quot;could we easily replicate this for other commands?&amp;quot;&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;solution&quot;&gt;Solution&lt;&#x2F;h1&gt;
 &lt;p&gt;For the sake of simplicity, let&#x27;s try to write a complex &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;httpie&#x2F;httpie&quot;&gt;httpie&lt;&#x2F;a&gt; command. It could be an involved &lt;code&gt;awk&lt;&#x2F;code&gt;, &lt;code&gt;grep&lt;&#x2F;code&gt; or &lt;code&gt;jq&lt;&#x2F;code&gt; command, though.&lt;&#x2F;p&gt;
 &lt;p&gt;The final call should look like this:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;http -v POST https:&#x2F;&#x2F;jsonplaceholder.typicode.com&#x2F;posts title=foo body=bar userId=11
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;pre&gt;&lt;code&gt;http -v POST https:&#x2F;&#x2F;jsonplaceholder.typicode.com&#x2F;posts title=foo body=bar userId=11
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;The tool I&#x27;m going to use is &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;navi&quot;&gt;navi&lt;&#x2F;a&gt;. It allows you to browse through cheatsheets —that you may write yourself or download from maintainers— and execute commands. &lt;&#x2F;p&gt;
 &lt;p&gt;navi encourages you to write &lt;code&gt;.cheat&lt;&#x2F;code&gt; files which break commands down into smaller, reusable pieces:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;%&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; httpie
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;% httpie
 
-&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# make a request to a typicode microservice
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;http&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -v &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;method&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;https:&#x2F;&#x2F;&amp;lt;service&amp;gt;.typicode.com&#x2F;&amp;lt;endpoint&amp;gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;http-body&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt;
+# make a request to a typicode microservice
+http -v &lt;method&gt; &quot;https:&#x2F;&#x2F;&lt;service&gt;.typicode.com&#x2F;&lt;endpoint&gt;&quot; &lt;http-body&gt;
 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;$ method: echo&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -e &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;GET\nPOST\nPUT&amp;#39;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; service: echo&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -e &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;jsonplaceholder\nanotherservice&amp;#39;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; endpoint: case &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;${&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;service&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;}:${&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;method&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;}&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; in&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;jsonplaceholder:post&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#5ebfcc;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;-e &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;e1\ne2\ne3&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;esac
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+$ method: echo -e &#x27;GET\nPOST\nPUT&#x27;
+$ service: echo -e &#x27;jsonplaceholder\nanotherservice&#x27;
+$ endpoint: case &quot;${service}:${method}&quot; in; &quot;jsonplaceholder:post&quot;) echo -e &#x27;e1\ne2\ne3&#x27;;; esac
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;The &lt;code&gt;endpoint&lt;&#x2F;code&gt; values here are incomplete for briefness and, in a real-world scenario, would probably be fetched dynamically, instead of being harcoded.&lt;&#x2F;p&gt;
 &lt;p&gt;This &lt;code&gt;.cheat&lt;&#x2F;code&gt; enables us to very quickly make a request to any endpoint in our company, given that we somehow mapped all possible values to the corresponding variables. &lt;&#x2F;p&gt;
 &lt;p&gt;But an engineer who recently joined the team still wouldn&#x27;t know what service&#x2F;endpoint to request for creating a new &lt;code&gt;post&lt;&#x2F;code&gt;. We could then add another cheatsheet entry for more granular commands:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;%&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; httpie, endpoints
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;% httpie, endpoints
 
-&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# create a post
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;http&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -v &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;method&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;https:&#x2F;&#x2F;&amp;lt;service&amp;gt;.typicode.com&#x2F;&amp;lt;endpoint&amp;gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; title=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; body=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; userId=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;userId&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt;
+# create a post
+http -v &lt;method&gt; &quot;https:&#x2F;&#x2F;&lt;service&gt;.typicode.com&#x2F;&lt;endpoint&gt;&quot; title=&lt;title&gt; body=&lt;body&gt; userId=&lt;userId&gt;
 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;$ method: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;POST&amp;#39;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; service: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;jsonplaceholder&amp;#39;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; endpoint: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;posts&amp;#39;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; title: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;foo&amp;#39;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; body: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;bar&amp;#39;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; userId: echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;11&amp;#39;
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+$ method: echo &#x27;POST&#x27;
+$ service: echo &#x27;jsonplaceholder&#x27;
+$ endpoint: echo &#x27;posts&#x27;
+$ title: echo &#x27;foo&#x27;
+$ body: echo &#x27;bar&#x27;
+$ userId: echo &#x27;11&#x27;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;There are a multitude of ways to invoke this cheatsheet. One of them is like this:&lt;&#x2F;p&gt;
 &lt;script id=&quot;asciicast-Su5eUYFHn7M5A6Yccvcv7WH7k&quot; src=&quot;https:&#x2F;&#x2F;asciinema.org&#x2F;a&#x2F;Su5eUYFHn7M5A6Yccvcv7WH7k.js&quot; async&gt;&lt;&#x2F;script&gt;
 &lt;h3 id=&quot;preventing-user-interaction&quot;&gt;Preventing user interaction&lt;&#x2F;h3&gt;
 &lt;p&gt;If no interaction is wanted we could override values using environment variables and autoselect the desired command by using the &lt;code&gt;--best-match&lt;&#x2F;code&gt; flag:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;userId&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;12 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;navi --query &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;http endpoints create post&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; --best-match
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;userId=12 navi --query &#x27;http endpoints create post&#x27; --best-match
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Let&#x27;s say that we want to skip the &lt;code&gt;--query&lt;&#x2F;code&gt; and &lt;code&gt;--best-match&lt;&#x2F;code&gt; boilerplate and we know that we&#x27;re always gonna use this tool for &lt;code&gt;http endpoints&lt;&#x2F;code&gt;. A simple bash script  come to the rescue:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;export_var&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;() {
-   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;local &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;-r var&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;${&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;_}&amp;quot;
-   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;export &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;var&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;}
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;export_var() {
+   local -r var=&quot;${1&#x2F;&#x2F;-&#x2F;_}&quot;
+   export &quot;$var&quot;=&quot;$2&quot;
+}
 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;endpoint&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;() {
-   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;local &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;var
-   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;for&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; v &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;in &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;@&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;do
-    case &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;v &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;in
-        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;--&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;var&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;${&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;v&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;}&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;;;
-        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;export_var &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;var&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot; &amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;v&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;;;
-    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#cd74e8;&quot;&gt;esac
+endpoint() {
+   local var
+   for v in $@; do
+    case $v in
+        --*) var=&quot;${v:2}&quot; ;;
+        *) export_var &quot;$var&quot; &quot;$v&quot; ;;
+    esac
    done
 
-   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;navi --query &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;http endpoints ${&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;query&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;}&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; --best-match
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;}
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+   navi --query &quot;http endpoints ${query}&quot; --best-match
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;And we could call it as follows:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;endpoint &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;create post&amp;#39;
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;endpoint &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;create post&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; --userId&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; 12
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;endpoint &#x27;create post&#x27;
+endpoint &#x27;create post&#x27; --userId 12
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
 &lt;p&gt;I hope that, with these tips, using the terminal becomes easier for you. &lt;&#x2F;p&gt;
 &lt;p&gt;Creating templates may speed up day-to-day tasks and improve knowledge sharing —either with other team members or with your future self.&lt;&#x2F;p&gt;
 &lt;p&gt;By the way, if you have any feature requests for navi, feel free to leave an issue &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;navi&#x2F;issues&quot;&gt;here&lt;&#x2F;a&gt;!&lt;&#x2F;p&gt;
@@ -365,15 +503,15 @@ request&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;:
 &lt;&#x2F;ol&gt;
 &lt;p&gt;This requirement made me reject some complex ideas I had that involved graph databases such as &lt;a href=&quot;https:&#x2F;&#x2F;neo4j.com&#x2F;&quot;&gt;Neo4j&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;For writing, I went with the most simple solution possible: an indented plain text document. &lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;Kingdoms
+&lt;pre&gt;&lt;code&gt;Kingdoms
    Animalia
    Plantae
    Arthropoda
       Insects
    Fungi
    Porifera
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;&lt;h3 id=&quot;the-result&quot;&gt;The result&lt;&#x2F;h3&gt;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;the-result&quot;&gt;The result&lt;&#x2F;h3&gt;
 &lt;p&gt;After some work, here&#x27;s what I came up with:&lt;&#x2F;p&gt;
 &lt;figure&gt;
     &lt;img src=&quot;https:&#x2F;&#x2F;user-images.githubusercontent.com&#x2F;3226564&#x2F;99435931-9199c280-28ef-11eb-8bb6-ef0b5450b92d.gif&quot;&#x2F;&gt;
@@ -739,11 +877,10 @@ request&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;:
 &lt;p&gt;Initially, I had written functions for integrals, derivatives, curve aggregation and so on. But I was reinventing the wheel. Now, I’m leveraging the robustness of time-series ecosystems.&lt;&#x2F;p&gt;
 &lt;p&gt;The competitors were &lt;a href=&quot;https:&#x2F;&#x2F;prometheus.io&#x2F;&quot;&gt;Prometheus&lt;&#x2F;a&gt;, &lt;a href=&quot;https:&#x2F;&#x2F;www.influxdata.com&#x2F;&quot;&gt;InfluxDB&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;graphiteapp.org&#x2F;&quot;&gt;Graphite&lt;&#x2F;a&gt;. As of the time of writing, there’s no way to fetch past data into Prometheus. InfluxDB has too much SQL for my taste. Graphite was the chosen one, then.&lt;&#x2F;p&gt;
 &lt;p&gt;With a simple pure function, we can export our internal models as Graphite-compatible data:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;citigroup.rf.cdb_paribas 1554325794 1000.00
+&lt;pre&gt;&lt;code&gt;citigroup.rf.cdb_paribas 1554325794 1000.00
 citigroup.rf.cdb_paribas 1554378794 1050.33
 citigroup.rf.cdb_paribas 1564325312 1097.44
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Now we can perform queries such as &lt;code&gt;sumSeries(some.bucket.*)&lt;&#x2F;code&gt;, instead of hand crafting it directly in our code.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;visualizing-balances&quot;&gt;Visualizing balances&lt;&#x2F;h3&gt;
 &lt;p&gt;Graphite has a built-in renderer for data:&lt;&#x2F;p&gt;
@@ -953,23 +1090,21 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
 &lt;h3 id=&quot;motivation&quot;&gt;Motivation&lt;&#x2F;h3&gt;
 &lt;p&gt;Objective: develop a shell script to ease the writing of XML files.&lt;&#x2F;p&gt;
 &lt;p&gt;Let’s say that the output to be generated is:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;grid&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&amp;gt;   
-  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;row&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&amp;gt;   
-     &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;label &lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;id&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;info&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&#x2F;&amp;gt;   
-     &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;text&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&amp;gt;Now playing&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;text&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&amp;gt;   
-  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;row&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&amp;gt;   
-  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;row&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&amp;gt;   
-     &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;button &lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;onTap&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;mute&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&#x2F;&amp;gt;   
-  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;row&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&amp;gt;   
-&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;grid&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&amp;gt;
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;pre data-lang=&quot;xml&quot; class=&quot;language-xml &quot;&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;grid&gt;   
+  &lt;row&gt;   
+     &lt;label id=&quot;info&quot; &#x2F;&gt;   
+     &lt;text&gt;Now playing&lt;&#x2F;text&gt;   
+  &lt;&#x2F;row&gt;   
+  &lt;row&gt;   
+     &lt;button onTap=&quot;mute&quot; &#x2F;&gt;   
+  &lt;&#x2F;row&gt;   
+&lt;&#x2F;grid&gt;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;I’d like to write it as:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;:grid &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;:row &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;:label &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;{&lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;:id :info&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;}]   
-             [&lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;:text &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;Now playing&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;]]   
-       [&lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;:row &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#db9d63;&quot;&gt;:button :onTap &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;mute&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;]]]
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;pre data-lang=&quot;clojure&quot; class=&quot;language-clojure &quot;&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;[:grid [:row [:label {:id :info}]   
+             [:text &quot;Now playing&quot;]]   
+       [:row [:button :onTap &quot;mute&quot;]]]
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;By the way, this syntax is a subset of &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;edn-format&#x2F;edn&quot;&gt;EDN&lt;&#x2F;a&gt; and called &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;weavejester&#x2F;hiccup&quot;&gt;hiccup&lt;&#x2F;a&gt;, used by frameworks such as &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Day8&#x2F;re-frame&quot;&gt;re-frame&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;This way, in &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;dotfiles&quot;&gt;my dotfiles&lt;&#x2F;a&gt;, I can store, versionate and compose my configs as hiccup files and not as XML ones.&lt;&#x2F;p&gt;
 &lt;p&gt;This is no simple task for Bash and would feel natural to use &lt;a href=&quot;https:&#x2F;&#x2F;clojure.org&#x2F;&quot;&gt;Clojure(Script)&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
@@ -986,15 +1121,14 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
 &lt;h3 id=&quot;speeding-up-with-graalvm&quot;&gt;Speeding up with GraalVM&lt;&#x2F;h3&gt;
 &lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.graalvm.org&#x2F;&quot;&gt;GraalVM&lt;&#x2F;a&gt; is a universal virtual machine for running applications written in JavaScript, Ruby, JVM-based languages and more.&lt;&#x2F;p&gt;
 &lt;p&gt;By using &lt;a href=&quot;https:&#x2F;&#x2F;www.graalvm.org&#x2F;docs&#x2F;reference-manual&#x2F;aot-compilation&#x2F;&quot;&gt;AOT compilation&lt;&#x2F;a&gt; we can compile our clj scripts to native code, which doesn’t rely on the JVM. The benefit? Let’s compare startup times:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;λ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;[:table]&amp;#39; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;time&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; clj&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -m&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; xml 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;table &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt; 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;clj&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -m&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; xml 9.88s user 0.68s system 293% cpu 3.593 total 
+&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;λ echo &#x27;[:table]&#x27; | time clj -m xml 
+&lt;table &#x2F;&gt; 
+clj -m xml 9.88s user 0.68s system 293% cpu 3.593 total 
 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;λ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;#39;[:table]&amp;#39; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;time&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; native-binary 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;table &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;&amp;gt; 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;native-binary 0.01s user 0.01s system 79% cpu 0.019 total
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+λ echo &#x27;[:table]&#x27; | time native-binary 
+&lt;table &#x2F;&gt; 
+native-binary 0.01s user 0.01s system 79% cpu 0.019 total
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;That’s 200x faster!&lt;&#x2F;p&gt;
 &lt;p&gt;In addition, I can simply copy&#x2F;paste this binary to any other machine with the same architecture + OS and it will work regardless of JVM or Node.js being installed or not.&lt;&#x2F;p&gt;
 &lt;p&gt;Example scripts and helpers for clj and GraalVM can be found &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;dotfiles&#x2F;tree&#x2F;c4f656d6c83f34c106afc61f44568fcd4e3ea1b9&#x2F;scripts&#x2F;clojure&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
@@ -1040,14 +1174,12 @@ The purpose of this post isn’t simply about showing what I learned. Instead, i
 &lt;p&gt;I think it’s fundamental to navigate around your file system.&lt;br &#x2F;&gt;
 As an exercise, let’s &lt;em&gt;cd&lt;&#x2F;em&gt; to a mobile app from work. &lt;br &#x2F;&gt;
 This is a simple, tedious and time-consuming way to do it.&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#5ebfcc;&quot;&gt;cd &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;~&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&#x2F;dev&#x2F;work&#x2F;mobile
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;cd ~&#x2F;dev&#x2F;work&#x2F;mobile
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Creating a simple &lt;strong&gt;alias function&lt;&#x2F;strong&gt; already saves us some keystrokes:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#5cb3fa;&quot;&gt;cdw&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;() { &lt;&#x2F;span&gt;&lt;span style=&quot;color:#5ebfcc;&quot;&gt;cd &lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;HOME&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&#x2F;dev&#x2F;work&#x2F;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#9acc76;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#adb7c9;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;}  
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;cdw&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; mobile
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;cdw() { cd &quot;$HOME&#x2F;dev&#x2F;work&#x2F;$1&quot;; }  
+cdw mobile
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;But we still can do much better. An improved version of this could be achieved using the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;junegunn&#x2F;fzf&quot;&gt;&lt;strong&gt;fzf command&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;. fzf is a fuzzy-finder that allows you to interactively choose an input from &lt;em&gt;stdin&lt;&#x2F;em&gt;. I use it for everything and folder browsing isn’t an exception.&lt;&#x2F;p&gt;
 &lt;div &gt;
     &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;5485fe0f1d51922559366775f2f2904d.js&quot;&gt;&lt;&#x2F;script&gt;
@@ -1055,13 +1187,12 @@ This is a simple, tedious and time-consuming way to do it.&lt;&#x2F;p&gt;
 &lt;p&gt;So, in a single command we get for free: listing, a nice interface and matching by substrings. We also added another arity to our command that _cd_s to the best match directly. Nice, isn’t it?&lt;&#x2F;p&gt;
 &lt;p&gt;A more generic approach would be using the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;clvv&#x2F;fasd&quot;&gt;&lt;strong&gt;fasd command&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;. Fasd keeps track of every folder you &lt;em&gt;cd&lt;&#x2F;em&gt; into and scores them by frecency: a metric based on frequency and recency, so it knows where you probably wanna go to.&lt;br &#x2F;&gt;
 This way, if I have already visited the mobile folder, I can simply type ‘’mob’’ and I’m done.&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;~&#x2F;Downloads  
-λ&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; j mob
+&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;~&#x2F;Downloads  
+λ j mob
 
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;~&#x2F;dev&#x2F;work&#x2F;mobile  
+~&#x2F;dev&#x2F;work&#x2F;mobile  
 λ
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;From this, we can come up with a lot of interesting commands.&lt;br &#x2F;&gt;
 Using &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;dotfiles&#x2F;blob&#x2F;bebfcbd6c32e7a5a9dc151d6a9153ae010d8d32f&#x2F;shell&#x2F;aliases&#x2F;browsing.zsh#L100&quot;&gt;this command&lt;&#x2F;a&gt;, for example, I can quickly open in &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;neovim&#x2F;neovim&quot;&gt;vim&lt;&#x2F;a&gt; any file that is inside any subfolder of the folder I’m currently in. Likewise, if I input a substring to it, it opens the best match directly.&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
@@ -1111,21 +1242,19 @@ Using &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;dotfile
 &lt;h3 id=&quot;git&quot;&gt;Git&lt;&#x2F;h3&gt;
 &lt;p&gt;The most straightforward tip is to use &lt;a href=&quot;https:&#x2F;&#x2F;gist.github.com&#x2F;mwhite&#x2F;6887990&quot;&gt;&lt;strong&gt;shell aliases&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;.&lt;br &#x2F;&gt;
 So, instead of typing the following…&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;git&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; checkout master  
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;git&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; pull  
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;git&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; checkout feature  
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;git&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; merge master  
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;git&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; commit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -a
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git checkout master  
+git pull  
+git checkout feature  
+git merge master  
+git commit -a
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;…we can save lots and lots of keystrokes (and time) by using:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;gcom  
+&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;gcom  
 gl  
-gco&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; -  
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;gmm  
+gco -  
+gmm  
 gca
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Another tip is to use a &lt;a href=&quot;https:&#x2F;&#x2F;help.github.com&#x2F;articles&#x2F;ignoring-files&#x2F;&quot;&gt;&lt;strong&gt;global .gitignore&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;.&lt;br &#x2F;&gt;
 This way, you have the guarantee that you’ll never ever commit again &lt;em&gt;node_modules&lt;&#x2F;em&gt;, IDE files or sensitive data, regardless of your repository’s .gitignore.&lt;&#x2F;p&gt;
 &lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;git-scm.com&#x2F;book&#x2F;en&#x2F;v2&#x2F;Customizing-Git-Git-Hooks&quot;&gt;&lt;strong&gt;Git hooks&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt; are very powerful as well. They are scripts that are run before you commit or push, for example.&lt;br &#x2F;&gt;
@@ -1163,8 +1292,7 @@ Simply validate JSON files in a pre-commit hook: if anything is incorrect, the c
 &lt;&#x2F;figure&gt;
 &lt;p&gt;Using &lt;a href=&quot;https:&#x2F;&#x2F;git-scm.com&#x2F;book&#x2F;en&#x2F;v2&#x2F;Git-Tools-Rewriting-History&quot;&gt;&lt;strong&gt;git squash&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;  really changed my daily work.&lt;br &#x2F;&gt;
 First, let’s see what many people consider a nice, organized PR:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;6c96a Add logic  
+&lt;pre&gt;&lt;code&gt;6c96a Add logic  
 84f15 Replace login screen  
 7960c Add button callbacks to new login screen  
 22cd3 Add ...  
@@ -1173,7 +1301,7 @@ First, let’s see what many people consider a nice, organized PR:&lt;&#x2F;p&gt
 12cd4 Bump  
 bc96a Merge branch master  
 a3b5a Bump again
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;First commit: ‘’Add logic’’. Fair enough.&lt;br &#x2F;&gt;
 Then, “Replace login screen’’. Ok.&lt;br &#x2F;&gt;
 ‘’Add button callbacks to new login screen’’. Wait a minute! The previous commit was replacing a working screen by an incomplete one! Possibly it wouldn’t even compile. What good is this previous commit for, then? &lt;br &#x2F;&gt;
@@ -1182,11 +1310,10 @@ I think that the master branch should only have commits with which you would be 
 ‘’Add unit tests’’. Was everything untested, then? The previous commits are potentially buggy code?&lt;&#x2F;p&gt;
 &lt;p&gt;You see, we’ve put a lot of effort into carefully hand-picking chunks of code and writing commit messages with arguably no benefit. Rarely anyone reviews a PR commit by commit, anyway.&lt;&#x2F;p&gt;
 &lt;p&gt;Ideally, we could select chunks of code so that every commit has nice test coverage and the expected behavior. But that takes too much time. Instead, I do the following:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;bc96a wip  
+&lt;pre&gt;&lt;code&gt;bc96a wip  
 54be0 code compilable again  
 ab4fc fixes
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;When I open the PR I try to write a nice PR description. Finally, I simply squash everything into a single commit and merge it.&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
 
@@ -1268,12 +1395,11 @@ Using &lt;a href=&quot;http:&#x2F;&#x2F;docopt.org&#x2F;&quot;&gt;&lt;strong&gt;
     &lt;figcaption&gt;With docopt, you don’t need to write parsers. Instead, you just write the script documentation&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;
 &lt;p&gt;&lt;strong&gt;Don’t throw away your scripts&lt;&#x2F;strong&gt;, even if they are simple. Instead, put them in a folder, document them and make them available to your disposal whenever you need. I never remember the command for spawning a new Android emulator, for example, but I can always remember how to type &lt;code&gt;dot android emu start&lt;&#x2F;code&gt;. In particular, I divide all my scripts into non-nested folders and make them callable by a &lt;code&gt;dot&lt;&#x2F;code&gt; command.&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;$ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;ANDROID_HOME&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&#x2F;tools&#x2F;emulator start     &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# is it like this?  
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;$ $&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;ANDROID_SDK&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&#x2F;tools&#x2F;emulator&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt; -avd&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; nexus &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# maybe like this?  
+&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;$ $ANDROID_HOME&#x2F;tools&#x2F;emulator start     # is it like this?  
+$ $ANDROID_SDK&#x2F;tools&#x2F;emulator -avd nexus # maybe like this?  
 # checks StackOverflow, other references or simply...  
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;$ dot android emu start                  &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5f697a;&quot;&gt;# there you go!
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+$ dot android emu start                  # there you go!
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Finally, my biggest tip for bash is… &lt;strong&gt;don’t use bash&lt;&#x2F;strong&gt;.&lt;br &#x2F;&gt;
 Use a language you feel comfortable with or that makes sense to your project.&lt;br &#x2F;&gt;
 Use Python, Ruby or NodeJS.&lt;&#x2F;p&gt;
@@ -1287,18 +1413,16 @@ Use Python, Ruby or NodeJS.&lt;&#x2F;p&gt;
 &lt;&#x2F;figure&gt;
 &lt;p&gt;For Linux, &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;i3&#x2F;i3&quot;&gt;i3wm&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;baskerville&#x2F;bspwm&quot;&gt;bspwm&lt;&#x2F;a&gt; are some options; for OSX, &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;koekeishiya&#x2F;chunkwm&quot;&gt;chunkwm&lt;&#x2F;a&gt; and spectacle; for Windows, &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;fuhsjr00&#x2F;bug.n&quot;&gt;bugn&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;Have a &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;dotfiles&quot;&gt;&lt;strong&gt;dotfiles repository&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt; on Github. This way, it’s easy to share your setup with your colleagues. But most importantly: all your setup becomes centralized and you’re always two commands away (or some minutes away) from having your ideal config:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;git&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt; clone https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;dotfiles.git &lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;~&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&#x2F;.dotfiles  
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#eb6772;&quot;&gt;bash ~&lt;&#x2F;span&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;&#x2F;.dotfiles&#x2F;scripts&#x2F;environment&#x2F;init
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git clone https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;dotfiles.git ~&#x2F;.dotfiles  
+bash ~&#x2F;.dotfiles&#x2F;scripts&#x2F;environment&#x2F;init
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Use &lt;strong&gt;consistent keybindings&lt;&#x2F;strong&gt; across applications. My memory is limited, so it’s nice to memorize commands only once and extend them to other usages. &lt;code&gt;HJKL&lt;&#x2F;code&gt;, for example, is reserved for directions in my setup: cursor position and buffer selection on text editors, window selection and resizing on my window manager, scrolling on Chrome, moving between folders on ranger, etc. By the way, &lt;strong&gt;sequential keybindings&lt;&#x2F;strong&gt; help a lot. I can never remember commands like &lt;code&gt;cmd + option + shift + whatever&lt;&#x2F;code&gt;, but commands that follow a pattern are pretty straightforward:&lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#2b303b;&quot;&gt;
-&lt;code&gt;&lt;span style=&quot;color:#abb2bf;&quot;&gt;Focus window left:   CapsLock + H  
+&lt;pre&gt;&lt;code&gt;Focus window left:   CapsLock + H  
 Focus window right:  CapsLock + L  
 Resize window right: CapsLock + R, L  
 Swap window right:   CapsLock + S, L  
 Warp window right:   CapsLock + W, L
-&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Navigate through your shell &lt;strong&gt;history with ease.&lt;&#x2F;strong&gt; This becomes trivial with fzf:&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
 

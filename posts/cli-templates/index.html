@@ -9,23 +9,23 @@
   <meta name="google-site-verification" content="kCkEw_7g3u9-z3dP2MXtD-SNMTXjEUdoI9fRUbPB7Ks" />
 
   
-    <link rel="icon" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+    <link rel="icon" href="[object]" />
     <link rel="apple-touch-icon" sizes="48x48"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="72x72"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;919926a10d297a1500.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="96x96"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;6c2aa64354c1ad0e00.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="144x144"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;f15f82763548a03000.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="192x192"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;60ba6917360f159900.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="256x256"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;be09d2da8b7096cc00.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="384x384"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;165598e81aa1737500.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="512x512"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;ca26ad195d4a364c00.jpg" />
+      href="[object]" />
   
 
   
@@ -37,7 +37,7 @@
   <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.css"
     rel="stylesheet" /> 
   <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" /> -->
-  <link href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;site.css' rel="stylesheet" /> 
+  <link href='https://denisidoro.github.io/site.css' rel="stylesheet" /> 
   <title>
     
   Creating templates for CLIs
@@ -171,14 +171,14 @@
 <p>
   <span class="has-text-black has-text-weight-normal">Tags:</span>
   
-  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;dev&#x2F;'>
+  <a class="link has-text-weight-light" href='https://denisidoro.github.io/tags/dev/'>
     <span class="icon is-small">
       <i class="fas fa-tag fa-xs"></i>
     </span>
     dev
   </a>
   
-  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;terminal&#x2F;'>
+  <a class="link has-text-weight-light" href='https://denisidoro.github.io/tags/terminal/'>
     <span class="icon is-small">
       <i class="fas fa-tag fa-xs"></i>
     </span>
@@ -203,100 +203,91 @@
               <h3 id="inspiration">Inspiration</h3>
 <p>I've been using <a href="https://github.com/yarpc/yab">yab</a> —a curl-like CLI— recently and I was surprised by how elegantly it solves a common problem.</p>
 <p>yab calls can get quite verbose. As an example, to get a <code>Customer</code> by its <code>id</code> from a <code>customer</code> microservice:</p>
-<pre style="background-color:#2b303b;">
-<code class="language-sh" data-lang="sh"><span style="color:#eb6772;">yab</span><span style="color:#abb2bf;"> customer Customer::get \
-</span><span style="color:#eb6772;">    -t</span><span style="color:#abb2bf;"> /path/to/idl/some.company/customer/customer.thrift \
-</span><span style="color:#eb6772;">    -P</span><span style="color:#abb2bf;"> 131.144.23.5/customer:tchannel \
-</span><span style="color:#eb6772;">    -r </span><span style="color:#9acc76;">&#39;{&quot;request&quot;: {&quot;id&quot;: 11}}&#39;
-</span></code></pre>
+<pre data-lang="sh" class="language-sh "><code class="language-sh" data-lang="sh">yab customer Customer::get \
+    -t /path/to/idl/some.company/customer/customer.thrift \
+    -P 131.144.23.5/customer:tchannel \
+    -r '{"request": {"id": 11}}'
+</code></pre>
 <p>The call is pretty convoluted, but it can be simplified by storing params in a yaml file:</p>
-<pre style="background-color:#2b303b;">
-<code class="language-yaml" data-lang="yaml"><span style="font-style:italic;color:#5f697a;"># customer_by_id.yaml
-</span><span style="color:#eb6772;">service</span><span style="color:#abb2bf;">: </span><span style="color:#eb6772;">customer
-procedure</span><span style="color:#abb2bf;">: </span><span style="color:#9acc76;">&quot;Customer::get&quot;
-</span><span style="color:#eb6772;">thrift</span><span style="color:#abb2bf;">: </span><span style="color:#eb6772;">/path/to/idl/some.company/customer/customer.thrift
-peer-list</span><span style="color:#abb2bf;">: </span><span style="color:#eb6772;">131.144.23.5/customer:tchannel
-request</span><span style="color:#abb2bf;">:
-  </span><span style="color:#eb6772;">request</span><span style="color:#abb2bf;">:
-    </span><span style="color:#eb6772;">id</span><span style="color:#abb2bf;">: </span><span style="color:#9acc76;">${number:11}
-</span></code></pre>
+<pre data-lang="yaml" class="language-yaml "><code class="language-yaml" data-lang="yaml"># customer_by_id.yaml
+service: customer
+procedure: "Customer::get"
+thrift: /path/to/idl/some.company/customer/customer.thrift
+peer-list: 131.144.23.5/customer:tchannel
+request:
+  request:
+    id: ${number:11}
+</code></pre>
 <p>The file takes a set of CLI flags in their long form, e.g. <code>--thrift</code> instead of <code>-t</code>, and their associated values.</p>
 <p>Then, the following call is equivalent to the beforementioned one:</p>
-<pre style="background-color:#2b303b;">
-<code class="language-sh" data-lang="sh"><span style="color:#eb6772;">yab -y</span><span style="color:#abb2bf;"> customer_by_id.yaml
-</span></code></pre>
+<pre data-lang="sh" class="language-sh "><code class="language-sh" data-lang="sh">yab -y customer_by_id.yaml
+</code></pre>
 <p>Additional flags can be passed to yab to override the default values specified in the yaml file:</p>
-<pre style="background-color:#2b303b;">
-<code class="language-sh" data-lang="sh"><span style="color:#eb6772;">yab -y</span><span style="color:#abb2bf;"> customer_by_id.yaml</span><span style="color:#eb6772;"> --number</span><span style="color:#abb2bf;"> 42
-</span></code></pre>
+<pre data-lang="sh" class="language-sh "><code class="language-sh" data-lang="sh">yab -y customer_by_id.yaml --number 42
+</code></pre>
 <p>I think this is pretty cool!</p>
 <p>It can save us lots of time. It also helps sharing knowledge between team members: we could have a git repo with a bunch of these <code>.yaml</code> files and a simple <code>git pull</code> would allow everyone to be on the same page.</p>
 <p>My immediate thought was &quot;could we easily replicate this for other commands?&quot;</p>
 <h1 id="solution">Solution</h1>
 <p>For the sake of simplicity, let's try to write a complex <a href="https://github.com/httpie/httpie">httpie</a> command. It could be an involved <code>awk</code>, <code>grep</code> or <code>jq</code> command, though.</p>
 <p>The final call should look like this:</p>
-<pre style="background-color:#2b303b;">
-<code><span style="color:#abb2bf;">http -v POST https://jsonplaceholder.typicode.com/posts title=foo body=bar userId=11
-</span></code></pre>
+<pre><code>http -v POST https://jsonplaceholder.typicode.com/posts title=foo body=bar userId=11
+</code></pre>
 <p>The tool I'm going to use is <a href="https://github.com/denisidoro/navi">navi</a>. It allows you to browse through cheatsheets —that you may write yourself or download from maintainers— and execute commands. </p>
 <p>navi encourages you to write <code>.cheat</code> files which break commands down into smaller, reusable pieces:</p>
-<pre style="background-color:#2b303b;">
-<code class="language-sh" data-lang="sh"><span style="color:#eb6772;">%</span><span style="color:#abb2bf;"> httpie
+<pre data-lang="sh" class="language-sh "><code class="language-sh" data-lang="sh">% httpie
 
-</span><span style="font-style:italic;color:#5f697a;"># make a request to a typicode microservice
-</span><span style="color:#abb2bf;">http</span><span style="color:#eb6772;"> -v </span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">method</span><span style="color:#adb7c9;">&gt; </span><span style="color:#9acc76;">&quot;https://&lt;service&gt;.typicode.com/&lt;endpoint&gt;&quot; </span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">http-body</span><span style="color:#adb7c9;">&gt;
+# make a request to a typicode microservice
+http -v <method> "https://<service>.typicode.com/<endpoint>" <http-body>
 
-</span><span style="color:#abb2bf;">$ method: echo</span><span style="color:#eb6772;"> -e </span><span style="color:#9acc76;">&#39;GET\nPOST\nPUT&#39;
-</span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> service: echo</span><span style="color:#eb6772;"> -e </span><span style="color:#9acc76;">&#39;jsonplaceholder\nanotherservice&#39;
-</span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> endpoint: case </span><span style="color:#9acc76;">&quot;${</span><span style="color:#eb6772;">service</span><span style="color:#9acc76;">}:${</span><span style="color:#eb6772;">method</span><span style="color:#9acc76;">}&quot;</span><span style="color:#abb2bf;"> in</span><span style="color:#adb7c9;">; </span><span style="color:#9acc76;">&quot;jsonplaceholder:post&quot;</span><span style="color:#abb2bf;">) </span><span style="color:#5ebfcc;">echo </span><span style="color:#eb6772;">-e </span><span style="color:#9acc76;">&#39;e1\ne2\ne3&#39;</span><span style="color:#abb2bf;">;</span><span style="color:#adb7c9;">; </span><span style="color:#cd74e8;">esac
-</span></code></pre>
+$ method: echo -e 'GET\nPOST\nPUT'
+$ service: echo -e 'jsonplaceholder\nanotherservice'
+$ endpoint: case "${service}:${method}" in; "jsonplaceholder:post") echo -e 'e1\ne2\ne3';; esac
+</code></pre>
 <p>The <code>endpoint</code> values here are incomplete for briefness and, in a real-world scenario, would probably be fetched dynamically, instead of being harcoded.</p>
 <p>This <code>.cheat</code> enables us to very quickly make a request to any endpoint in our company, given that we somehow mapped all possible values to the corresponding variables. </p>
 <p>But an engineer who recently joined the team still wouldn't know what service/endpoint to request for creating a new <code>post</code>. We could then add another cheatsheet entry for more granular commands:</p>
-<pre style="background-color:#2b303b;">
-<code class="language-sh" data-lang="sh"><span style="color:#eb6772;">%</span><span style="color:#abb2bf;"> httpie, endpoints
+<pre data-lang="sh" class="language-sh "><code class="language-sh" data-lang="sh">% httpie, endpoints
 
-</span><span style="font-style:italic;color:#5f697a;"># create a post
-</span><span style="color:#abb2bf;">http</span><span style="color:#eb6772;"> -v </span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">method</span><span style="color:#adb7c9;">&gt; </span><span style="color:#9acc76;">&quot;https://&lt;service&gt;.typicode.com/&lt;endpoint&gt;&quot;</span><span style="color:#abb2bf;"> title=</span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">title</span><span style="color:#adb7c9;">&gt;</span><span style="color:#abb2bf;"> body=</span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">body</span><span style="color:#adb7c9;">&gt;</span><span style="color:#abb2bf;"> userId=</span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;">userId</span><span style="color:#adb7c9;">&gt;
+# create a post
+http -v <method> "https://<service>.typicode.com/<endpoint>" title=<title> body=<body> userId=<userId>
 
-</span><span style="color:#abb2bf;">$ method: echo </span><span style="color:#9acc76;">&#39;POST&#39;
-</span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> service: echo </span><span style="color:#9acc76;">&#39;jsonplaceholder&#39;
-</span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> endpoint: echo </span><span style="color:#9acc76;">&#39;posts&#39;
-</span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> title: echo </span><span style="color:#9acc76;">&#39;foo&#39;
-</span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> body: echo </span><span style="color:#9acc76;">&#39;bar&#39;
-</span><span style="color:#eb6772;">$</span><span style="color:#abb2bf;"> userId: echo </span><span style="color:#9acc76;">&#39;11&#39;
-</span></code></pre>
+$ method: echo 'POST'
+$ service: echo 'jsonplaceholder'
+$ endpoint: echo 'posts'
+$ title: echo 'foo'
+$ body: echo 'bar'
+$ userId: echo '11'
+</code></pre>
 <p>There are a multitude of ways to invoke this cheatsheet. One of them is like this:</p>
 <script id="asciicast-Su5eUYFHn7M5A6Yccvcv7WH7k" src="https://asciinema.org/a/Su5eUYFHn7M5A6Yccvcv7WH7k.js" async></script>
 <h3 id="preventing-user-interaction">Preventing user interaction</h3>
 <p>If no interaction is wanted we could override values using environment variables and autoselect the desired command by using the <code>--best-match</code> flag:</p>
-<pre style="background-color:#2b303b;">
-<code class="language-sh" data-lang="sh"><span style="color:#eb6772;">userId</span><span style="color:#adb7c9;">=</span><span style="color:#9acc76;">12 </span><span style="color:#eb6772;">navi --query </span><span style="color:#9acc76;">&#39;http endpoints create post&#39;</span><span style="color:#eb6772;"> --best-match
-</span></code></pre>
+<pre data-lang="sh" class="language-sh "><code class="language-sh" data-lang="sh">userId=12 navi --query 'http endpoints create post' --best-match
+</code></pre>
 <p>Let's say that we want to skip the <code>--query</code> and <code>--best-match</code> boilerplate and we know that we're always gonna use this tool for <code>http endpoints</code>. A simple bash script  come to the rescue:</p>
-<pre style="background-color:#2b303b;">
-<code class="language-sh" data-lang="sh"><span style="color:#5cb3fa;">export_var</span><span style="color:#abb2bf;">() {
-   </span><span style="color:#cd74e8;">local </span><span style="color:#eb6772;">-r var</span><span style="color:#adb7c9;">=</span><span style="color:#9acc76;">&quot;${</span><span style="color:#eb6772;">1</span><span style="color:#adb7c9;">/</span><span style="color:#eb6772;">/</span><span style="color:#9acc76;">-</span><span style="color:#adb7c9;">/</span><span style="color:#9acc76;">_}&quot;
-   </span><span style="color:#cd74e8;">export </span><span style="color:#9acc76;">&quot;$</span><span style="color:#eb6772;">var</span><span style="color:#9acc76;">&quot;</span><span style="color:#adb7c9;">=</span><span style="color:#9acc76;">&quot;$</span><span style="color:#eb6772;">2</span><span style="color:#9acc76;">&quot;
-</span><span style="color:#abb2bf;">}
+<pre data-lang="sh" class="language-sh "><code class="language-sh" data-lang="sh">export_var() {
+   local -r var="${1//-/_}"
+   export "$var"="$2"
+}
 
-</span><span style="color:#5cb3fa;">endpoint</span><span style="color:#abb2bf;">() {
-   </span><span style="color:#cd74e8;">local </span><span style="color:#eb6772;">var
-   </span><span style="color:#cd74e8;">for</span><span style="color:#abb2bf;"> v </span><span style="color:#cd74e8;">in </span><span style="color:#abb2bf;">$</span><span style="color:#eb6772;">@</span><span style="color:#adb7c9;">; </span><span style="color:#cd74e8;">do
-    case </span><span style="color:#abb2bf;">$</span><span style="color:#eb6772;">v </span><span style="color:#cd74e8;">in
-        </span><span style="color:#abb2bf;">--</span><span style="color:#adb7c9;">*</span><span style="color:#cd74e8;">) </span><span style="color:#eb6772;">var</span><span style="color:#adb7c9;">=</span><span style="color:#9acc76;">&quot;${</span><span style="color:#eb6772;">v</span><span style="color:#adb7c9;">:</span><span style="color:#db9d63;">2</span><span style="color:#9acc76;">}&quot; </span><span style="color:#abb2bf;">;;
-        </span><span style="color:#adb7c9;">*</span><span style="color:#cd74e8;">) </span><span style="color:#eb6772;">export_var </span><span style="color:#9acc76;">&quot;$</span><span style="color:#eb6772;">var</span><span style="color:#9acc76;">&quot; &quot;$</span><span style="color:#eb6772;">v</span><span style="color:#9acc76;">&quot; </span><span style="color:#abb2bf;">;;
-    </span><span style="color:#cd74e8;">esac
+endpoint() {
+   local var
+   for v in $@; do
+    case $v in
+        --*) var="${v:2}" ;;
+        *) export_var "$var" "$v" ;;
+    esac
    done
 
-   </span><span style="color:#eb6772;">navi --query </span><span style="color:#9acc76;">&quot;http endpoints ${</span><span style="color:#eb6772;">query</span><span style="color:#9acc76;">}&quot;</span><span style="color:#eb6772;"> --best-match
-</span><span style="color:#abb2bf;">}
-</span></code></pre>
+   navi --query "http endpoints ${query}" --best-match
+}
+</code></pre>
 <p>And we could call it as follows:</p>
-<pre style="background-color:#2b303b;">
-<code class="language-sh" data-lang="sh"><span style="color:#eb6772;">endpoint </span><span style="color:#9acc76;">&#39;create post&#39;
-</span><span style="color:#eb6772;">endpoint </span><span style="color:#9acc76;">&#39;create post&#39;</span><span style="color:#eb6772;"> --userId</span><span style="color:#abb2bf;"> 12
-</span></code></pre><h3 id="conclusion">Conclusion</h3>
+<pre data-lang="sh" class="language-sh "><code class="language-sh" data-lang="sh">endpoint 'create post'
+endpoint 'create post' --userId 12
+</code></pre>
+<h3 id="conclusion">Conclusion</h3>
 <p>I hope that, with these tips, using the terminal becomes easier for you. </p>
 <p>Creating templates may speed up day-to-day tasks and improve knowledge sharing —either with other team members or with your future self.</p>
 <p>By the way, if you have any feature requests for navi, feel free to leave an issue <a href="https://github.com/denisidoro/navi/issues">here</a>!</p>
@@ -425,8 +416,8 @@ request</span><span style="color:#abb2bf;">:
     <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.js"></script>
   -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/elasticlunr/0.9.6/elasticlunr.min.js"></script>
-  <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;search_index.en.js'></script>
-  <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;js&#x2F;site.js'></script>
+  <script src='https://denisidoro.github.io/search_index.en.js'></script>
+  <script src='https://denisidoro.github.io/js/site.js'></script>
   
   
 

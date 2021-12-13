@@ -9,23 +9,23 @@
   <meta name="google-site-verification" content="kCkEw_7g3u9-z3dP2MXtD-SNMTXjEUdoI9fRUbPB7Ks" />
 
   
-    <link rel="icon" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+    <link rel="icon" href="[object]" />
     <link rel="apple-touch-icon" sizes="48x48"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;bb8e06f1bd83412a00.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="72x72"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;919926a10d297a1500.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="96x96"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;6c2aa64354c1ad0e00.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="144x144"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;f15f82763548a03000.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="192x192"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;60ba6917360f159900.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="256x256"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;be09d2da8b7096cc00.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="384x384"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;165598e81aa1737500.jpg" />
+      href="[object]" />
     <link rel="apple-touch-icon" sizes="512x512"
-      href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;processed_images&#x2F;ca26ad195d4a364c00.jpg" />
+      href="[object]" />
   
 
   
@@ -37,7 +37,7 @@
   <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.css"
     rel="stylesheet" /> 
   <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" /> -->
-  <link href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;site.css' rel="stylesheet" /> 
+  <link href='https://denisidoro.github.io/site.css' rel="stylesheet" /> 
   <title>
     
   Working around Google Photos limitation
@@ -171,28 +171,28 @@
 <p>
   <span class="has-text-black has-text-weight-normal">Tags:</span>
   
-  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;cloud&#x2F;'>
+  <a class="link has-text-weight-light" href='https://denisidoro.github.io/tags/cloud/'>
     <span class="icon is-small">
       <i class="fas fa-tag fa-xs"></i>
     </span>
     cloud
   </a>
   
-  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;android&#x2F;'>
+  <a class="link has-text-weight-light" href='https://denisidoro.github.io/tags/android/'>
     <span class="icon is-small">
       <i class="fas fa-tag fa-xs"></i>
     </span>
     android
   </a>
   
-  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;tasker&#x2F;'>
+  <a class="link has-text-weight-light" href='https://denisidoro.github.io/tags/tasker/'>
     <span class="icon is-small">
       <i class="fas fa-tag fa-xs"></i>
     </span>
     tasker
   </a>
   
-  <a class="link has-text-weight-light" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;tags&#x2F;termux&#x2F;'>
+  <a class="link has-text-weight-light" href='https://denisidoro.github.io/tags/termux/'>
     <span class="icon is-small">
       <i class="fas fa-tag fa-xs"></i>
     </span>
@@ -244,8 +244,7 @@
 <h3 id="solution">Solution</h3>
 <p>I won't get into too much implementation details, but I basically used <a href="https://play.google.com/store/apps/details?id=net.dinglisch.android.taskerm&amp;hl=en&amp;gl=US">Tasker</a> and <a href="https://play.google.com/store/apps/details?id=com.termux&amp;hl=en&amp;gl=US">Termux</a>. I also installed the packages for <a href="https://linux.die.net/man/1/file">file</a>, <a href="https://exiftool.org">exiftool</a> and <a href="https://rclone.org">rclone</a>.</p>
 <p>The pseudo-code is as follows:</p>
-<pre style="background-color:#2b303b;">
-<code><span style="color:#abb2bf;">every day at 2am:
+<pre><code>every day at 2am:
     for each photo in /sdcard/DCIM:
         compress photo to /sdcard/Cloud/GooglePhotos/⋯.jpg
         compress and zip photo to /sdcard/Cloud/pCloud/⋯.jpg.7z
@@ -254,9 +253,10 @@
         move photo to /sdcard/Cloud/Telegram/⋯.jpg
 
 every day at 3am, if wifi is connected:
-    for each file in /sdcard/Cloud/&lt;provider&gt;:
-        move file to &lt;provider&gt;
-</span></code></pre><h3 id="compression">Compression</h3>
+    for each file in /sdcard/Cloud/<provider>:
+        move file to <provider>
+</code></pre>
+<h3 id="compression">Compression</h3>
 <p>A photo is compressed for each storage provider accordingly.</p>
 <p>The output image will be limited by <code>Photo size</code> and, if <code>Trust?</code> is <code>false</code>, it will be 7zipped using a password.</p>
 <p>The output image size is limited by playing with the properties for image resizing inside Tasker (<code>max dimension</code> and <code>compression quality</code>). These are estimated based on the <code>Photo size</code> input and the original image properties, retrived by <code>file</code>.</p>
@@ -272,11 +272,10 @@ every day at 3am, if wifi is connected:
 <p>Its API allows file uploads using a simple POST request. The response body contains a <code>file_id</code>.</p>
 <p>We can download the attachment by making a request to <code>https://⋯.telegram.org/⋯?file_id=&lt;file_id&gt;</code>.</p>
 <p>We thus need to keep this <code>file_id</code> in a database. My Tasker task stores this in <code>/sdcard/Tasker/db/telegram_uploads.txt</code> and its contents look like this:</p>
-<pre style="background-color:#2b303b;">
-<code class="language-txt" data-lang="txt"><span style="color:#abb2bf;">/Pictures/IMG_00.jpg;123456
+<pre data-lang="txt" class="language-txt "><code class="language-txt" data-lang="txt">/Pictures/IMG_00.jpg;123456
 /Pictures/IMG_01.jpg;789012
 /Pictures/IMG_02.jpg;654321
-</span></code></pre>
+</code></pre>
 <p>Having this database in hand, we can even design a primitive web-based file manager, for example.</p>
 <p>The database is replicated across all other storage providers, using the aforementioned methods.</p>
 <figure style="margin-left: 0; margin-right: 0">
@@ -356,6 +355,15 @@ every day at 3am, if wifi is connected:
           
             <nav class="level mt-2">
               
+                <div class="level-item has-text-centered">
+                  <a class="button is-black is-outlined" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;faster-monorepo-workflow-with-materialized-views&#x2F;'>
+                    <span class="icon mr-2">
+                      <i class="fas fa-arrow-circle-left"></i>
+                    </span>
+                    Faster monorepo workflow with materialized views
+                  </a>
+                </div>
+              
               
                 <div class="level-item has-text-centered">
                   <a class="button is-black is-outlined" href='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;spreadsheet-tsdb-finance&#x2F;'>
@@ -404,8 +412,8 @@ every day at 3am, if wifi is connected:
     <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/twelve/galleria.twelve.min.js"></script>
   -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/elasticlunr/0.9.6/elasticlunr.min.js"></script>
-  <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;search_index.en.js'></script>
-  <script src='https:&#x2F;&#x2F;denisidoro.github.io&#x2F;js&#x2F;site.js'></script>
+  <script src='https://denisidoro.github.io/search_index.en.js'></script>
+  <script src='https://denisidoro.github.io/js/site.js'></script>
   
   
 
