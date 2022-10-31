@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta itemprop="name" content="Denis Isidoro" />
+  <meta itemprop="description" content="My blog" />
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://denisidoro.github.io/apple-touch-icon.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://denisidoro.github.io/favicon-32x32.png" />
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="https://denisidoro.github.io/favicon-16x16.png"
+  />
+  <link
+    rel="shortcut icon"
+    href="https://denisidoro.github.io/favicon.ico"
+  />
+  <link rel="stylesheet" href="https://denisidoro.github.io/style.css"/>
+  
+  <title>A memory-efficient data structure for geolocation history</title>
+  
+
+  
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://denisidoro.github.io/rss.xml">
+  
+
+  <body id="page">
+
+	
+<header id="site-header" class="animated slideInUp faster">
+  <div class="hdr-wrapper section-inner">
+    <div class="hdr-left">
+      <div class="site-branding">
+        <a href="https:&#x2F;&#x2F;denisidoro.github.io">Denis Isidoro</a>
+      </div>
+      <nav class="site-nav hide-in-mobile">
+            
+        
+        <a href="https://denisidoro.github.io/posts">Posts</a>
+        
+      </nav>
+    </div>
+    <div class="hdr-right hdr-icons">
+      <span class="hdr-social hide-in-mobile">
+        
+      
+      <a href="https:&#x2F;&#x2F;github.com&#x2F;denisidoro" target="_blank" rel="noopener me" title="github">
+         
+         <svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path
+               d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+            </path>
+         </svg>
+         
+      </a>
+      
+      <a href="https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;dnsisidoro&#x2F;" target="_blank" rel="noopener me" title="linkedin">
+         
+         <svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+            <rect x="2" y="9" width="4" height="12"></rect>
+            <circle cx="4" cy="4" r="2"></circle>
+         </svg>
+         
+      </a>
+      
+      
+      </span>
+      <button id="menu-btn" class="hdr-btn" title="Menu">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="feather feather-menu"
+        >
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="mobile-menu" class="animated fast">
+  <ul>
+    
+    <li><a href="https://denisidoro.github.io/posts">Posts</a></li>
+    
+  </ul>
+</div>
+
+	
+	
+
+		
+<main class="site-main section-inner animated fadeIn faster">
+  <article class="thin">
+	<header class="post-header">
+	  <div class="post-meta">
+		
+		<span>Oct 31, 2022</span>
+		<small> - 
+<span class="reading-time" title="Estimated read time">
+    6 min read  </span>
+      </small>
+		
+            
+	  </div>
+	  <h1>A memory-efficient data structure for geolocation history</h1>
+	</header>
+
+	<div class="content">
+        
+	  <p>In this blog post I'll cover how I built a memory-efficient data structure for storing location history data.</p>
+<p>Some Rust details will also be explained.</p>
+<h3 id="motivation">Motivation</h3>
+<p>My DSLR camera has no GPS built-in. Evidently, photos from it don't include geolocation-based EXIF tags.</p>
+<p>If only my location history were stored somewhere, so that I could update photos with the correct data...</p>
+<p>Unsurprisingly, Google knows where I am, where I've been and where I'm going to be. They even allow me to export this data.</p>
+<p>The problem is that the exported JSON weighs ~1GB. My computer has 16GB of RAM so it can all fit in memory, but we certainly can store it more efficiently.</p>
+<h3 id="json-parsing">JSON parsing</h3>
+<p>For reference, here's what the JSON looks like:</p>
+<pre data-lang="json" class="language-json "><code class="language-json" data-lang="json">{
+  &quot;locations&quot;: [{
+    &quot;latitudeE7&quot;: 435631892,
+    &quot;longitudeE7&quot;: 26848689,
+    &quot;accuracy&quot;: 56,
+    &quot;activity&quot;: [{
+      &quot;activity&quot;: [{
+        &quot;type&quot;: &quot;STILL&quot;,
+        &quot;confidence&quot;: 100
+      }],
+      &quot;timestamp&quot;: &quot;2014-01-09T00:48:24.424Z&quot;
+    }],
+    &quot;source&quot;: &quot;WIFI&quot;,
+    &quot;deviceTag&quot;: 1348159918,
+    &quot;timestamp&quot;: &quot;2014-01-09T00:48:24.751Z&quot;
+  }, {
+    &quot;latitudeE7&quot;: 435631881,
+    &#x2F;&#x2F; ...
+</code></pre>
+<p>Deserializing a JSON file into a struct results in something that is certainly lighter than the JSON string.</p>
+<p>The reason for this is that a string with the value <code>&quot;2022-10-22&quot;</code> needs more bytes than, say, its equivalent <code>Date</code>  object.</p>
+<p>The latter can simply throw away the hyphens, for example. Additionally, the number 10 can be represented with 4 bits instead of using two chars, which occupy at least 8 bits each.</p>
+<p>So moving away from a textual representation is the first step in our journey.</p>
+<p>Instead of using a JSON deserializer per se, I decided to iterate over each line of the file and ignore the lines I wasn't interested in.</p>
+<h3 id="do-we-really-need-to-store-everything">Do we really need to store everything?</h3>
+<p>A naive structure for our purposes is a sequence of <code>DataPoint</code>s, where <code>DataPoint</code> has <code>datetime</code>, <code>latitude</code> and <code>longitude</code>:</p>
+<pre data-lang="json" class="language-json "><code class="language-json" data-lang="json">[
+ (DateTime(2022,10,22,10,45,32), 27.5226335, 43.552225),  
+ (DateTime(2022,10,22,10,46,21), 27.5226382, 43.552237),  
+ &#x2F;&#x2F; ...
+]  
+</code></pre>
+<p>But isn't there some redundancy? The data is clearly not random.</p>
+<p>There are some assumptions we can make to help us design a better data structure:</p>
+<ol>
+<li>Data points are sorted by time</li>
+<li>Neighbor data points are very similar
+<ul>
+<li>unless I'm on a plane, my speed is at most 100 km/h, so in a minute I'll travel less 2 km</li>
+<li>on foot I'll travel just a few meters </li>
+</ul>
+</li>
+<li>Most of the days I stay inside a circle of 3km of radius</li>
+<li>One data point per minute is more than enough</li>
+<li>Errors in position up to 15m is something I'm OK with</li>
+</ol>
+<h3 id="how-many-bits-do-we-need-to-represent-a-position">How many bits do we need to represent a position?</h3>
+<p>First let's try to understand how much each decimal place contributes to precision.</p>
+<p>A quick search on Google gives us <a href="https://gis.stackexchange.com/questions/8650/measuring-accuracy-of-latitude-and-longitude">the following</a>:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">- The first decimal place  is worth up to 11.1 km: it can distinguish the position of one large city from a neighboring large city.
+- The second decimal place is worth up to 1.1 km: it can separate one village from the next.
+- The third decimal place is worth up to 110 m: it can identify a large agricultural field or institutional campus.
+- The fourth decimal place is worth up to 11 m: it can identify a parcel of land. It is comparable to the typical accuracy of an uncorrected GPS unit with no interference.
+</code></pre>
+<p>If we want to have errors less than 15 m, then we need to be able to correctly represent the latitude and longitude up to the 4th decimal place.</p>
+<p>If both coordinates are off by 0.0001° then the error will be close to <code>sqrt(10^2+10^2) = 15 m</code>.</p>
+<p>Given that neighbor data points are close to each other, we can represent deltas in position instead of absolute positions.</p>
+<p>Let's first try using a single byte to represent a delta in latitude.</p>
+<p>Given that we must represent the 4th decimal place precisely, we can have a range that goes from 0 to <code>2^7-1</code> = 127, where 0 translates to 0°; 1 to 0.0001°; and, as a consequence, 127 to 0.0127°. The remaining bit can be used to indicate if the difference is positive or negative.</p>
+<p>0.0127° of difference in both coordinates results in a distance of ~2.1km. This is good because, from assumption number 3, we can conclude that, for most days, most data points can be represented with deltas of only one byte for each coordinate.</p>
+<p>This conversion simply consists of a rule of three, so I'll skip further details.</p>
+<h3 id="how-many-bits-do-we-need-to-represent-time">How many bits do we need to represent time?</h3>
+<p>From assumption number 4, we can discard seconds from timestamps.</p>
+<p>Let's say that we're looking at an interval of 20 years. 20 years is roughly equal to 10.5 million minutes.</p>
+<p>To represent this number we need <code>ceiling(log2(10.5 million))</code> = 24 bits.</p>
+<p>Rust doesn't have a <code>u24</code> type. Even though we could implement a <code>u24</code> type with a tuple of <code>(u8, u16)</code>, in the end our  <code>u24</code> would end up using 4 bytes instead of 3:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">type struct u24 {
+  msb: u8,
+  lsb: u8
+}
+
+fn main() {
+   let x = u24 { msb: 1, lsb: 1 };
+   println!(&quot;{} bytes&quot;, x.deep_size_of()); &#x2F;&#x2F; 4 bytes
+}
+</code></pre>
+<p>This happens because of <a href="https://doc.rust-lang.org/reference/type-layout.html">memory alignment</a>.</p>
+<p>In Rust, we can circumvent this &quot;limitation&quot; by using the <code>repr</code> directive:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">#[repr(packed(1))]
+type struct u24 {
+  msb: u8,
+  lsb: u8
+}
+
+fn main() {
+   let x = u24 { msb: 1, lsb: 1 };
+   println!(&quot;{} bytes&quot;, x.deep_size_of()); &#x2F;&#x2F; 3 bytes
+}
+</code></pre>
+<p>But even <a href="https://github.com/rust-lang/rust-clippy">clippy</a> complains about this, with the <code>unaligned_references</code> warning.</p>
+<p>So let's stick with a <code>u32</code> for timestamps instead. Hey, at least we can now represent 8000+ years worth of data.</p>
+<h3 id="getting-our-hands-dirty">Getting our hands dirty</h3>
+<p>At its core, our database will do the following:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">fn add(&amp;mut self, time: DateTime, lat: f32, lng: f32) {  
+   let point = self.low_precision_point(lat, lng);  
+   if error(point, lat, lng) &gt; threshold {  
+      self.store_high_precision_point(time, lat, lng)  
+   } else {  
+      self.store_low_precision_point(point)  
+   }  
+}  
+</code></pre>
+<p>Simply using the 0.0001°-based rule in the <code>error()</code> function isn't enough because the error varies with your distance to the Equator. To be more precise, this function must calculate the <a href="https://en.wikipedia.org/wiki/Haversine_formula">haversine distance</a> instead.</p>
+<p>This is more CPU-intensive but it's a cost we need to pay at the time of writing only.</p>
+<h3 id="defining-our-structs">Defining our structs</h3>
+<p>Our data structure for low-precision datapoints can be a sequence of 2 1-byte positions, as mentioned above. We also need to have a reference to a high-precision point so that the final position is reference + delta.</p>
+<p>Our data structure for high-precision can be a sequence of minutes plus both coordinates.</p>
+<p>In the end we'll have something like this:</p>
+<pre data-lang="rust" class="language-rust "><code class="language-rust" data-lang="rust">type Minutes = u32
+type LatLng = (f32, f32)
+type LatLngDelta = (u8, u8)
+  
+struct Db {
+   high_precision_points: Vec&lt;Minutes, LatLng&gt;,  
+   low_precision_points: HashMap&lt;Minutes, Vec&lt;LatLngDelta&gt;&gt;  
+}
+</code></pre>
+<p>I'll skip the implementation details but you can check the full code <a href="https://gist.github.com/denisidoro/c79282fa44aab10f5a33e838b8b1811f">here</a>.</p>
+<h3 id="benchmarking">Benchmarking</h3>
+<p>After finishing everything, we can measure how many megabytes our data structure needs.</p>
+<p>Let's insert data for the last couple of years into it and measure memory consumption:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">input points: 345 k
+high-precision data points: 42 k
+low-precision data points: 280 k
+high-precision structure size: 768 KB
+low-precision structure size: 2583 KB
+sum size: 3351 KB
+</code></pre>
+<p>In the end, less than 4 MB were occupied. </p>
+<h3 id="oversized-vecs">Oversized Vecs</h3>
+<p>There's something odd with the numbers above: the <code>Vec</code>s should be smaller. </p>
+<p>If we have 42k elements of <code>32*3 bits</code> = 12 bytes each, the total sequence should have ~492KB, not 768KB.</p>
+<p>After some experiments, I realized that the <code>Vec</code>s were bigger than expected by 5 to 100%. In average, they were ~55% bigger.</p>
+<p>I then remembered that such data structures usually double their inner buffers when there's no room for a new element.</p>
+<p>Fortunately, Rust offers a <a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.shrink_to_fit">Vec::shrink_to_fit()</a> operation, which we can call after finishing mutating our database.</p>
+<h3 id="benchmarking-1">Benchmarking</h3>
+<p>Finally, here are our results:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">input points: 345 k
+high-precision data points: 42 k
+low-precision data points: 280 k
+high-precision structure size: 499 KB
+low-precision structure size: 2339 KB
+sum size: 2838 KB
+</code></pre>
+<p>Let's compare this to a naive <code>Vec&lt;Timestamp, f64, f64&gt;</code> implementation:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">input_points * (size_of_timestamp + 64 + 64) * average vec overhead
+354k * (64+64+64) * 1.5 bits
+121 MB
+</code></pre>
+<p>Overall we saved around ~95% in memory!</p>
+<p>After fiddling with some thresholds, I noticed that, to achieve a 5m precision instead of 15m, the memory overhead is negligible:</p>
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">input points: 345 k
+high-precision data points: 46 k
+low-precision data points: 273 k
+high-precision structure size: 546 KB
+low-precision structure size: 2326 KB
+sum size: 2872 KB
+</code></pre>
+<p>So I decided to set the max error to 5m instead.</p>
+<h3 id="future-improvements">Future improvements</h3>
+<p>A high-precision data point occupies 32 bits for a timestamp and 32 bits for each coordinate. </p>
+<p>Timestamps could be represented with 24 bits, as mentioned above. 32 bits for each coordinate is unnecessary.</p>
+<p>We could use a <code>u64</code> for everything instead: with some bit shifting, 24 bits could be reserved for the timestamp and each coordinate could use 20 bits.</p>
+<p>This would decrease the size of these data points by <code>1-64/(32*3)</code> = 33%.</p>
+<p>In addition, I wonder if we could use <a href="https://en.wikipedia.org/wiki/Quadtree#:%7E:text=A%20quadtree%20is%20a%20tree,into%20four%20quadrants%20or%20regions.">QuadTrees</a> somehow...</p>
+<h3 id="conclusion">Conclusion</h3>
+<p>This journey was clearly over-engineered.</p>
+<p>But I learned a lot as part of the process and I ended up with results very efficient memory-wise.</p>
+<p>Instead of asking &quot;why?&quot;, I asked &quot;why not?&quot; 😂  </p>
+
+	</div>
+	<hr class="post-end">
+	<footer class="post-info">
+    
+	  <p>
+		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
+		
+		
+		<span class="tag"><a href="https://denisidoro.github.io/tags/dev/">dev</a></span>
+		
+		<span class="tag"><a href="https://denisidoro.github.io/tags/rust/">rust</a></span>
+		
+		<span class="tag"><a href="https://denisidoro.github.io/tags/geo/">geo</a></span>
+		
+		
+    </p>
+    
+    <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1587 Words</p>
+    
+    <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2022-10-31</p>
+    
+	</footer>
+  </article>
+    
+  
+  <div class="post-nav thin">
+	
+	
+	<a class="prev-post" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;faster-monorepo-workflow-with-materialized-views&#x2F;">
+	  <span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br>
+	  <span>Faster monorepo workflow with materialized views</span>
+	</a>
+	
+  </div>
+
+  
+</main>
+
+	  </div>
+	  
+	  
+
+
+
+      <footer id="site-footer" class="section-inner thin animated fadeIn faster">
+         <!--<p>&copy; 2022 <a href="https:&#x2F;&#x2F;denisidoro.github.io">Denis Isidoro</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>-->
+         <p>Made with <a href="https://www.getzola.org" target="_blank" rel="noopener">Zola</a> &#183; Theme <a
+               href="https://github.com/VersBinarii/hermit_zola" target="_blank" rel="noopener">Hermit_Zola</a>
+            
+            &#183; <a href="https://denisidoro.github.io/rss.xml" target="_blank"
+               title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="feather feather-rss">
+                  <path d="M4 11a9 9 0 0 1 9 9"></path>
+                  <path d="M4 4a16 16 0 0 1 16 16"></path>
+                  <circle cx="5" cy="19" r="1"></circle>
+               </svg></a>
+            
+         </p>
+      </footer>
+
+      
+
+
+	</div>
+	
+	<script src="https://denisidoro.github.io/js/main.js"></script>
+
+	<!-- Math rendering -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+        onload="renderMathInElement(document.body, { delimiters: [ {left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}, {left: '\\[', right: '\\]', display: true}, {left: '\\(', right: '\\)', display: false}]});"></script>
+
+    
+		<link href="https://unpkg.com/highlightjs-badge/highlightjs/styles/railscasts.css" rel="stylesheet">
+		<!-- https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.1/build/styles/  for min version -->
+		<script src="https://unpkg.com/highlightjs-badge/highlightjs/highlight.pack.js"></script>
+		<script src="https://unpkg.com/highlightjs-badge/highlightjs-badge.min.js"></script>
+		<script>
+			var pres = document.querySelectorAll("pre>code");
+			for (var i = 0; i < pres.length; i++) {
+				hljs.highlightBlock(pres[i]);
+			}
+		</script>
+		
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+			<script>
+				var options = {
+					copyIconClass: "gg-clipboard",
+					checkIconClass: "gg-check"
+				};
+				window.highlightJsBadge(options);
+			</script>
+		
+
+	
+
+	
+	<script src="https://denisidoro.github.io/js/main.js"></script>
+
+    
+    
+
+	
+  </body>
+</html>
