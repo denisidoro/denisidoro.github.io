@@ -4,6 +4,9 @@
         <loc>https://denisidoro.github.io/</loc>
     </url>
     <url>
+        <loc>https://denisidoro.github.io/about/</loc>
+    </url>
+    <url>
         <loc>https://denisidoro.github.io/posts/</loc>
     </url>
     <url>
@@ -17,6 +20,10 @@
     <url>
         <loc>https://denisidoro.github.io/posts/data-driven-programming/</loc>
         <lastmod>2020-09-02</lastmod>
+    </url>
+    <url>
+        <loc>https://denisidoro.github.io/posts/data-structure-geolocation-history/</loc>
+        <lastmod>2022-10-31</lastmod>
     </url>
     <url>
         <loc>https://denisidoro.github.io/posts/dictionaries-in-shell-scripts/</loc>
@@ -51,12 +58,6 @@
         <lastmod>2018-10-01</lastmod>
     </url>
     <url>
-        <loc>https://denisidoro.github.io/posts/page/1/</loc>
-    </url>
-    <url>
-        <loc>https://denisidoro.github.io/posts/page/2/</loc>
-    </url>
-    <url>
         <loc>https://denisidoro.github.io/posts/react-native-kotlinjs/</loc>
         <lastmod>2018-04-23</lastmod>
     </url>
@@ -79,126 +80,69 @@
         <loc>https://denisidoro.github.io/tags/android/</loc>
     </url>
     <url>
-        <loc>https://denisidoro.github.io/tags/android/page/1/</loc>
-    </url>
-    <url>
         <loc>https://denisidoro.github.io/tags/architecture/</loc>
-    </url>
-    <url>
-        <loc>https://denisidoro.github.io/tags/architecture/page/1/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/blog/</loc>
     </url>
     <url>
-        <loc>https://denisidoro.github.io/tags/blog/page/1/</loc>
-    </url>
-    <url>
         <loc>https://denisidoro.github.io/tags/clojure/</loc>
-    </url>
-    <url>
-        <loc>https://denisidoro.github.io/tags/clojure/page/1/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/cloud/</loc>
     </url>
     <url>
-        <loc>https://denisidoro.github.io/tags/cloud/page/1/</loc>
-    </url>
-    <url>
         <loc>https://denisidoro.github.io/tags/dev/</loc>
-    </url>
-    <url>
-        <loc>https://denisidoro.github.io/tags/dev/page/1/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/finance/</loc>
     </url>
     <url>
-        <loc>https://denisidoro.github.io/tags/finance/page/1/</loc>
+        <loc>https://denisidoro.github.io/tags/geo/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/git/</loc>
     </url>
     <url>
-        <loc>https://denisidoro.github.io/tags/git/page/1/</loc>
-    </url>
-    <url>
         <loc>https://denisidoro.github.io/tags/go/</loc>
-    </url>
-    <url>
-        <loc>https://denisidoro.github.io/tags/go/page/1/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/grafana/</loc>
     </url>
     <url>
-        <loc>https://denisidoro.github.io/tags/grafana/page/1/</loc>
-    </url>
-    <url>
         <loc>https://denisidoro.github.io/tags/js/</loc>
-    </url>
-    <url>
-        <loc>https://denisidoro.github.io/tags/js/page/1/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/kotlin/</loc>
     </url>
     <url>
-        <loc>https://denisidoro.github.io/tags/kotlin/page/1/</loc>
-    </url>
-    <url>
         <loc>https://denisidoro.github.io/tags/learning/</loc>
-    </url>
-    <url>
-        <loc>https://denisidoro.github.io/tags/learning/page/1/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/monorepo/</loc>
     </url>
     <url>
-        <loc>https://denisidoro.github.io/tags/monorepo/page/1/</loc>
-    </url>
-    <url>
         <loc>https://denisidoro.github.io/tags/productivity/</loc>
-    </url>
-    <url>
-        <loc>https://denisidoro.github.io/tags/productivity/page/1/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/react/</loc>
     </url>
     <url>
-        <loc>https://denisidoro.github.io/tags/react/page/1/</loc>
+        <loc>https://denisidoro.github.io/tags/rust/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/sheets/</loc>
     </url>
     <url>
-        <loc>https://denisidoro.github.io/tags/sheets/page/1/</loc>
-    </url>
-    <url>
         <loc>https://denisidoro.github.io/tags/shell/</loc>
-    </url>
-    <url>
-        <loc>https://denisidoro.github.io/tags/shell/page/1/</loc>
     </url>
     <url>
         <loc>https://denisidoro.github.io/tags/tasker/</loc>
     </url>
     <url>
-        <loc>https://denisidoro.github.io/tags/tasker/page/1/</loc>
-    </url>
-    <url>
         <loc>https://denisidoro.github.io/tags/terminal/</loc>
     </url>
     <url>
-        <loc>https://denisidoro.github.io/tags/terminal/page/1/</loc>
-    </url>
-    <url>
         <loc>https://denisidoro.github.io/tags/termux/</loc>
-    </url>
-    <url>
-        <loc>https://denisidoro.github.io/tags/termux/page/1/</loc>
     </url>
 </urlset>

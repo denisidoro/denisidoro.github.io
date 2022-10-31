@@ -3,11 +3,196 @@
     <channel>
       <title>Denis Isidoro</title>
         <link>https://denisidoro.github.io</link>
-        <description></description>
+        <description>My blog</description>
         <generator>Zola</generator>
         <language>en</language>
         <atom:link href="https://denisidoro.github.io/rss.xml" rel="self" type="application/rss+xml"/>
-        <lastBuildDate>Mon, 13 Dec 2021 00:00:00 +0000</lastBuildDate>
+        <lastBuildDate>Mon, 31 Oct 2022 00:00:00 +0000</lastBuildDate>
+        <item>
+            <title>A memory-efficient data structure for geolocation history</title>
+            <pubDate>Mon, 31 Oct 2022 00:00:00 +0000</pubDate>
+            <link>https://denisidoro.github.io/posts/data-structure-geolocation-history/</link>
+            <guid>https://denisidoro.github.io/posts/data-structure-geolocation-history/</guid>
+            <description>&lt;p&gt;In this blog post I&#x27;ll cover how I built a memory-efficient data structure for storing location history data.&lt;&#x2F;p&gt;
+&lt;p&gt;Some Rust details will also be explained.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;motivation&quot;&gt;Motivation&lt;&#x2F;h3&gt;
+&lt;p&gt;My DSLR camera has no GPS built-in. Evidently, photos from it don&#x27;t include geolocation-based EXIF tags.&lt;&#x2F;p&gt;
+&lt;p&gt;If only my location history were stored somewhere, so that I could update photos with the correct data...&lt;&#x2F;p&gt;
+&lt;p&gt;Unsurprisingly, Google knows where I am, where I&#x27;ve been and where I&#x27;m going to be. They even allow me to export this data.&lt;&#x2F;p&gt;
+&lt;p&gt;The problem is that the exported JSON weighs ~1GB. My computer has 16GB of RAM so it can all fit in memory, but we certainly can store it more efficiently.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;json-parsing&quot;&gt;JSON parsing&lt;&#x2F;h3&gt;
+&lt;p&gt;For reference, here&#x27;s what the JSON looks like:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;json&quot; class=&quot;language-json &quot;&gt;&lt;code class=&quot;language-json&quot; data-lang=&quot;json&quot;&gt;{
+  &amp;quot;locations&amp;quot;: [{
+    &amp;quot;latitudeE7&amp;quot;: 435631892,
+    &amp;quot;longitudeE7&amp;quot;: 26848689,
+    &amp;quot;accuracy&amp;quot;: 56,
+    &amp;quot;activity&amp;quot;: [{
+      &amp;quot;activity&amp;quot;: [{
+        &amp;quot;type&amp;quot;: &amp;quot;STILL&amp;quot;,
+        &amp;quot;confidence&amp;quot;: 100
+      }],
+      &amp;quot;timestamp&amp;quot;: &amp;quot;2014-01-09T00:48:24.424Z&amp;quot;
+    }],
+    &amp;quot;source&amp;quot;: &amp;quot;WIFI&amp;quot;,
+    &amp;quot;deviceTag&amp;quot;: 1348159918,
+    &amp;quot;timestamp&amp;quot;: &amp;quot;2014-01-09T00:48:24.751Z&amp;quot;
+  }, {
+    &amp;quot;latitudeE7&amp;quot;: 435631881,
+    &amp;#x2F;&amp;#x2F; ...
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Deserializing a JSON file into a struct results in something that is certainly lighter than the JSON string.&lt;&#x2F;p&gt;
+&lt;p&gt;The reason for this is that a string with the value &lt;code&gt;&amp;quot;2022-10-22&amp;quot;&lt;&#x2F;code&gt; needs more bytes than, say, its equivalent &lt;code&gt;Date&lt;&#x2F;code&gt;  object.&lt;&#x2F;p&gt;
+&lt;p&gt;The latter can simply throw away the hyphens, for example. Additionally, the number 10 can be represented with 4 bits instead of using two chars, which occupy at least 8 bits each.&lt;&#x2F;p&gt;
+&lt;p&gt;So moving away from a textual representation is the first step in our journey.&lt;&#x2F;p&gt;
+&lt;p&gt;Instead of using a JSON deserializer per se, I decided to iterate over each line of the file and ignore the lines I wasn&#x27;t interested in.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;do-we-really-need-to-store-everything&quot;&gt;Do we really need to store everything?&lt;&#x2F;h3&gt;
+&lt;p&gt;A naive structure for our purposes is a sequence of &lt;code&gt;DataPoint&lt;&#x2F;code&gt;s, where &lt;code&gt;DataPoint&lt;&#x2F;code&gt; has &lt;code&gt;datetime&lt;&#x2F;code&gt;, &lt;code&gt;latitude&lt;&#x2F;code&gt; and &lt;code&gt;longitude&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;json&quot; class=&quot;language-json &quot;&gt;&lt;code class=&quot;language-json&quot; data-lang=&quot;json&quot;&gt;[
+ (DateTime(2022,10,22,10,45,32), 27.5226335, 43.552225),  
+ (DateTime(2022,10,22,10,46,21), 27.5226382, 43.552237),  
+ &amp;#x2F;&amp;#x2F; ...
+]  
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;But isn&#x27;t there some redundancy? The data is clearly not random.&lt;&#x2F;p&gt;
+&lt;p&gt;There are some assumptions we can make to help us design a better data structure:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Data points are sorted by time&lt;&#x2F;li&gt;
+&lt;li&gt;Neighbor data points are very similar
+&lt;ul&gt;
+&lt;li&gt;unless I&#x27;m on a plane, my speed is at most 100 km&#x2F;h, so in a minute I&#x27;ll travel less 2 km&lt;&#x2F;li&gt;
+&lt;li&gt;on foot I&#x27;ll travel just a few meters &lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Most of the days I stay inside a circle of 3km of radius&lt;&#x2F;li&gt;
+&lt;li&gt;One data point per minute is more than enough&lt;&#x2F;li&gt;
+&lt;li&gt;Errors in position up to 15m is something I&#x27;m OK with&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h3 id=&quot;how-many-bits-do-we-need-to-represent-a-position&quot;&gt;How many bits do we need to represent a position?&lt;&#x2F;h3&gt;
+&lt;p&gt;First let&#x27;s try to understand how much each decimal place contributes to precision.&lt;&#x2F;p&gt;
+&lt;p&gt;A quick search on Google gives us &lt;a href=&quot;https:&#x2F;&#x2F;gis.stackexchange.com&#x2F;questions&#x2F;8650&#x2F;measuring-accuracy-of-latitude-and-longitude&quot;&gt;the following&lt;&#x2F;a&gt;:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;- The first decimal place  is worth up to 11.1 km: it can distinguish the position of one large city from a neighboring large city.
+- The second decimal place is worth up to 1.1 km: it can separate one village from the next.
+- The third decimal place is worth up to 110 m: it can identify a large agricultural field or institutional campus.
+- The fourth decimal place is worth up to 11 m: it can identify a parcel of land. It is comparable to the typical accuracy of an uncorrected GPS unit with no interference.
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;If we want to have errors less than 15 m, then we need to be able to correctly represent the latitude and longitude up to the 4th decimal place.&lt;&#x2F;p&gt;
+&lt;p&gt;If both coordinates are off by 0.0001° then the error will be close to &lt;code&gt;sqrt(10^2+10^2) = 15 m&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Given that neighbor data points are close to each other, we can represent deltas in position instead of absolute positions.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s first try using a single byte to represent a delta in latitude.&lt;&#x2F;p&gt;
+&lt;p&gt;Given that we must represent the 4th decimal place precisely, we can have a range that goes from 0 to &lt;code&gt;2^7-1&lt;&#x2F;code&gt; = 127, where 0 translates to 0°; 1 to 0.0001°; and, as a consequence, 127 to 0.0127°. The remaining bit can be used to indicate if the difference is positive or negative.&lt;&#x2F;p&gt;
+&lt;p&gt;0.0127° of difference in both coordinates results in a distance of ~2.1km. This is good because, from assumption number 3, we can conclude that, for most days, most data points can be represented with deltas of only one byte for each coordinate.&lt;&#x2F;p&gt;
+&lt;p&gt;This conversion simply consists of a rule of three, so I&#x27;ll skip further details.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;how-many-bits-do-we-need-to-represent-time&quot;&gt;How many bits do we need to represent time?&lt;&#x2F;h3&gt;
+&lt;p&gt;From assumption number 4, we can discard seconds from timestamps.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s say that we&#x27;re looking at an interval of 20 years. 20 years is roughly equal to 10.5 million minutes.&lt;&#x2F;p&gt;
+&lt;p&gt;To represent this number we need &lt;code&gt;ceiling(log2(10.5 million))&lt;&#x2F;code&gt; = 24 bits.&lt;&#x2F;p&gt;
+&lt;p&gt;Rust doesn&#x27;t have a &lt;code&gt;u24&lt;&#x2F;code&gt; type. Even though we could implement a &lt;code&gt;u24&lt;&#x2F;code&gt; type with a tuple of &lt;code&gt;(u8, u16)&lt;&#x2F;code&gt;, in the end our  &lt;code&gt;u24&lt;&#x2F;code&gt; would end up using 4 bytes instead of 3:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;type struct u24 {
+  msb: u8,
+  lsb: u8
+}
+
+fn main() {
+   let x = u24 { msb: 1, lsb: 1 };
+   println!(&amp;quot;{} bytes&amp;quot;, x.deep_size_of()); &amp;#x2F;&amp;#x2F; 4 bytes
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This happens because of &lt;a href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;reference&#x2F;type-layout.html&quot;&gt;memory alignment&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;In Rust, we can circumvent this &amp;quot;limitation&amp;quot; by using the &lt;code&gt;repr&lt;&#x2F;code&gt; directive:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;#[repr(packed(1))]
+type struct u24 {
+  msb: u8,
+  lsb: u8
+}
+
+fn main() {
+   let x = u24 { msb: 1, lsb: 1 };
+   println!(&amp;quot;{} bytes&amp;quot;, x.deep_size_of()); &amp;#x2F;&amp;#x2F; 3 bytes
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;But even &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust-clippy&quot;&gt;clippy&lt;&#x2F;a&gt; complains about this, with the &lt;code&gt;unaligned_references&lt;&#x2F;code&gt; warning.&lt;&#x2F;p&gt;
+&lt;p&gt;So let&#x27;s stick with a &lt;code&gt;u32&lt;&#x2F;code&gt; for timestamps instead. Hey, at least we can now represent 8000+ years worth of data.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;getting-our-hands-dirty&quot;&gt;Getting our hands dirty&lt;&#x2F;h3&gt;
+&lt;p&gt;At its core, our database will do the following:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;fn add(&amp;amp;mut self, time: DateTime, lat: f32, lng: f32) {  
+   let point = self.low_precision_point(lat, lng);  
+   if error(point, lat, lng) &amp;gt; threshold {  
+      self.store_high_precision_point(time, lat, lng)  
+   } else {  
+      self.store_low_precision_point(point)  
+   }  
+}  
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Simply using the 0.0001°-based rule in the &lt;code&gt;error()&lt;&#x2F;code&gt; function isn&#x27;t enough because the error varies with your distance to the Equator. To be more precise, this function must calculate the &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Haversine_formula&quot;&gt;haversine distance&lt;&#x2F;a&gt; instead.&lt;&#x2F;p&gt;
+&lt;p&gt;This is more CPU-intensive but it&#x27;s a cost we need to pay at the time of writing only.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;defining-our-structs&quot;&gt;Defining our structs&lt;&#x2F;h3&gt;
+&lt;p&gt;Our data structure for low-precision datapoints can be a sequence of 2 1-byte positions, as mentioned above. We also need to have a reference to a high-precision point so that the final position is reference + delta.&lt;&#x2F;p&gt;
+&lt;p&gt;Our data structure for high-precision can be a sequence of minutes plus both coordinates.&lt;&#x2F;p&gt;
+&lt;p&gt;In the end we&#x27;ll have something like this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;type Minutes = u32
+type LatLng = (f32, f32)
+type LatLngDelta = (u8, u8)
+  
+struct Db {
+   high_precision_points: Vec&amp;lt;Minutes, LatLng&amp;gt;,  
+   low_precision_points: HashMap&amp;lt;Minutes, Vec&amp;lt;LatLngDelta&amp;gt;&amp;gt;  
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;I&#x27;ll skip the implementation details but you can check the full code &lt;a href=&quot;https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;c79282fa44aab10f5a33e838b8b1811f&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;benchmarking&quot;&gt;Benchmarking&lt;&#x2F;h3&gt;
+&lt;p&gt;After finishing everything, we can measure how many megabytes our data structure needs.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s insert data for the last couple of years into it and measure memory consumption:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;input points: 345 k
+high-precision data points: 42 k
+low-precision data points: 280 k
+high-precision structure size: 768 KB
+low-precision structure size: 2583 KB
+sum size: 3351 KB
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;In the end, less than 4 MB were occupied. &lt;&#x2F;p&gt;
+&lt;h3 id=&quot;oversized-vecs&quot;&gt;Oversized Vecs&lt;&#x2F;h3&gt;
+&lt;p&gt;There&#x27;s something odd with the numbers above: the &lt;code&gt;Vec&lt;&#x2F;code&gt;s should be smaller. &lt;&#x2F;p&gt;
+&lt;p&gt;If we have 42k elements of &lt;code&gt;32*3 bits&lt;&#x2F;code&gt; = 12 bytes each, the total sequence should have ~492KB, not 768KB.&lt;&#x2F;p&gt;
+&lt;p&gt;After some experiments, I realized that the &lt;code&gt;Vec&lt;&#x2F;code&gt;s were bigger than expected by 5 to 100%. In average, they were ~55% bigger.&lt;&#x2F;p&gt;
+&lt;p&gt;I then remembered that such data structures usually double their inner buffers when there&#x27;s no room for a new element.&lt;&#x2F;p&gt;
+&lt;p&gt;Fortunately, Rust offers a &lt;a href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;std&#x2F;vec&#x2F;struct.Vec.html#method.shrink_to_fit&quot;&gt;Vec::shrink_to_fit()&lt;&#x2F;a&gt; operation, which we can call after finishing mutating our database.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;benchmarking-1&quot;&gt;Benchmarking&lt;&#x2F;h3&gt;
+&lt;p&gt;Finally, here are our results:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;input points: 345 k
+high-precision data points: 42 k
+low-precision data points: 280 k
+high-precision structure size: 499 KB
+low-precision structure size: 2339 KB
+sum size: 2838 KB
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Let&#x27;s compare this to a naive &lt;code&gt;Vec&amp;lt;Timestamp, f64, f64&amp;gt;&lt;&#x2F;code&gt; implementation:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;input_points * (size_of_timestamp + 64 + 64) * average vec overhead
+354k * (64+64+64) * 1.5 bits
+121 MB
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Overall we saved around ~95% in memory!&lt;&#x2F;p&gt;
+&lt;p&gt;After fiddling with some thresholds, I noticed that, to achieve a 5m precision instead of 15m, the memory overhead is negligible:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;input points: 345 k
+high-precision data points: 46 k
+low-precision data points: 273 k
+high-precision structure size: 546 KB
+low-precision structure size: 2326 KB
+sum size: 2872 KB
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;So I decided to set the max error to 5m instead.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;future-improvements&quot;&gt;Future improvements&lt;&#x2F;h3&gt;
+&lt;p&gt;A high-precision data point occupies 32 bits for a timestamp and 32 bits for each coordinate. &lt;&#x2F;p&gt;
+&lt;p&gt;Timestamps could be represented with 24 bits, as mentioned above. 32 bits for each coordinate is unnecessary.&lt;&#x2F;p&gt;
+&lt;p&gt;We could use a &lt;code&gt;u64&lt;&#x2F;code&gt; for everything instead: with some bit shifting, 24 bits could be reserved for the timestamp and each coordinate could use 20 bits.&lt;&#x2F;p&gt;
+&lt;p&gt;This would decrease the size of these data points by &lt;code&gt;1-64&#x2F;(32*3)&lt;&#x2F;code&gt; = 33%.&lt;&#x2F;p&gt;
+&lt;p&gt;In addition, I wonder if we could use &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Quadtree#:%7E:text=A%20quadtree%20is%20a%20tree,into%20four%20quadrants%20or%20regions.&quot;&gt;QuadTrees&lt;&#x2F;a&gt; somehow...&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
+&lt;p&gt;This journey was clearly over-engineered.&lt;&#x2F;p&gt;
+&lt;p&gt;But I learned a lot as part of the process and I ended up with results very efficient memory-wise.&lt;&#x2F;p&gt;
+&lt;p&gt;Instead of asking &amp;quot;why?&amp;quot;, I asked &amp;quot;why not?&amp;quot; 😂  &lt;&#x2F;p&gt;
+</description>
+        </item>
         <item>
             <title>Faster monorepo workflow with materialized views</title>
             <pubDate>Mon, 13 Dec 2021 00:00:00 +0000</pubDate>
@@ -72,51 +257,51 @@
 &lt;p&gt;Without further ado, let&#x27;s get to it.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;0-a-setting-up-the-monorepo&quot;&gt;0.a. Setting up the monorepo&lt;&#x2F;h3&gt;
 &lt;p&gt;Let&#x27;s create the remote &lt;code&gt;mono&lt;&#x2F;code&gt; repository:&lt;&#x2F;p&gt;
-&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;mkdir -p ~&#x2F;github&#x2F;mono
-cd ~&#x2F;github&#x2F;mono
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;mkdir -p ~&amp;#x2F;github&amp;#x2F;mono
+cd ~&amp;#x2F;github&amp;#x2F;mono
 git init
 mkdir proj{1,2}
-for i in 1 2; do echo &quot;console.log(&#x27;proj${i}&#x27;)&quot; &gt; proj${i}&#x2F;file${i}.js; done
+for i in 1 2; do echo &amp;quot;console.log(&amp;#x27;proj${i}&amp;#x27;)&amp;quot; &amp;gt; proj${i}&amp;#x2F;file${i}.js; done
 git add . 
-git commit -am &#x27;First commit&#x27; 
+git commit -am &amp;#x27;First commit&amp;#x27; 
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;By the end of these steps, GitHub would host a monorepo like this:&lt;&#x2F;p&gt;
-&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;mono&#x2F;
-   proj1&#x2F;file1.js
-   proj2&#x2F;file2.js
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;mono&amp;#x2F;
+   proj1&amp;#x2F;file1.js
+   proj2&amp;#x2F;file2.js
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;h3 id=&quot;0-b-setting-up-the-microrepos&quot;&gt;0.b. Setting up the microrepos&lt;&#x2F;h3&gt;
 &lt;p&gt;Let&#x27;s create the remote microrepos:&lt;&#x2F;p&gt;
-&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;for i in 1 2; do git monorepo extract proj${i} ~&#x2F;github&#x2F;proj${i}; done
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;for i in 1 2; do git monorepo extract proj${i} ~&amp;#x2F;github&amp;#x2F;proj${i}; done
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;The first argument is the path to the project inside &lt;code&gt;mono&lt;&#x2F;code&gt;; the second argument is where the remote microrepo will live.&lt;&#x2F;p&gt;
 &lt;p&gt;Normally, the second argument would look like &lt;code&gt;https:&#x2F;&#x2F;github.com&#x2F;username&#x2F;proj1&lt;&#x2F;code&gt; or &lt;code&gt;git@github.com:username&#x2F;proj1&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
 &lt;p&gt;By the end of these steps, GitHub would host repositories like this:&lt;&#x2F;p&gt;
-&lt;pre&gt;&lt;code&gt;mono&#x2F;
+&lt;pre&gt;&lt;code&gt;mono&amp;#x2F;
    .gitmonorepo
-   proj1&#x2F;file1.js
-   proj2&#x2F;file2.js
-proj1&#x2F;
+   proj1&amp;#x2F;file1.js
+   proj2&amp;#x2F;file2.js
+proj1&amp;#x2F;
    file1.js
-proj2&#x2F;
+proj2&amp;#x2F;
    file2.js
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;The &lt;code&gt;.gitmonorepo&lt;&#x2F;code&gt; was automatically created to keep track of the microrepos. &lt;&#x2F;p&gt;
 &lt;h3 id=&quot;1-cloning-a-microrepo&quot;&gt;1. Cloning a microrepo&lt;&#x2F;h3&gt;
 &lt;p&gt;Let&#x27;s clone &lt;code&gt;proj1&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
-&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;mkdir -p ~&#x2F;dev
-cd ~&#x2F;dev
-git clone -b master ~&#x2F;github&#x2F;proj1
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;mkdir -p ~&amp;#x2F;dev
+cd ~&amp;#x2F;dev
+git clone -b master ~&amp;#x2F;github&amp;#x2F;proj1
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;h3 id=&quot;2-making-changes&quot;&gt;2. Making changes&lt;&#x2F;h3&gt;
 &lt;p&gt;Let&#x27;s develop a new feature. &lt;&#x2F;p&gt;
-&lt;pre&gt;&lt;code&gt;cd ~&#x2F;dev&#x2F;proj1
+&lt;pre&gt;&lt;code&gt;cd ~&amp;#x2F;dev&amp;#x2F;proj1
 git checkout master
 git pull origin master
 git checkout -b newfeature
-echo &quot;console.log(&#x27;newchange&#x27;)&quot; &gt;&gt; file1.js
+echo &amp;quot;console.log(&amp;#x27;newchange&amp;#x27;)&amp;quot; &amp;gt;&amp;gt; file1.js
 git add .
-git commit -am &quot;proj1&#x2F;newfeature: change file1.js&quot;
+git commit -am &amp;quot;proj1&amp;#x2F;newfeature: change file1.js&amp;quot;
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;h3 id=&quot;3-pushing-a-change-to-the-microrepo&quot;&gt;3. Pushing a change to the microrepo&lt;&#x2F;h3&gt;
 &lt;p&gt;Let&#x27;s push our changes to the remote &lt;code&gt;proj1&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
@@ -124,7 +309,7 @@ git commit -am &quot;proj1&#x2F;newfeature: change file1.js&quot;
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;h3 id=&quot;4-propagating-the-changes-to-the-monorepo&quot;&gt;4. Propagating the changes to the monorepo&lt;&#x2F;h3&gt;
 &lt;p&gt;The bot would automatically propagate the changes to &lt;code&gt;mono&lt;&#x2F;code&gt;, by running something like the following:&lt;&#x2F;p&gt;
-&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;cd ~&#x2F;github&#x2F;mono
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;cd ~&amp;#x2F;github&amp;#x2F;mono
 git monorepo pull newfeature
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Now, &lt;code&gt;~&#x2F;github&#x2F;mono&#x2F;proj1&#x2F;file1.js&lt;&#x2F;code&gt; should have the &lt;code&gt;newchange&lt;&#x2F;code&gt; line on the &lt;code&gt;newfeature&lt;&#x2F;code&gt; branch, but not in &lt;code&gt;master&lt;&#x2F;code&gt;. &lt;&#x2F;p&gt;
@@ -195,16 +380,16 @@ git merge newfeature
 &lt;p&gt;I won&#x27;t get into too much implementation details, but I basically used &lt;a href=&quot;https:&#x2F;&#x2F;play.google.com&#x2F;store&#x2F;apps&#x2F;details?id=net.dinglisch.android.taskerm&amp;amp;hl=en&amp;amp;gl=US&quot;&gt;Tasker&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;play.google.com&#x2F;store&#x2F;apps&#x2F;details?id=com.termux&amp;amp;hl=en&amp;amp;gl=US&quot;&gt;Termux&lt;&#x2F;a&gt;. I also installed the packages for &lt;a href=&quot;https:&#x2F;&#x2F;linux.die.net&#x2F;man&#x2F;1&#x2F;file&quot;&gt;file&lt;&#x2F;a&gt;, &lt;a href=&quot;https:&#x2F;&#x2F;exiftool.org&quot;&gt;exiftool&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;rclone.org&quot;&gt;rclone&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;The pseudo-code is as follows:&lt;&#x2F;p&gt;
 &lt;pre&gt;&lt;code&gt;every day at 2am:
-    for each photo in &#x2F;sdcard&#x2F;DCIM:
-        compress photo to &#x2F;sdcard&#x2F;Cloud&#x2F;GooglePhotos&#x2F;⋯.jpg
-        compress and zip photo to &#x2F;sdcard&#x2F;Cloud&#x2F;pCloud&#x2F;⋯.jpg.7z
+    for each photo in &amp;#x2F;sdcard&amp;#x2F;DCIM:
+        compress photo to &amp;#x2F;sdcard&amp;#x2F;Cloud&amp;#x2F;GooglePhotos&amp;#x2F;⋯.jpg
+        compress and zip photo to &amp;#x2F;sdcard&amp;#x2F;Cloud&amp;#x2F;pCloud&amp;#x2F;⋯.jpg.7z
         ...
-        zip photo to &#x2F;sdcard&#x2F;Cloud&#x2F;Terabox&#x2F;⋯.jpg.7z
-        move photo to &#x2F;sdcard&#x2F;Cloud&#x2F;Telegram&#x2F;⋯.jpg
+        zip photo to &amp;#x2F;sdcard&amp;#x2F;Cloud&amp;#x2F;Terabox&amp;#x2F;⋯.jpg.7z
+        move photo to &amp;#x2F;sdcard&amp;#x2F;Cloud&amp;#x2F;Telegram&amp;#x2F;⋯.jpg
 
 every day at 3am, if wifi is connected:
-    for each file in &#x2F;sdcard&#x2F;Cloud&#x2F;&lt;provider&gt;:
-        move file to &lt;provider&gt;
+    for each file in &amp;#x2F;sdcard&amp;#x2F;Cloud&amp;#x2F;&amp;lt;provider&amp;gt;:
+        move file to &amp;lt;provider&amp;gt;
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;h3 id=&quot;compression&quot;&gt;Compression&lt;&#x2F;h3&gt;
 &lt;p&gt;A photo is compressed for each storage provider accordingly.&lt;&#x2F;p&gt;
@@ -222,9 +407,9 @@ every day at 3am, if wifi is connected:
 &lt;p&gt;Its API allows file uploads using a simple POST request. The response body contains a &lt;code&gt;file_id&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;We can download the attachment by making a request to &lt;code&gt;https:&#x2F;&#x2F;⋯.telegram.org&#x2F;⋯?file_id=&amp;lt;file_id&amp;gt;&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;We thus need to keep this &lt;code&gt;file_id&lt;&#x2F;code&gt; in a database. My Tasker task stores this in &lt;code&gt;&#x2F;sdcard&#x2F;Tasker&#x2F;db&#x2F;telegram_uploads.txt&lt;&#x2F;code&gt; and its contents look like this:&lt;&#x2F;p&gt;
-&lt;pre data-lang=&quot;txt&quot; class=&quot;language-txt &quot;&gt;&lt;code class=&quot;language-txt&quot; data-lang=&quot;txt&quot;&gt;&#x2F;Pictures&#x2F;IMG_00.jpg;123456
-&#x2F;Pictures&#x2F;IMG_01.jpg;789012
-&#x2F;Pictures&#x2F;IMG_02.jpg;654321
+&lt;pre data-lang=&quot;txt&quot; class=&quot;language-txt &quot;&gt;&lt;code class=&quot;language-txt&quot; data-lang=&quot;txt&quot;&gt;&amp;#x2F;Pictures&amp;#x2F;IMG_00.jpg;123456
+&amp;#x2F;Pictures&amp;#x2F;IMG_01.jpg;789012
+&amp;#x2F;Pictures&amp;#x2F;IMG_02.jpg;654321
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Having this database in hand, we can even design a primitive web-based file manager, for example.&lt;&#x2F;p&gt;
 &lt;p&gt;The database is replicated across all other storage providers, using the aforementioned methods.&lt;&#x2F;p&gt;
@@ -279,40 +464,40 @@ every day at 3am, if wifi is connected:
     &lt;figcaption style=&quot;font-size: 0.8em&quot;&gt;This sheet contains all numeric data&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt; 
 &lt;p&gt;In Javascript we can read from and write to this sheet as if we were using a real timeseries database. Effectively, this made my new code look very similar to the previous ones:&lt;&#x2F;p&gt;
-&lt;pre data-lang=&quot;js&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&#x2F;&#x2F; old 
+&lt;pre data-lang=&quot;js&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&amp;#x2F;&amp;#x2F; old 
 influx.emit(today, 3.12)
-&#x2F;&#x2F; new
-tsdbSheet.setValue(&#x27;D67&#x27;) = 3.12
+&amp;#x2F;&amp;#x2F; new
+tsdbSheet.setValue(&amp;#x27;D67&amp;#x27;) = 3.12
  
-&#x2F;&#x2F; old 
-config = readFromFile(&#x27;.&#x2F;config.yaml&#x27;)
+&amp;#x2F;&amp;#x2F; old 
+config = readFromFile(&amp;#x27;.&amp;#x2F;config.yaml&amp;#x27;)
 foo = config.foo
-&#x2F;&#x2F; new
-foo = configSheet.getValue(&#x27;A2&#x27;)
+&amp;#x2F;&amp;#x2F; new
+foo = configSheet.getValue(&amp;#x27;A2&amp;#x27;)
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;h3 id=&quot;abstractions&quot;&gt;Abstractions&lt;&#x2F;h3&gt;
 &lt;p&gt;These low-level spreadsheet operations were abstracted away, in order to make the rest of the code agnostic to Google Sheets. Should I decide to port it elsewhere, I&#x27;ll only need to edit some parts from the &lt;code&gt;TSDB&lt;&#x2F;code&gt;, &lt;code&gt;EventLog&lt;&#x2F;code&gt; and &lt;code&gt;Config&lt;&#x2F;code&gt; classes.&lt;&#x2F;p&gt;
 &lt;p&gt;For example, calculating balances looks like this:&lt;&#x2F;p&gt;
-&lt;pre data-lang=&quot;js&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;config.assets.forEach(asset -&gt; {
-   const balance = range(startDate, today).map(date =&gt; {
+&lt;pre data-lang=&quot;js&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;config.assets.forEach(asset -&amp;gt; {
+   const balance = range(startDate, today).map(date =&amp;gt; {
       const value = someMath(asset, date, tsdb)
       return [date, value] 
    }
-   tsdb.save(asset.id, &#x27;balance&#x27;, balance)
+   tsdb.save(asset.id, &amp;#x27;balance&amp;#x27;, balance)
 })
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Getting historical data for stocks isn&#x27;t any different:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;js&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;config.assets
-   .filter(asset =&gt; asset.kind == &#x27;stock&#x27;) 
-   .forEach(stock =&gt; {
+   .filter(asset =&amp;gt; asset.kind == &amp;#x27;stock&amp;#x27;) 
+   .forEach(stock =&amp;gt; {
       const price = callSomeApi(asset.id)
-      tsdb.save(asset.id, &#x27;price&#x27;, price) 
+      tsdb.save(asset.id, &amp;#x27;price&amp;#x27;, price) 
    }) 
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Similarly, to prevent some input, the following is executed on startup:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;js&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;config.assets
-   .filter(asset -&gt; asset.reachedMaturity())
-   .forEach(asset -&gt; eventLog.save(&#x27;sell&#x27;, asset.id, asset.maturityDate))
+   .filter(asset -&amp;gt; asset.reachedMaturity())
+   .forEach(asset -&amp;gt; eventLog.save(&amp;#x27;sell&amp;#x27;, asset.id, asset.maturityDate))
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Finally, this allowed me to achieve what I already had in the early designs but with 3 benefits:&lt;&#x2F;p&gt;
 &lt;ul&gt;
@@ -380,16 +565,16 @@ foo = configSheet.getValue(&#x27;A2&#x27;)
 &lt;p&gt;I&#x27;ve been using &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;yarpc&#x2F;yab&quot;&gt;yab&lt;&#x2F;a&gt; —a curl-like CLI— recently and I was surprised by how elegantly it solves a common problem.&lt;&#x2F;p&gt;
 &lt;p&gt;yab calls can get quite verbose. As an example, to get a &lt;code&gt;Customer&lt;&#x2F;code&gt; by its &lt;code&gt;id&lt;&#x2F;code&gt; from a &lt;code&gt;customer&lt;&#x2F;code&gt; microservice:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;yab customer Customer::get \
-    -t &#x2F;path&#x2F;to&#x2F;idl&#x2F;some.company&#x2F;customer&#x2F;customer.thrift \
-    -P 131.144.23.5&#x2F;customer:tchannel \
-    -r &#x27;{&quot;request&quot;: {&quot;id&quot;: 11}}&#x27;
+    -t &amp;#x2F;path&amp;#x2F;to&amp;#x2F;idl&amp;#x2F;some.company&amp;#x2F;customer&amp;#x2F;customer.thrift \
+    -P 131.144.23.5&amp;#x2F;customer:tchannel \
+    -r &amp;#x27;{&amp;quot;request&amp;quot;: {&amp;quot;id&amp;quot;: 11}}&amp;#x27;
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;The call is pretty convoluted, but it can be simplified by storing params in a yaml file:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;yaml&quot; class=&quot;language-yaml &quot;&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;# customer_by_id.yaml
 service: customer
-procedure: &quot;Customer::get&quot;
-thrift: &#x2F;path&#x2F;to&#x2F;idl&#x2F;some.company&#x2F;customer&#x2F;customer.thrift
-peer-list: 131.144.23.5&#x2F;customer:tchannel
+procedure: &amp;quot;Customer::get&amp;quot;
+thrift: &amp;#x2F;path&amp;#x2F;to&amp;#x2F;idl&amp;#x2F;some.company&amp;#x2F;customer&amp;#x2F;customer.thrift
+peer-list: 131.144.23.5&amp;#x2F;customer:tchannel
 request:
   request:
     id: ${number:11}
@@ -407,18 +592,18 @@ request:
 &lt;h1 id=&quot;solution&quot;&gt;Solution&lt;&#x2F;h1&gt;
 &lt;p&gt;For the sake of simplicity, let&#x27;s try to write a complex &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;httpie&#x2F;httpie&quot;&gt;httpie&lt;&#x2F;a&gt; command. It could be an involved &lt;code&gt;awk&lt;&#x2F;code&gt;, &lt;code&gt;grep&lt;&#x2F;code&gt; or &lt;code&gt;jq&lt;&#x2F;code&gt; command, though.&lt;&#x2F;p&gt;
 &lt;p&gt;The final call should look like this:&lt;&#x2F;p&gt;
-&lt;pre&gt;&lt;code&gt;http -v POST https:&#x2F;&#x2F;jsonplaceholder.typicode.com&#x2F;posts title=foo body=bar userId=11
+&lt;pre&gt;&lt;code&gt;http -v POST https:&amp;#x2F;&amp;#x2F;jsonplaceholder.typicode.com&amp;#x2F;posts title=foo body=bar userId=11
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;The tool I&#x27;m going to use is &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;navi&quot;&gt;navi&lt;&#x2F;a&gt;. It allows you to browse through cheatsheets —that you may write yourself or download from maintainers— and execute commands. &lt;&#x2F;p&gt;
 &lt;p&gt;navi encourages you to write &lt;code&gt;.cheat&lt;&#x2F;code&gt; files which break commands down into smaller, reusable pieces:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;% httpie
 
 # make a request to a typicode microservice
-http -v &lt;method&gt; &quot;https:&#x2F;&#x2F;&lt;service&gt;.typicode.com&#x2F;&lt;endpoint&gt;&quot; &lt;http-body&gt;
+http -v &amp;lt;method&amp;gt; &amp;quot;https:&amp;#x2F;&amp;#x2F;&amp;lt;service&amp;gt;.typicode.com&amp;#x2F;&amp;lt;endpoint&amp;gt;&amp;quot; &amp;lt;http-body&amp;gt;
 
-$ method: echo -e &#x27;GET\nPOST\nPUT&#x27;
-$ service: echo -e &#x27;jsonplaceholder\nanotherservice&#x27;
-$ endpoint: case &quot;${service}:${method}&quot; in; &quot;jsonplaceholder:post&quot;) echo -e &#x27;e1\ne2\ne3&#x27;;; esac
+$ method: echo -e &amp;#x27;GET\nPOST\nPUT&amp;#x27;
+$ service: echo -e &amp;#x27;jsonplaceholder\nanotherservice&amp;#x27;
+$ endpoint: case &amp;quot;${service}:${method}&amp;quot; in; &amp;quot;jsonplaceholder:post&amp;quot;) echo -e &amp;#x27;e1\ne2\ne3&amp;#x27;;; esac
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;The &lt;code&gt;endpoint&lt;&#x2F;code&gt; values here are incomplete for briefness and, in a real-world scenario, would probably be fetched dynamically, instead of being harcoded.&lt;&#x2F;p&gt;
 &lt;p&gt;This &lt;code&gt;.cheat&lt;&#x2F;code&gt; enables us to very quickly make a request to any endpoint in our company, given that we somehow mapped all possible values to the corresponding variables. &lt;&#x2F;p&gt;
@@ -426,42 +611,41 @@ $ endpoint: case &quot;${service}:${method}&quot; in; &quot;jsonplaceholder:post
 &lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;% httpie, endpoints
 
 # create a post
-http -v &lt;method&gt; &quot;https:&#x2F;&#x2F;&lt;service&gt;.typicode.com&#x2F;&lt;endpoint&gt;&quot; title=&lt;title&gt; body=&lt;body&gt; userId=&lt;userId&gt;
+http -v &amp;lt;method&amp;gt; &amp;quot;https:&amp;#x2F;&amp;#x2F;&amp;lt;service&amp;gt;.typicode.com&amp;#x2F;&amp;lt;endpoint&amp;gt;&amp;quot; title=&amp;lt;title&amp;gt; body=&amp;lt;body&amp;gt; userId=&amp;lt;userId&amp;gt;
 
-$ method: echo &#x27;POST&#x27;
-$ service: echo &#x27;jsonplaceholder&#x27;
-$ endpoint: echo &#x27;posts&#x27;
-$ title: echo &#x27;foo&#x27;
-$ body: echo &#x27;bar&#x27;
-$ userId: echo &#x27;11&#x27;
+$ method: echo &amp;#x27;POST&amp;#x27;
+$ service: echo &amp;#x27;jsonplaceholder&amp;#x27;
+$ endpoint: echo &amp;#x27;posts&amp;#x27;
+$ title: echo &amp;#x27;foo&amp;#x27;
+$ body: echo &amp;#x27;bar&amp;#x27;
+$ userId: echo &amp;#x27;11&amp;#x27;
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;There are a multitude of ways to invoke this cheatsheet. One of them is like this:&lt;&#x2F;p&gt;
-&lt;script id=&quot;asciicast-Su5eUYFHn7M5A6Yccvcv7WH7k&quot; src=&quot;https:&#x2F;&#x2F;asciinema.org&#x2F;a&#x2F;Su5eUYFHn7M5A6Yccvcv7WH7k.js&quot; async&gt;&lt;&#x2F;script&gt;
-&lt;h3 id=&quot;preventing-user-interaction&quot;&gt;Preventing user interaction&lt;&#x2F;h3&gt;
+&lt;script id=&quot;asciicast-Su5eUYFHn7M5A6Yccvcv7WH7k&quot; src=&quot;https:&#x2F;&#x2F;asciinema.org&#x2F;a&#x2F;Su5eUYFHn7M5A6Yccvcv7WH7k.js&quot; async&gt;&lt;&#x2F;script&gt;&lt;h3 id=&quot;preventing-user-interaction&quot;&gt;Preventing user interaction&lt;&#x2F;h3&gt;
 &lt;p&gt;If no interaction is wanted we could override values using environment variables and autoselect the desired command by using the &lt;code&gt;--best-match&lt;&#x2F;code&gt; flag:&lt;&#x2F;p&gt;
-&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;userId=12 navi --query &#x27;http endpoints create post&#x27; --best-match
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;userId=12 navi --query &amp;#x27;http endpoints create post&amp;#x27; --best-match
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Let&#x27;s say that we want to skip the &lt;code&gt;--query&lt;&#x2F;code&gt; and &lt;code&gt;--best-match&lt;&#x2F;code&gt; boilerplate and we know that we&#x27;re always gonna use this tool for &lt;code&gt;http endpoints&lt;&#x2F;code&gt;. A simple bash script  come to the rescue:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;export_var() {
-   local -r var=&quot;${1&#x2F;&#x2F;-&#x2F;_}&quot;
-   export &quot;$var&quot;=&quot;$2&quot;
+   local -r var=&amp;quot;${1&amp;#x2F;&amp;#x2F;-&amp;#x2F;_}&amp;quot;
+   export &amp;quot;$var&amp;quot;=&amp;quot;$2&amp;quot;
 }
 
 endpoint() {
    local var
    for v in $@; do
     case $v in
-        --*) var=&quot;${v:2}&quot; ;;
-        *) export_var &quot;$var&quot; &quot;$v&quot; ;;
+        --*) var=&amp;quot;${v:2}&amp;quot; ;;
+        *) export_var &amp;quot;$var&amp;quot; &amp;quot;$v&amp;quot; ;;
     esac
    done
 
-   navi --query &quot;http endpoints ${query}&quot; --best-match
+   navi --query &amp;quot;http endpoints ${query}&amp;quot; --best-match
 }
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;And we could call it as follows:&lt;&#x2F;p&gt;
-&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;endpoint &#x27;create post&#x27;
-endpoint &#x27;create post&#x27; --userId 12
+&lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;endpoint &amp;#x27;create post&amp;#x27;
+endpoint &amp;#x27;create post&amp;#x27; --userId 12
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
 &lt;p&gt;I hope that, with these tips, using the terminal becomes easier for you. &lt;&#x2F;p&gt;
@@ -574,6 +758,7 @@ endpoint &#x27;create post&#x27; --userId 12
     &lt;div &gt;
     &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;10a79e0d5b5591a5da733f07bcd25233.js&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
+
     &lt;figcaption&gt;
     Is this code correct? Is there a typo? Should &lt;code&gt;containers&lt;&#x2F;code&gt; be a direct child of &lt;code&gt;spec&lt;&#x2F;code&gt; or &lt;code&gt;selector&lt;&#x2F;code&gt;? I know that &lt;code&gt;ports&lt;&#x2F;code&gt; has a &lt;code&gt;containerPort&lt;&#x2F;code&gt; field, but does it have any other one? If so, is it a string or a number?
 &lt;&#x2F;figcaption&gt;
@@ -625,6 +810,7 @@ endpoint &#x27;create post&#x27; --userId 12
     &lt;div &gt;
     &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;5932b86b92fc520c57fd7e07730f59eb.js&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
+
     &lt;figcaption&gt;In IntelliJ, if you typed BillingAddress, an Intellisense window would show us all possible fields. If we forgot the street field, the editor would suggest us to add it.&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;
 &lt;p&gt;This is exactly what &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Kotlin&#x2F;anko&quot;&gt;Anko&lt;&#x2F;a&gt; does in order to build Android UIs, for example.&lt;&#x2F;p&gt;
@@ -634,8 +820,7 @@ endpoint &#x27;create post&#x27; --userId 12
     This post first appeared on
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;on-data-driven-programming-925e450525e3&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 
-&lt;&#x2F;div&gt;
-</description>
+&lt;&#x2F;div&gt;</description>
         </item>
         <item>
             <title>Quick prototyping with a Golang REPL</title>
@@ -655,8 +840,7 @@ endpoint &#x27;create post&#x27; --userId 12
 
     
 
-&lt;&#x2F;figure&gt;
-&lt;h3 id=&quot;why-use-a-repl&quot;&gt;Why use a REPL?&lt;&#x2F;h3&gt;
+&lt;&#x2F;figure&gt;&lt;h3 id=&quot;why-use-a-repl&quot;&gt;Why use a REPL?&lt;&#x2F;h3&gt;
 &lt;p&gt;Because it allows rapid experimentation and gives feedbacks instantaneously. Will my complex regex work? Instead of double-checking everything let’s just eval one case. When selecting a substring is the last index exclusive or not? Instead of reading the documentation let’s just try it out with an example.&lt;&#x2F;p&gt;
 &lt;p&gt;Data scientists usually do this with &lt;a href=&quot;https:&#x2F;&#x2F;jupyter.org&#x2F;&quot;&gt;Jupyter Notebooks&lt;&#x2F;a&gt;, for example, but this is a practice which still isn’t ubiquitous in the backend&#x2F;frontend&#x2F;devops scene.&lt;&#x2F;p&gt;
 &lt;p&gt;For more use cases, please check one video about &lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;results?search_query=repl+driven+development&quot;&gt;REPL driven development&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
@@ -677,8 +861,7 @@ endpoint &#x27;create post&#x27; --userId 12
     This post first appeared on
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;quick-prototyping-with-a-golang-repl-547703885bd8&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 
-&lt;&#x2F;div&gt;
-</description>
+&lt;&#x2F;div&gt;</description>
         </item>
         <item>
             <title>Using dictionaries in shell scripts</title>
@@ -713,8 +896,7 @@ endpoint &#x27;create post&#x27; --userId 12
     This post first appeared on
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;dictionaries-in-shell-scripts-61d34e1c91c6&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 
-&lt;&#x2F;div&gt;
-</description>
+&lt;&#x2F;div&gt;</description>
         </item>
         <item>
             <title>Writing multi-module, monolithic apps with graph APIs</title>
@@ -828,8 +1010,7 @@ endpoint &#x27;create post&#x27; --userId 12
     This post first appeared on
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;writing-multi-module-monolithic-apps-with-graph-apis-1c095cdaccdf&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 
-&lt;&#x2F;div&gt;
-</description>
+&lt;&#x2F;div&gt;</description>
         </item>
         <item>
             <title>Using Grafana for personal financial management</title>
@@ -913,8 +1094,7 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
 
     
 
-&lt;&#x2F;figure&gt;
-&lt;h3 id=&quot;tabular-and-scalar-data&quot;&gt;Tabular and scalar data&lt;&#x2F;h3&gt;
+&lt;&#x2F;figure&gt;&lt;h3 id=&quot;tabular-and-scalar-data&quot;&gt;Tabular and scalar data&lt;&#x2F;h3&gt;
 &lt;p&gt;Even though piping data to Graphite made my life easier, it limited possibilities. There’s no simple way to display in a table all the info for yielding investments. Or adding a single stat with the next investment maturity date.&lt;&#x2F;p&gt;
 &lt;p&gt;It became clear I had to add a second data source. Considering that some steps before I already had all the data in Clojure code, I decided to upgrade the Clojure scripts to an HTTP server.&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
@@ -965,8 +1145,7 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
     This post first appeared on
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;using-grafana-for-personal-financial-management-ac0e4d0cb43&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 
-&lt;&#x2F;div&gt;
-</description>
+&lt;&#x2F;div&gt;</description>
         </item>
         <item>
             <title>On microservice splitting and code refactoring</title>
@@ -1047,8 +1226,7 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
     This post first appeared on
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;microservice-size-and-splitting-dd9fc98a262e&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 
-&lt;&#x2F;div&gt;
-</description>
+&lt;&#x2F;div&gt;</description>
         </item>
         <item>
             <title>Moving from Medium</title>
@@ -1065,8 +1243,7 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
     This post first appeared on
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;new-posts-moving-from-medium-f4e9ae4acc19&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 
-&lt;&#x2F;div&gt;
-</description>
+&lt;&#x2F;div&gt;</description>
         </item>
         <item>
             <title>Using Clojure + GraalVM for shell scripting</title>
@@ -1086,24 +1263,23 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
 
     
 
-&lt;&#x2F;figure&gt;
-&lt;h3 id=&quot;motivation&quot;&gt;Motivation&lt;&#x2F;h3&gt;
+&lt;&#x2F;figure&gt;&lt;h3 id=&quot;motivation&quot;&gt;Motivation&lt;&#x2F;h3&gt;
 &lt;p&gt;Objective: develop a shell script to ease the writing of XML files.&lt;&#x2F;p&gt;
 &lt;p&gt;Let’s say that the output to be generated is:&lt;&#x2F;p&gt;
-&lt;pre data-lang=&quot;xml&quot; class=&quot;language-xml &quot;&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;grid&gt;   
-  &lt;row&gt;   
-     &lt;label id=&quot;info&quot; &#x2F;&gt;   
-     &lt;text&gt;Now playing&lt;&#x2F;text&gt;   
-  &lt;&#x2F;row&gt;   
-  &lt;row&gt;   
-     &lt;button onTap=&quot;mute&quot; &#x2F;&gt;   
-  &lt;&#x2F;row&gt;   
-&lt;&#x2F;grid&gt;
+&lt;pre data-lang=&quot;xml&quot; class=&quot;language-xml &quot;&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&amp;lt;grid&amp;gt;   
+  &amp;lt;row&amp;gt;   
+     &amp;lt;label id=&amp;quot;info&amp;quot; &amp;#x2F;&amp;gt;   
+     &amp;lt;text&amp;gt;Now playing&amp;lt;&amp;#x2F;text&amp;gt;   
+  &amp;lt;&amp;#x2F;row&amp;gt;   
+  &amp;lt;row&amp;gt;   
+     &amp;lt;button onTap=&amp;quot;mute&amp;quot; &amp;#x2F;&amp;gt;   
+  &amp;lt;&amp;#x2F;row&amp;gt;   
+&amp;lt;&amp;#x2F;grid&amp;gt;
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;I’d like to write it as:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;clojure&quot; class=&quot;language-clojure &quot;&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;[:grid [:row [:label {:id :info}]   
-             [:text &quot;Now playing&quot;]]   
-       [:row [:button :onTap &quot;mute&quot;]]]
+             [:text &amp;quot;Now playing&amp;quot;]]   
+       [:row [:button :onTap &amp;quot;mute&amp;quot;]]]
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;By the way, this syntax is a subset of &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;edn-format&#x2F;edn&quot;&gt;EDN&lt;&#x2F;a&gt; and called &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;weavejester&#x2F;hiccup&quot;&gt;hiccup&lt;&#x2F;a&gt;, used by frameworks such as &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Day8&#x2F;re-frame&quot;&gt;re-frame&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;This way, in &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;dotfiles&quot;&gt;my dotfiles&lt;&#x2F;a&gt;, I can store, versionate and compose my configs as hiccup files and not as XML ones.&lt;&#x2F;p&gt;
@@ -1121,12 +1297,12 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
 &lt;h3 id=&quot;speeding-up-with-graalvm&quot;&gt;Speeding up with GraalVM&lt;&#x2F;h3&gt;
 &lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.graalvm.org&#x2F;&quot;&gt;GraalVM&lt;&#x2F;a&gt; is a universal virtual machine for running applications written in JavaScript, Ruby, JVM-based languages and more.&lt;&#x2F;p&gt;
 &lt;p&gt;By using &lt;a href=&quot;https:&#x2F;&#x2F;www.graalvm.org&#x2F;docs&#x2F;reference-manual&#x2F;aot-compilation&#x2F;&quot;&gt;AOT compilation&lt;&#x2F;a&gt; we can compile our clj scripts to native code, which doesn’t rely on the JVM. The benefit? Let’s compare startup times:&lt;&#x2F;p&gt;
-&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;λ echo &#x27;[:table]&#x27; | time clj -m xml 
-&lt;table &#x2F;&gt; 
+&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;λ echo &amp;#x27;[:table]&amp;#x27; | time clj -m xml 
+&amp;lt;table &amp;#x2F;&amp;gt; 
 clj -m xml 9.88s user 0.68s system 293% cpu 3.593 total 
 
-λ echo &#x27;[:table]&#x27; | time native-binary 
-&lt;table &#x2F;&gt; 
+λ echo &amp;#x27;[:table]&amp;#x27; | time native-binary 
+&amp;lt;table &amp;#x2F;&amp;gt; 
 native-binary 0.01s user 0.01s system 79% cpu 0.019 total
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;That’s 200x faster!&lt;&#x2F;p&gt;
@@ -1138,8 +1314,7 @@ native-binary 0.01s user 0.01s system 79% cpu 0.019 total
     This post first appeared on
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;using-clojure-graalvm-for-shell-scripting-da0bcc8955d4&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 
-&lt;&#x2F;div&gt;
-</description>
+&lt;&#x2F;div&gt;</description>
         </item>
         <item>
             <title>Save 15min a day: tips for faster development</title>
@@ -1174,10 +1349,10 @@ The purpose of this post isn’t simply about showing what I learned. Instead, i
 &lt;p&gt;I think it’s fundamental to navigate around your file system.&lt;br &#x2F;&gt;
 As an exercise, let’s &lt;em&gt;cd&lt;&#x2F;em&gt; to a mobile app from work. &lt;br &#x2F;&gt;
 This is a simple, tedious and time-consuming way to do it.&lt;&#x2F;p&gt;
-&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;cd ~&#x2F;dev&#x2F;work&#x2F;mobile
+&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;cd ~&amp;#x2F;dev&amp;#x2F;work&amp;#x2F;mobile
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Creating a simple &lt;strong&gt;alias function&lt;&#x2F;strong&gt; already saves us some keystrokes:&lt;&#x2F;p&gt;
-&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;cdw() { cd &quot;$HOME&#x2F;dev&#x2F;work&#x2F;$1&quot;; }  
+&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;cdw() { cd &amp;quot;$HOME&amp;#x2F;dev&amp;#x2F;work&amp;#x2F;$1&amp;quot;; }  
 cdw mobile
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;But we still can do much better. An improved version of this could be achieved using the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;junegunn&#x2F;fzf&quot;&gt;&lt;strong&gt;fzf command&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;. fzf is a fuzzy-finder that allows you to interactively choose an input from &lt;em&gt;stdin&lt;&#x2F;em&gt;. I use it for everything and folder browsing isn’t an exception.&lt;&#x2F;p&gt;
@@ -1187,10 +1362,10 @@ cdw mobile
 &lt;p&gt;So, in a single command we get for free: listing, a nice interface and matching by substrings. We also added another arity to our command that _cd_s to the best match directly. Nice, isn’t it?&lt;&#x2F;p&gt;
 &lt;p&gt;A more generic approach would be using the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;clvv&#x2F;fasd&quot;&gt;&lt;strong&gt;fasd command&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;. Fasd keeps track of every folder you &lt;em&gt;cd&lt;&#x2F;em&gt; into and scores them by frecency: a metric based on frequency and recency, so it knows where you probably wanna go to.&lt;br &#x2F;&gt;
 This way, if I have already visited the mobile folder, I can simply type ‘’mob’’ and I’m done.&lt;&#x2F;p&gt;
-&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;~&#x2F;Downloads  
+&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;~&amp;#x2F;Downloads  
 λ j mob
 
-~&#x2F;dev&#x2F;work&#x2F;mobile  
+~&amp;#x2F;dev&amp;#x2F;work&amp;#x2F;mobile  
 λ
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;From this, we can come up with a lot of interesting commands.&lt;br &#x2F;&gt;
@@ -1238,8 +1413,7 @@ Using &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;dotfile
 
     
 
-&lt;&#x2F;figure&gt;
-&lt;h3 id=&quot;git&quot;&gt;Git&lt;&#x2F;h3&gt;
+&lt;&#x2F;figure&gt;&lt;h3 id=&quot;git&quot;&gt;Git&lt;&#x2F;h3&gt;
 &lt;p&gt;The most straightforward tip is to use &lt;a href=&quot;https:&#x2F;&#x2F;gist.github.com&#x2F;mwhite&#x2F;6887990&quot;&gt;&lt;strong&gt;shell aliases&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;.&lt;br &#x2F;&gt;
 So, instead of typing the following…&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git checkout master  
@@ -1328,8 +1502,7 @@ ab4fc fixes
 
     
 
-&lt;&#x2F;figure&gt;
-&lt;figure class=&quot;medium-image&quot;&gt;
+&lt;&#x2F;figure&gt;&lt;figure class=&quot;medium-image&quot;&gt;
 
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*wIsFO0z5cXTo9Te2LABH6g.png&quot;
@@ -1357,8 +1530,7 @@ ab4fc fixes
 
     
 
-&lt;&#x2F;figure&gt;
-&lt;h3 id=&quot;shell-scripting&quot;&gt;Shell scripting&lt;&#x2F;h3&gt;
+&lt;&#x2F;figure&gt;&lt;h3 id=&quot;shell-scripting&quot;&gt;Shell scripting&lt;&#x2F;h3&gt;
 &lt;p&gt;Another fundamental skill to be efficient is to write shell scripts hassle-free.We studied programming and are usually hired to develop scalable, high-quality microservices or applications, not for performing tedious, easy tasks.&lt;br &#x2F;&gt;
 If it’s common for you to think that ‘’it would be nice to have a script for X, but the time it’ll take to write it isn’t worth it’’, then let’s think about it as a chemistry reaction:&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
@@ -1392,11 +1564,12 @@ Using &lt;a href=&quot;http:&#x2F;&#x2F;docopt.org&#x2F;&quot;&gt;&lt;strong&gt;
     &lt;div &gt;
     &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;9ab91e30c9ae277072d1740b710e6d43.js&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
+
     &lt;figcaption&gt;With docopt, you don’t need to write parsers. Instead, you just write the script documentation&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;
 &lt;p&gt;&lt;strong&gt;Don’t throw away your scripts&lt;&#x2F;strong&gt;, even if they are simple. Instead, put them in a folder, document them and make them available to your disposal whenever you need. I never remember the command for spawning a new Android emulator, for example, but I can always remember how to type &lt;code&gt;dot android emu start&lt;&#x2F;code&gt;. In particular, I divide all my scripts into non-nested folders and make them callable by a &lt;code&gt;dot&lt;&#x2F;code&gt; command.&lt;&#x2F;p&gt;
-&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;$ $ANDROID_HOME&#x2F;tools&#x2F;emulator start     # is it like this?  
-$ $ANDROID_SDK&#x2F;tools&#x2F;emulator -avd nexus # maybe like this?  
+&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;$ $ANDROID_HOME&amp;#x2F;tools&amp;#x2F;emulator start     # is it like this?  
+$ $ANDROID_SDK&amp;#x2F;tools&amp;#x2F;emulator -avd nexus # maybe like this?  
 # checks StackOverflow, other references or simply...  
 $ dot android emu start                  # there you go!
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
@@ -1409,12 +1582,13 @@ Use Python, Ruby or NodeJS.&lt;&#x2F;p&gt;
     &lt;div class=&quot;youtube&quot;&gt;
     &lt;iframe src=&quot;https:&#x2F;&#x2F;www.youtube-nocookie.com&#x2F;embed&#x2F;U17CLayt_aA&quot; webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;&#x2F;iframe&gt;
 &lt;&#x2F;div&gt;
+
     &lt;figcaption&gt;A demonstration showcasing bspwm&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;
 &lt;p&gt;For Linux, &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;i3&#x2F;i3&quot;&gt;i3wm&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;baskerville&#x2F;bspwm&quot;&gt;bspwm&lt;&#x2F;a&gt; are some options; for OSX, &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;koekeishiya&#x2F;chunkwm&quot;&gt;chunkwm&lt;&#x2F;a&gt; and spectacle; for Windows, &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;fuhsjr00&#x2F;bug.n&quot;&gt;bugn&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;Have a &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;dotfiles&quot;&gt;&lt;strong&gt;dotfiles repository&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt; on Github. This way, it’s easy to share your setup with your colleagues. But most importantly: all your setup becomes centralized and you’re always two commands away (or some minutes away) from having your ideal config:&lt;&#x2F;p&gt;
-&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git clone https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;dotfiles.git ~&#x2F;.dotfiles  
-bash ~&#x2F;.dotfiles&#x2F;scripts&#x2F;environment&#x2F;init
+&lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git clone https:&amp;#x2F;&amp;#x2F;github.com&amp;#x2F;denisidoro&amp;#x2F;dotfiles.git ~&amp;#x2F;.dotfiles  
+bash ~&amp;#x2F;.dotfiles&amp;#x2F;scripts&amp;#x2F;environment&amp;#x2F;init
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Use &lt;strong&gt;consistent keybindings&lt;&#x2F;strong&gt; across applications. My memory is limited, so it’s nice to memorize commands only once and extend them to other usages. &lt;code&gt;HJKL&lt;&#x2F;code&gt;, for example, is reserved for directions in my setup: cursor position and buffer selection on text editors, window selection and resizing on my window manager, scrolling on Chrome, moving between folders on ranger, etc. By the way, &lt;strong&gt;sequential keybindings&lt;&#x2F;strong&gt; help a lot. I can never remember commands like &lt;code&gt;cmd + option + shift + whatever&lt;&#x2F;code&gt;, but commands that follow a pattern are pretty straightforward:&lt;&#x2F;p&gt;
 &lt;pre&gt;&lt;code&gt;Focus window left:   CapsLock + H  
@@ -1464,8 +1638,7 @@ If you’re lazy, you’ll get uncomfortable with time-demanding processes and i
     This post first appeared on
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;save-15min-a-day-tips-for-faster-development-67a31f3498bf&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 
-&lt;&#x2F;div&gt;
-</description>
+&lt;&#x2F;div&gt;</description>
         </item>
         <item>
             <title>Writing multi-platform mobile apps with React Native and KotlinJS</title>
@@ -1590,8 +1763,7 @@ An example repository can be found &lt;a href=&quot;https:&#x2F;&#x2F;github.com
 
     
 
-&lt;&#x2F;figure&gt;
-&lt;h3 id=&quot;so-is-kotlin-with-react-native-production-ready&quot;&gt;So… Is Kotlin with React Native production-ready?&lt;&#x2F;h3&gt;
+&lt;&#x2F;figure&gt;&lt;h3 id=&quot;so-is-kotlin-with-react-native-production-ready&quot;&gt;So… Is Kotlin with React Native production-ready?&lt;&#x2F;h3&gt;
 &lt;p&gt;Possibly, but there are still some improvements to be made to the whole ecosystem. The interoperability with JavaScript isn’t effortless and has some pitfalls. For example, passing the store via props to the component won’t work because the state will become immutable. Also, using data classes for the props directly will return an error from React because apparently the serialization contains some metadata. In addition, you’re supposed to write your own type definitions, which is a huge productivity killer.&lt;&#x2F;p&gt;
 &lt;p&gt;I think JetBrains is to blame for the unpopularity of KotlinJS, by not giving the language the love it deserves. &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Kotlin&#x2F;ts2kt&quot;&gt;Kotlin&#x2F;ts2kt&lt;&#x2F;a&gt;, for instance, could solve the type definition problem. However, most of the attempts for converting types fail, and the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Kotlin&#x2F;ts2kt&#x2F;issues&quot;&gt;issues remain open&lt;&#x2F;a&gt;. Actually, we don’t see many examples targeting JS at all, despite the fact that this a working platform for more than a year. Maybe they are focused on &lt;a href=&quot;https:&#x2F;&#x2F;kotlinlang.org&#x2F;docs&#x2F;reference&#x2F;native-overview.html&quot;&gt;Kotlin&#x2F;Native&lt;&#x2F;a&gt;…&lt;&#x2F;p&gt;
 &lt;p&gt;In the meantime, another alternative to JavaScript is &lt;a href=&quot;https:&#x2F;&#x2F;clojurescript.org&#x2F;&quot;&gt;Clojurescript&lt;&#x2F;a&gt;, which is awesome with &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Day8&#x2F;re-frame&quot;&gt;re-frame&lt;&#x2F;a&gt; and in my opinion offers the best development experience out there. However, it’s not for the faint-hearted.&lt;&#x2F;p&gt;
@@ -1601,8 +1773,7 @@ An example repository can be found &lt;a href=&quot;https:&#x2F;&#x2F;github.com
     This post first appeared on
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;writing-multi-platform-mobile-apps-with-react-native-and-kotlin-50f486b53462&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 
-&lt;&#x2F;div&gt;
-</description>
+&lt;&#x2F;div&gt;</description>
         </item>
     </channel>
 </rss>

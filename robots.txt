@@ -1,2 +1,3 @@
 User-agent: *
+Allow: /
 Sitemap: https://denisidoro.github.io/sitemap.xml
