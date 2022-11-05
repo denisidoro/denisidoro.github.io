@@ -7,18 +7,279 @@
         <generator>Zola</generator>
         <language>en</language>
         <atom:link href="https://denisidoro.github.io/rss.xml" rel="self" type="application/rss+xml"/>
-        <lastBuildDate>Mon, 31 Oct 2022 00:00:00 +0000</lastBuildDate>
+        <lastBuildDate>Sat, 05 Nov 2022 00:00:00 +0000</lastBuildDate>
+        <item>
+            <title>A memory-efficient data structure for geolocation history (rev2)</title>
+            <pubDate>Sat, 05 Nov 2022 00:00:00 +0000</pubDate>
+            <link>https://denisidoro.github.io/posts/data-structure-geolocation-history-rev2/</link>
+            <guid>https://denisidoro.github.io/posts/data-structure-geolocation-history-rev2/</guid>
+            <description>&lt;p&gt;In this blog post I&#x27;ll cover how I built a memory-efficient data structure for storing location history data.&lt;&#x2F;p&gt;
+&lt;p&gt;Some Rust details will also be explained.&lt;&#x2F;p&gt;
+&lt;p&gt;This article is a rewrite of my &lt;a href=&quot;https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;data-structure-geolocation-history&#x2F;&quot;&gt;previous one&lt;&#x2F;a&gt;, after taking into account &lt;a href=&quot;https:&#x2F;&#x2F;www.reddit.com&#x2F;r&#x2F;rust&#x2F;comments&#x2F;yil0i8&#x2F;blog_post_a_memoryefficient_data_structure_for&quot;&gt;feedback from Reddit&lt;&#x2F;a&gt; and further researching the topic.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;motivation&quot;&gt;Motivation&lt;&#x2F;h2&gt;
+&lt;p&gt;My DSLR camera has no GPS built-in. Evidently, photos from it don&#x27;t include geolocation-based EXIF tags.&lt;&#x2F;p&gt;
+&lt;p&gt;If only my location history were stored somewhere, so that I could update photos with the correct data...&lt;&#x2F;p&gt;
+&lt;p&gt;Unsurprisingly, Google knows where I am, where I&#x27;ve been &lt;del&gt;and where I&#x27;m going to be&lt;&#x2F;del&gt;. They even allow me to export this data.&lt;&#x2F;p&gt;
+&lt;p&gt;The problem is that the exported JSON weighs ~1GB. My computer has 16GB of RAM so it can all fit in memory, but we certainly can store it more efficiently.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;json-parsing&quot;&gt;JSON parsing&lt;&#x2F;h2&gt;
+&lt;p&gt;For reference, here&#x27;s what the JSON looks like:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;json&quot; class=&quot;language-json &quot;&gt;&lt;code class=&quot;language-json&quot; data-lang=&quot;json&quot;&gt;{
+  &amp;quot;locations&amp;quot;: [{
+    &amp;quot;latitudeE7&amp;quot;: 435631892,
+    &amp;quot;longitudeE7&amp;quot;: 26848689,
+    &amp;quot;accuracy&amp;quot;: 56,
+    &amp;quot;activity&amp;quot;: [{
+      &amp;quot;activity&amp;quot;: [{
+        &amp;quot;type&amp;quot;: &amp;quot;STILL&amp;quot;,
+        &amp;quot;confidence&amp;quot;: 100
+      }],
+      &amp;quot;timestamp&amp;quot;: &amp;quot;2014-01-09T00:48:24.424Z&amp;quot;
+    }],
+    &amp;quot;source&amp;quot;: &amp;quot;WIFI&amp;quot;,
+    &amp;quot;deviceTag&amp;quot;: 1348159918,
+    &amp;quot;timestamp&amp;quot;: &amp;quot;2014-01-09T00:48:24.751Z&amp;quot;
+  }, {
+    &amp;quot;latitudeE7&amp;quot;: 435631881,
+    &amp;#x2F;&amp;#x2F; ...
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Deserializing a JSON file into a struct results in something that is certainly lighter than the JSON string.&lt;&#x2F;p&gt;
+&lt;p&gt;The reason for this is that a string with the value &lt;code&gt;&amp;quot;2022-10-22&amp;quot;&lt;&#x2F;code&gt; needs more bytes than, say, its equivalent &lt;code&gt;Date&lt;&#x2F;code&gt;  object.&lt;&#x2F;p&gt;
+&lt;p&gt;The latter can simply throw away the hyphens, for example. Additionally, the number 10 can be represented with 4 bits instead of using two chars, which occupy at least 8 bits each.&lt;&#x2F;p&gt;
+&lt;p&gt;So moving away from a textual representation is the first step in our journey.&lt;&#x2F;p&gt;
+&lt;p&gt;The simplest way to deserialize this data is to put its contents into a &lt;code&gt;String&lt;&#x2F;code&gt; and then pass it to your Json deserializer or choice. &lt;&#x2F;p&gt;
+&lt;p&gt;The problem of this approach is that the &lt;code&gt;String&lt;&#x2F;code&gt; will occupy ~1GB of RAM, even if for just a couple of seconds. &lt;&#x2F;p&gt;
+&lt;p&gt;Ideally, we should have a stream of data and keep deserializing small chunks at a time. &lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;m pretty sure there are some libraries out there capable of that but I decided to simply iterate over each line of the file, extract relevant data and ignore the lines I wasn&#x27;t interested in.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;do-we-really-need-to-store-everything&quot;&gt;Do we really need to store everything?&lt;&#x2F;h2&gt;
+&lt;p&gt;The most straightforward structure for our purposes is a sequence of &lt;code&gt;DataPoint&lt;&#x2F;code&gt;s, where &lt;code&gt;DataPoint&lt;&#x2F;code&gt; has &lt;code&gt;datetime&lt;&#x2F;code&gt;, &lt;code&gt;latitude&lt;&#x2F;code&gt; and &lt;code&gt;longitude&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;[
+   (DateTime(2022,10,22,10,45,32), 27.5226335, 43.552225),  
+   (DateTime(2022,10,22,10,46,21), 27.5226382, 43.552237),  
+   &amp;#x2F;&amp;#x2F; ...
+]  
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;But isn&#x27;t there some redundancy? The data is clearly not random.&lt;&#x2F;p&gt;
+&lt;p&gt;There are some assumptions we can make to help us design a better data structure:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Data points are sorted by time&lt;&#x2F;li&gt;
+&lt;li&gt;Neighbor data points are very similar
+&lt;ul&gt;
+&lt;li&gt;unless I&#x27;m on a plane, my speed is at most 100 km&#x2F;h, so in a minute I&#x27;ll travel less 2 km&lt;&#x2F;li&gt;
+&lt;li&gt;on foot I&#x27;ll travel just a few meters &lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Most of the days I stay inside a circle of 3km of radius&lt;&#x2F;li&gt;
+&lt;li&gt;One data point per minute is more than enough&lt;&#x2F;li&gt;
+&lt;li&gt;Errors in position up to 15m is something I&#x27;m OK with&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h2 id=&quot;estimating-size-of-straightforward-solution&quot;&gt;Estimating size of straightforward solution&lt;&#x2F;h2&gt;
+&lt;p&gt;Throughout this post, let&#x27;s consider 2.5 years worth of data, including 345k data points. &lt;&#x2F;p&gt;
+&lt;p&gt;Each data point consumes 64 bits for the timestamp and we can store each coordinate with a &lt;code&gt;f64&lt;&#x2F;code&gt;. &lt;&#x2F;p&gt;
+&lt;p&gt;In total we need ~11.8 MB (if you did the math and think this off by ~50% please see &lt;a href=&quot;https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;data-structure-geolocation-history-rev2&#x2F;#oversized-vecs&quot;&gt;this section&lt;&#x2F;a&gt;).&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;how-many-decimal-places-do-we-need-to-represent-a-coordinate&quot;&gt;How many decimal places do we need to represent a coordinate?&lt;&#x2F;h2&gt;
+&lt;p&gt;First let&#x27;s try to understand how much each decimal place contributes to precision.&lt;&#x2F;p&gt;
+&lt;p&gt;A quick search on Google gives us &lt;a href=&quot;https:&#x2F;&#x2F;gis.stackexchange.com&#x2F;questions&#x2F;8650&#x2F;measuring-accuracy-of-latitude-and-longitude&quot;&gt;the following&lt;&#x2F;a&gt;:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;markdown&quot; class=&quot;language-markdown &quot;&gt;&lt;code class=&quot;language-markdown&quot; data-lang=&quot;markdown&quot;&gt;- The first decimal place is worth up to 11.1 km
+   - it can distinguish the position of one large city from a neighboring large city
+- The second decimal place is worth up to 1.1 km
+   - it can separate one village from the next
+- The third decimal place is worth up to 110 m
+   - it can identify a large agricultural field or institutional campus
+- The fourth decimal place is worth up to 11 m
+   - it can identify a parcel of land
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;If we want to have errors less than 15 m, we need to be able to correctly represent the latitude and longitude up to the 4th decimal place.&lt;&#x2F;p&gt;
+&lt;p&gt;If both coordinates are off by 0.0001° then the error will be close to &lt;code&gt;sqrt(11^2+11^2) ~ 15 m&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;how-many-bits-do-we-need-to-represent-time&quot;&gt;How many bits do we need to represent time?&lt;&#x2F;h2&gt;
+&lt;p&gt;For our purposes, &lt;a href=&quot;https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;data-structure-geolocation-history&#x2F;#how-many-bits-do-we-need-to-represent-time&quot;&gt;24 bits would be enough&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;However, we don&#x27;t need to store timestamps. &lt;&#x2F;p&gt;
+&lt;p&gt;Instead of having at most one data point per minute, we can have exactly one data point per minute.&lt;&#x2F;p&gt;
+&lt;p&gt;It&#x27;s cheaper to just duplicate data for missing timestamps. The duplication of data is surely unfortunate, but having to spend 24 bits for every minute of data is worse.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;the-plan&quot;&gt;The plan&lt;&#x2F;h2&gt;
+&lt;p&gt;Suppose our data looks like this:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th align=&quot;center&quot;&gt;Timestamp&lt;&#x2F;th&gt;&lt;th align=&quot;center&quot;&gt;Latitude&lt;&#x2F;th&gt;&lt;th align=&quot;center&quot;&gt;Longitude&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;2022-10-15 16h13&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;26.1234&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;43.5678&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;2022-10-15 16h14&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;26.1235&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;43.5677&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;2022-10-15 16h15&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;26.1236&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;43.5678&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;We could delta-encode it so that all points (except the first one) are just the difference from the previous value:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th align=&quot;center&quot;&gt;Timestamp&lt;&#x2F;th&gt;&lt;th align=&quot;center&quot;&gt;Latitude&lt;&#x2F;th&gt;&lt;th align=&quot;center&quot;&gt;Longitude&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;+1 min&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;+0.0001&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;-0.0001&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;+1 min&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;+0.0001&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;+0.0001&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;The data clearly becomes easier to reason about and is arguably &amp;quot;smaller&amp;quot;.&lt;&#x2F;p&gt;
+&lt;p&gt;But when using an &lt;code&gt;f32&lt;&#x2F;code&gt; to represent a number, it doesn&#x27;t matter if it&#x27;s &lt;code&gt;26.1234&lt;&#x2F;code&gt; or &lt;code&gt;0.0001&lt;&#x2F;code&gt;: they will both occupy 32 bits.  So we need a way to make small numbers occupy less memory.&lt;&#x2F;p&gt;
+&lt;p&gt;Finally it would be nice to somehow merge the latitude and longitude columns, so that we can keep track of a single value instead of having to store 2 deltas for each minute.&lt;&#x2F;p&gt;
+&lt;p&gt;To recap, the plan is to:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;merge latitude and longitude into a single value&lt;&#x2F;li&gt;
+&lt;li&gt;delta-encode the data&lt;&#x2F;li&gt;
+&lt;li&gt;store small numbers efficiently&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h2 id=&quot;representing-2d-data-with-a-single-number&quot;&gt;Representing 2D data with a single number&lt;&#x2F;h2&gt;
+&lt;p&gt;The objective here is to come up with a function &lt;code&gt;f(pos: (f32, f32)) -&amp;gt; u32&lt;&#x2F;code&gt; and an &amp;quot;inverse&amp;quot; function &lt;code&gt;g(n: u32) -&amp;gt; (f32, f32)&lt;&#x2F;code&gt; such that &lt;code&gt;error(pos, g(f(pos))) &amp;lt; ε&lt;&#x2F;code&gt;, for any valid &lt;code&gt;pos&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;In our case, &lt;code&gt;ε&lt;&#x2F;code&gt; = 15 m.&lt;&#x2F;p&gt;
+&lt;p&gt;The most straightforward way to do it is like so:&lt;&#x2F;p&gt;
+&lt;figure&gt;
+    &lt;img src=&quot;&#x2F;posts&#x2F;geo-snakelike.webp&quot; width=&quot;70%&quot; &#x2F;&gt;
+    &lt;figcaption&gt;In this approach, we travel a full row, move one step up&#x2F;down, travel another full row and so on. Source: 3b1b&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt; 
+&lt;p&gt;The problem with this algorithm is that the distance between neighbour points isn&#x27;t necessarily small.&lt;&#x2F;p&gt;
+&lt;p&gt;Suppose we move one step to the right. The distance traveled will be one unit. Great!&lt;&#x2F;p&gt;
+&lt;p&gt;Now suppose we move one step up. The distance traveled will be &lt;code&gt;grid.cols&lt;&#x2F;code&gt;, which is certainly more than we&#x27;d like. This means that moving &lt;code&gt;+0.0001&lt;&#x2F;code&gt; in latitude could result in a distance of thousands of units, yet we want deltas to be as small as possible.&lt;&#x2F;p&gt;
+&lt;p&gt;A more elegant solution would be to use &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Hilbert_curve&quot;&gt;Hilbert curves&lt;&#x2F;a&gt;:&lt;&#x2F;p&gt;
+&lt;figure&gt;
+    &lt;img src=&quot;&#x2F;posts&#x2F;geo-hilbert.webp&quot; width=&quot;70%&quot; &#x2F;&gt;
+    &lt;figcaption&gt;The Hilbert curve is a continuous fractal space-filling curve. Source: 3b1b&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt; 
+&lt;&#x2F;figure&gt; 
+&lt;p&gt;Now, if we move one unit, the traveled distance will generally be small, regardless of the movement being horizontal or vertical.&lt;&#x2F;p&gt;
+&lt;p&gt;For resolutions big enough, this will remain true for most points, except the ones at &amp;quot;boundaries&amp;quot; (e.g. going from a red cell to a green one).&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=3s7h2MHQtxc&quot;&gt;This video from 3b1b&lt;&#x2F;a&gt; explains the concept of space-filling in detail. It&#x27;s worth checking it out!&lt;&#x2F;p&gt;
+&lt;p&gt;That said, I decided to go with a simpler strategy, which is close to the concept of &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Binary_space_partitioning&quot;&gt;binary space partitioning&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Here&#x27;s the idea:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;is our point in the left hemisphere or right?
+&lt;ul&gt;
+&lt;li&gt;if left, set first bit to 0; otherwise, 1&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;is our point in the south hemisphere or north? 
+&lt;ul&gt;
+&lt;li&gt;if south, set second bit to 0; otherwise, 1&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;is our point in the left half of the region in &lt;code&gt;1&lt;&#x2F;code&gt; or right? 
+&lt;ul&gt;
+&lt;li&gt;if left, set third bit to 0; otherwise, 1&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;is our point in the south half of the region in &lt;code&gt;2&lt;&#x2F;code&gt; or north? 
+&lt;ul&gt;
+&lt;li&gt;if south, set fourth bit to 0; otherwise, 1&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;...&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;Here&#x27;s an image depicting the process of representing the yellow circle:&lt;&#x2F;p&gt;
+&lt;figure style=&quot;margin-left: 0; margin-right: 0&quot;&gt;
+    &lt;img src=&quot;&#x2F;posts&#x2F;geo-worldmap.webp&quot;&gt;
+    &lt;figcaption&gt;Whenever we decide on a region in the horizontal space, the selected region becomes greener; likewise, pinker for vertical regions.&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt; 
+&lt;p&gt;One nice property of this algorithm is that, as we take more decisions (i.e. as resolution gets more fine-grained), we&#x27;re simply adding more bits.&lt;&#x2F;p&gt;
+&lt;p&gt;This means we can throw away less significant bits as we see fit.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;storing-small-numbers-efficiently&quot;&gt;Storing small numbers efficiently&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;1209.2137.pdf&quot;&gt;This paper&lt;&#x2F;a&gt; describes a lot of different methods.&lt;&#x2F;p&gt;
+&lt;p&gt;I decided to use a modified version of the Simple8b algorithm because of, as you&#x27;ve probably guessed, its simplicity.&lt;&#x2F;p&gt;
+&lt;p&gt;The idea is to divide a &lt;code&gt;u64&lt;&#x2F;code&gt; into 2 parts: a &lt;code&gt;selector&lt;&#x2F;code&gt; of 4 bits, and a &lt;code&gt;data&lt;&#x2F;code&gt; region of 60 bits.&lt;&#x2F;p&gt;
+&lt;p&gt;The selector determines how many bits each number inside &lt;code&gt;data&lt;&#x2F;code&gt; will take.&lt;&#x2F;p&gt;
+&lt;p&gt;For example, for &lt;code&gt;selector&lt;&#x2F;code&gt;=15, we store 60 numbers of 1 bit each; for &lt;code&gt;selector&lt;&#x2F;code&gt;=14 (= 1110 in binary), we store 30 numbers of 2 bits each:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;markdown&quot; class=&quot;language-markdown &quot;&gt;&lt;code class=&quot;language-markdown&quot; data-lang=&quot;markdown&quot;&gt;      4 bits                             60 bits
+=== selector === | ====================== data ========================
+       1110        01  10  00  10  11              ...               01
+  (= 14 in dec)    |    |   └ third number                            | 
+                   |    └ second number                               |
+                   first number                             30th number
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;I made 2 modifications to this algorithm that allowed me to compress data even further.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;modification-1-representing-a-lot-of-zeros&quot;&gt;Modification 1: representing (a lot of) zeros&lt;&#x2F;h3&gt;
+&lt;p&gt;As mentioned above, we&#x27;re adding one data point to our data structure for every minute. But what if there&#x27;s simply no data for an entire month? &lt;&#x2F;p&gt;
+&lt;p&gt;The good news is that the deltas will be a lot of zeros, if we decide to simply copy the latest data point over and over.&lt;&#x2F;p&gt;
+&lt;p&gt;The bad news is that we&#x27;ll have a lot of unnecessary zeros.&lt;&#x2F;p&gt;
+&lt;p&gt;So I changed the algorithm so that when &lt;code&gt;selector&lt;&#x2F;code&gt;=1, &lt;code&gt;data&lt;&#x2F;code&gt; is the count of zeros we&#x27;re trying to represent. So let&#x27;s say that we have 1 billion consecutive zeros. Instead of needing 1 billion numbers to represent this data, we can simply create a Simple8b-compressed &lt;code&gt;u64&lt;&#x2F;code&gt; with &lt;code&gt;selector&lt;&#x2F;code&gt;=1 and &lt;code&gt;data&lt;&#x2F;code&gt;=1 billion.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;modification-2-not-tracking-the-count-of-elements&quot;&gt;Modification 2: not tracking the count of elements&lt;&#x2F;h3&gt;
+&lt;p&gt;Unfortunately, the Simple8b-compressed &lt;code&gt;u64&lt;&#x2F;code&gt; doesn&#x27;t contain the number of elements compressed.&lt;&#x2F;p&gt;
+&lt;p&gt;For example, this test fails:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;let input0 = [2, 76, 3, 5, 7, 2, 0, 0];
+let input1 = [2, 76, 3, 5, 7, 2];
+let inverse0 = simple8b::decompress(simple8b::compress(input0));
+let inverse1 = simple8b::decompress(simple8b::compress(input1));
+
+&amp;#x2F;&amp;#x2F; passes
+assert_eq!(input0, inverse0);
+
+&amp;#x2F;&amp;#x2F; fails: inverse1 = input0, with the extra zeros
+assert_eq!(input1, inverse1);
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This is also unfortunate because keeping track of this count (which requires at least 8 bits), defeats the purpose of compressing: we may save a few bits here and there but, with this cost of 8 bits per &lt;code&gt;u64&lt;&#x2F;code&gt;, perhaps the final size will be bigger than the original.&lt;&#x2F;p&gt;
+&lt;p&gt;In Simple8b, a zero means a lack of data, so there&#x27;s no way to distinguish between trailing zeros or absence of data.&lt;&#x2F;p&gt;
+&lt;p&gt;My change was really simple: whenever we try to store a number &lt;code&gt;n&lt;&#x2F;code&gt;, we actually store &lt;code&gt;n+1&lt;&#x2F;code&gt;. Conversely, when retrieving a number &lt;code&gt;m&lt;&#x2F;code&gt;, we actually return &lt;code&gt;m-1 = n&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;This way any zeros we find during decompression indicate that the actual data has already ended.&lt;&#x2F;p&gt;
+&lt;p&gt;The downside of this approach is that &lt;code&gt;selector&lt;&#x2F;code&gt;=15 (60 numbers of 1 bit each) becomes useless: normally this could only happen if we had a bunch of 0s and 1s. But now a 1 becomes a 2, so this can only be possible if we have a lot of 0s only. In this case &lt;code&gt;selector&lt;&#x2F;code&gt;=1 will be used.&lt;&#x2F;p&gt;
+&lt;p&gt;But we would probably not have this scenario of multiple 0s and 1s to begin with: unless I kept moving ~1 cm per minute for a long period of time. 😅&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;representing-deltas&quot;&gt;Representing deltas&lt;&#x2F;h2&gt;
+&lt;p&gt;Alright, so we can now represent both coordinates with a single number and store a bunch of these numbers efficiently.&lt;&#x2F;p&gt;
+&lt;p&gt;A position at time &lt;code&gt;i&lt;&#x2F;code&gt; can then be represented as &lt;code&gt;position_i = position_0 + sum(delta_i, i = 0 to i)&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;But &lt;code&gt;delta_i&lt;&#x2F;code&gt; is a &lt;code&gt;u64&lt;&#x2F;code&gt;, which is an unsigned integer. How can we represent negative numbers?&lt;&#x2F;p&gt;
+&lt;p&gt;This is easy. We can simply bit shift to the left and use the least-significant bit to represent the sign:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;fn to_unsigned_delta(signed_delta: i128) -&amp;gt; u64 {
+   if signed_delta &amp;gt;= 0 {
+      (signed_delta &amp;lt;&amp;lt; 1) as u64
+   } else {
+      ((signed_delta &amp;lt;&amp;lt; 1) + 1) as u64
+   }
+}
+
+fn delta(unsigned_delta: u64) -&amp;gt; (u64, bool) {
+   let is_positive = unsigned_delta % 2 == 0;
+   let signed_delta = unsigned_delta &amp;gt;&amp;gt; 1;
+   (signed_delta, is_positive)
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;getting-our-hands-dirty&quot;&gt;Getting our hands dirty&lt;&#x2F;h2&gt;
+&lt;p&gt;Finally, at its core, our data structure will do the following:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;fn add(&amp;amp;mut self, time: DateTime, pos: (f32, f32)) -&amp;gt; Result&amp;lt;()&amp;gt; {  
+   self.add_missing_data(time, pos);
+   let delta = calculate_delta(self.last_pos, pos);
+   self.fail_if_error_is_too_big(delta, pos)?; &amp;#x2F;&amp;#x2F; optional
+   self.push_point(delta);
+   self.last_pos = pos;
+   Ok(())
+}  
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Just to be safe, before pushing the latest delta, I&#x27;m calculating if the &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Haversine_formula&quot;&gt;haversine distance&lt;&#x2F;a&gt; is below &lt;code&gt;ε&lt;&#x2F;code&gt; = 15 meters. This is more precise because the the error varies with the distance to the Equator. &lt;&#x2F;p&gt;
+&lt;h2 id=&quot;benchmarking&quot;&gt;Benchmarking&lt;&#x2F;h2&gt;
+&lt;p&gt;After finishing everything, we can measure how many megabytes our data structure needs.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s insert data for the last couple of years into it and measure memory consumption:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;markdown&quot; class=&quot;language-markdown &quot;&gt;&lt;code class=&quot;language-markdown&quot; data-lang=&quot;markdown&quot;&gt;input points: 345 k
+packed u64s: 56 k
+total size: 512 KB
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;oversized-vecs&quot;&gt;Oversized Vecs&lt;&#x2F;h2&gt;
+&lt;p&gt;There&#x27;s something odd with the numbers above: the &lt;code&gt;Vec&lt;&#x2F;code&gt; should be smaller. &lt;&#x2F;p&gt;
+&lt;p&gt;If we have 56k elements of 64 bits, the total sequence should have ~440KB, not 512KB.&lt;&#x2F;p&gt;
+&lt;p&gt;After some experiments, I realized that the &lt;code&gt;Vec&lt;&#x2F;code&gt;s were bigger than expected by 5% to 100%. In average, they were ~55% bigger.&lt;&#x2F;p&gt;
+&lt;p&gt;I then remembered that such data structures usually double their inner buffers when there&#x27;s no room for a new element.&lt;&#x2F;p&gt;
+&lt;p&gt;Fortunately, Rust offers a &lt;a href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;std&#x2F;vec&#x2F;struct.Vec.html#method.shrink_to_fit&quot;&gt;Vec::shrink_to_fit()&lt;&#x2F;a&gt; operation, which we can call after finishing mutating our database.&lt;&#x2F;p&gt;
+&lt;p&gt;After applying this change, the &lt;code&gt;Vec&lt;&#x2F;code&gt; occupies the expected size.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;final-results&quot;&gt;Final results&lt;&#x2F;h2&gt;
+&lt;p&gt;After fiddling with some thresholds I noticed that, to achieve a 5m precision instead of 15m, the memory overhead is negligible:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;markdown&quot; class=&quot;language-markdown &quot;&gt;&lt;code class=&quot;language-markdown&quot; data-lang=&quot;markdown&quot;&gt;input points: 345 k
+packed u64s: 62 k
+total size: 485 KB
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;So I decided to set the max error to 5m instead.&lt;&#x2F;p&gt;
+&lt;p&gt;Overall we saved 95%+ in memory, compared to the most straightforward solution!&lt;&#x2F;p&gt;
+&lt;p&gt;The final code can be found &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;blog&#x2F;tree&#x2F;master&#x2F;gists&#x2F;geolocation-history&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
+&lt;p&gt;I didn&#x27;t need to invest so much bandwidth in this optimization: my PC could use 1GB of RAM for this data anyway.&lt;&#x2F;p&gt;
+&lt;p&gt;But I learned a lot as part of the process and I ended up with results very efficient memory-wise.&lt;&#x2F;p&gt;
+&lt;p&gt;That said, as &lt;a href=&quot;https:&#x2F;&#x2F;www.reddit.com&#x2F;r&#x2F;rust&#x2F;comments&#x2F;yil0i8&#x2F;blog_post_a_memoryefficient_data_structure_for&quot;&gt;mentioned on Reddit&lt;&#x2F;a&gt;, &lt;a href=&quot;https:&#x2F;&#x2F;blog.logrocket.com&#x2F;rust-compression-libraries&#x2F;&quot;&gt;general-purpose compression algorithms&lt;&#x2F;a&gt; achieve similar results and simplify our code a lot. Querying is relatively more expensive, though.&lt;&#x2F;p&gt;
+&lt;p&gt;But, depending on your needs, perhaps you can just &lt;code&gt;gzip&lt;&#x2F;code&gt; everything and you&#x27;re good to go!&lt;&#x2F;p&gt;
+</description>
+        </item>
         <item>
             <title>A memory-efficient data structure for geolocation history</title>
             <pubDate>Mon, 31 Oct 2022 00:00:00 +0000</pubDate>
             <link>https://denisidoro.github.io/posts/data-structure-geolocation-history/</link>
             <guid>https://denisidoro.github.io/posts/data-structure-geolocation-history/</guid>
-            <description>&lt;p&gt;In this blog post I&#x27;ll cover how I built a memory-efficient data structure for storing location history data.&lt;&#x2F;p&gt;
+            <description>&lt;p&gt;&lt;em&gt;Note: please check &lt;a href=&quot;https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;data-structure-geolocation-history-rev2&#x2F;&quot;&gt;this other post&lt;&#x2F;a&gt; instead, which is a more recent revision on this topic.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;In this blog post I&#x27;ll cover how I built a memory-efficient data structure for storing location history data.&lt;&#x2F;p&gt;
 &lt;p&gt;Some Rust details will also be explained.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;motivation&quot;&gt;Motivation&lt;&#x2F;h3&gt;
 &lt;p&gt;My DSLR camera has no GPS built-in. Evidently, photos from it don&#x27;t include geolocation-based EXIF tags.&lt;&#x2F;p&gt;
 &lt;p&gt;If only my location history were stored somewhere, so that I could update photos with the correct data...&lt;&#x2F;p&gt;
-&lt;p&gt;Unsurprisingly, Google knows where I am, where I&#x27;ve been and where I&#x27;m going to be. They even allow me to export this data.&lt;&#x2F;p&gt;
+&lt;p&gt;Unsurprisingly, Google knows where I am, where I&#x27;ve been &lt;del&gt;and where I&#x27;m going to be&lt;&#x2F;del&gt;. They even allow me to export this data.&lt;&#x2F;p&gt;
 &lt;p&gt;The problem is that the exported JSON weighs ~1GB. My computer has 16GB of RAM so it can all fit in memory, but we certainly can store it more efficiently.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;json-parsing&quot;&gt;JSON parsing&lt;&#x2F;h3&gt;
 &lt;p&gt;For reference, here&#x27;s what the JSON looks like:&lt;&#x2F;p&gt;
@@ -169,9 +430,9 @@ sum size: 2838 KB
 &lt;p&gt;Let&#x27;s compare this to a naive &lt;code&gt;Vec&amp;lt;Timestamp, f64, f64&amp;gt;&lt;&#x2F;code&gt; implementation:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;input_points * (size_of_timestamp + 64 + 64) * average vec overhead
 354k * (64+64+64) * 1.5 bits
-121 MB
+11.8 MB
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;Overall we saved around ~95% in memory!&lt;&#x2F;p&gt;
+&lt;p&gt;Overall we saved around ~80% in memory!&lt;&#x2F;p&gt;
 &lt;p&gt;After fiddling with some thresholds, I noticed that, to achieve a 5m precision instead of 15m, the memory overhead is negligible:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;bash&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;input points: 345 k
 high-precision data points: 46 k
