@@ -259,7 +259,8 @@ packed u64s: 62 k
 total size: 485 KB
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;So I decided to set the max error to 5m instead.&lt;&#x2F;p&gt;
-&lt;p&gt;Overall we saved 95%+ in memory, compared to the most straightforward solution!&lt;&#x2F;p&gt;
+&lt;p&gt;Overall we reduced memory footprint by 24x, compared to the most straightforward solution (using a stream for JSON deserialization).&lt;&#x2F;p&gt;
+&lt;p&gt;Had we used a &lt;code&gt;String&lt;&#x2F;code&gt; for storing the whole JSON first, the maximum RAM used would be 1900x bigger!&lt;&#x2F;p&gt;
 &lt;p&gt;The final code can be found &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;blog&#x2F;tree&#x2F;master&#x2F;gists&#x2F;geolocation-history&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
 &lt;p&gt;I didn&#x27;t need to invest so much bandwidth in this optimization: my PC could use 1GB of RAM for this data anyway.&lt;&#x2F;p&gt;
