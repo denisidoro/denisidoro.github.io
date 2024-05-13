@@ -159,23 +159,23 @@
 <p>Does <code>stockHistory</code> have to import <code>stockScraper</code> a lot? Can't it be minimized? Remember that when splitting this will translate into HTTP calls or message streaming. Try to at least isolate this dependency into a single namespace, which will be the precursor of the API between the two. This step is the most subjective, because it can quickly introduce overheads in the codebase for an MVP. You must consider the trade-offs.</p>
 <h3 id="3-isolate-implementation-details-into-higher-level-components">3. Isolate implementation details into higher level components</h3>
 <p>Let’s now implement the handler for the endpoint that returns information about all the companies a customer has stocks from. One common approach is the following (we’re exposing components via dependency injection and middlewares):</p>
-<div >
-    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;d77a550d25bd6a77d35b5b57d40cf4b8.js"></script>
+<div>
+   <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;d77a550d25bd6a77d35b5b57d40cf4b8"></script>
 </div>
 <p>After splitting our service, not all data will be available via the <code>db</code> argument, of course. We'll need to make some HTTP calls. <code>customerCompaniesHandler</code> will have to get an HTTP component and pass it to <code>getCustomerCompanies</code>, which will propagate it to the domain-specific helper functions and so on...</p>
 <p>But why does the handler have to know this in the first place? We have divided our application into layers and, more importantly, we have already separated our code into <code>companyStore</code>, <code>stockStore</code> and other namespaces. Yet, we clearly have an implementation detail leak such that all our higher level, integration API code has to know about low level dependency management. These layers should be agnostic to where we store the <code>company</code> entity...</p>
 <p>Ideally, our handler should only know that it has to fetch data that depends on the <code>stock</code> and <code>company</code> entities. What if we created a component that abstracts this away, per entity? Let's call one of them as <code>CompanyRepository</code> (you can come up with the name you like):</p>
-<div >
-    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;335efcab949ddaa3f40c78a9fec4666e.js"></script>
+<div>
+   <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;335efcab949ddaa3f40c78a9fec4666e"></script>
 </div>
 <p>You can skip the interface/protocol definition if you’re not into that. The important thing is to avoid leaking lower level components.</p>
 <p>After adding this component to our dependency graph, our code would become:</p>
-<div >
-    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;36dd706464e5cbb223fd6debdfba24a9.js"></script>
+<div>
+   <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;36dd706464e5cbb223fd6debdfba24a9"></script>
 </div>
 <p>For the service split, we could create:</p>
-<div >
-    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;36dd706464e5cbb223fd6debdfba24a9.js"></script>
+<div>
+   <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;36dd706464e5cbb223fd6debdfba24a9"></script>
 </div>
 <p>The only thing we need to do is update the dependency graph! All the rest of the code remains the same.</p>
 <p>As a plus, we can move <code>CompanyDbRepository</code> to <code>companyStore</code>. Code reuse!</p>
@@ -222,20 +222,6 @@
   
   <div class="post-nav thin">
 	
-	<a class="next-post" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;grafana-personal-finance&#x2F;">
-	  <span class="post-nav-label">
-		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left">
-		  <line x1="19" y1="12" x2="5" y2="12"></line>
-		  <polyline points="12 19 5 12 12 5"></polyline>
-		</svg>&nbsp;Newer</span><br>
-		<span>Using Grafana for personal financial management</span>
-	</a>
-	
-	
-	<a class="prev-post" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;moving-from-medium&#x2F;">
-	  <span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br>
-	  <span>Moving from Medium</span>
-	</a>
 	
   </div>
 
@@ -249,7 +235,7 @@
 
 
       <footer id="site-footer" class="section-inner thin animated fadeIn faster">
-         <!--<p>&copy; 2022 <a href="https:&#x2F;&#x2F;denisidoro.github.io">Denis Isidoro</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>-->
+         <!--<p>&copy; 2024 <a href="https:&#x2F;&#x2F;denisidoro.github.io">Denis Isidoro</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>-->
          <p>Made with <a href="https://www.getzola.org" target="_blank" rel="noopener">Zola</a> &#183; Theme <a
                href="https://github.com/VersBinarii/hermit_zola" target="_blank" rel="noopener">Hermit_Zola</a>
             

@@ -2,18 +2,91 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
       <title>Denis Isidoro</title>
-        <link>https://denisidoro.github.io</link>
-        <description>My blog</description>
-        <generator>Zola</generator>
-        <language>en</language>
-        <atom:link href="https://denisidoro.github.io/rss.xml" rel="self" type="application/rss+xml"/>
-        <lastBuildDate>Sat, 05 Nov 2022 00:00:00 +0000</lastBuildDate>
-        <item>
-            <title>A memory-efficient data structure for geolocation history (rev2)</title>
-            <pubDate>Sat, 05 Nov 2022 00:00:00 +0000</pubDate>
-            <link>https://denisidoro.github.io/posts/data-structure-geolocation-history-rev2/</link>
-            <guid>https://denisidoro.github.io/posts/data-structure-geolocation-history-rev2/</guid>
-            <description>&lt;p&gt;In this blog post I&#x27;ll cover how I built a memory-efficient data structure for storing location history data.&lt;&#x2F;p&gt;
+      <link>https://denisidoro.github.io</link>
+      <description>My blog</description>
+      <generator>Zola</generator>
+      <language>en</language>
+      <atom:link href="https://denisidoro.github.io/rss.xml" rel="self" type="application/rss+xml"/>
+      <lastBuildDate>Mon, 13 May 2024 00:00:00 +0000</lastBuildDate>
+      <item>
+          <title>Trying to land an offer at a big tech company? These YouTubers will help you</title>
+          <pubDate>Mon, 13 May 2024 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://denisidoro.github.io/posts/youtubers-big-tech-interview/</link>
+          <guid>https://denisidoro.github.io/posts/youtubers-big-tech-interview/</guid>
+          <description xml:base="https://denisidoro.github.io/posts/youtubers-big-tech-interview/">&lt;h2 id=&quot;intro&quot;&gt;Intro&lt;&#x2F;h2&gt;
+&lt;p&gt;I&#x27;ve recently landed an offer I was really looking forward (yay! 🎉)&lt;&#x2F;p&gt;
+&lt;p&gt;The least I could do was to give some shoutouts to the YouTubers which made this possible.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;system-design&quot;&gt;System design&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;@jordanhasnolife5163&#x2F;featured&quot;&gt;Jordan&lt;&#x2F;a&gt; is the GOAT! Seriously.&lt;&#x2F;p&gt;
+&lt;p&gt;He goes way beyond the &amp;quot;design Twitter&#x27;s feed&amp;quot;-kind of questions. For more senior roles, the topics he covers are a must.&lt;&#x2F;p&gt;
+&lt;p&gt;He also has a playlist of videos for more junior engineers.&lt;&#x2F;p&gt;
+&lt;figure&gt;
+    &lt;div&gt;
+   &lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https:&#x2F;&#x2F;www.youtube-nocookie.com&#x2F;embed&#x2F;fUpYLwzGtW0&quot; webkitallowfullscreen
+      mozallowfullscreen allowfullscreen&gt;
+   &lt;&#x2F;iframe&gt;
+&lt;&#x2F;div&gt;
+
+    &lt;figcaption&gt;In this video, he quickly talks about how timeseries database are designed&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;p&gt;If a picture is worth a thousand words, than &lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;@ByteByteGo&quot;&gt;ByByteGo&lt;&#x2F;a&gt;&#x27;s short animations are worth a million.&lt;&#x2F;p&gt;
+&lt;figure&gt;
+    &lt;div&gt;
+   &lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https:&#x2F;&#x2F;www.youtube-nocookie.com&#x2F;embed&#x2F;V3pzxngeLqw&quot; webkitallowfullscreen
+      mozallowfullscreen allowfullscreen&gt;
+   &lt;&#x2F;iframe&gt;
+&lt;&#x2F;div&gt;
+
+    &lt;figcaption&gt;No need to read an article about bloom filters. This 5min-video is all you need to know&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;p&gt;If you speedrun his videos at 2x speed, you can watch all his videos in a day or two.&lt;&#x2F;p&gt;
+&lt;p&gt;In some big tech companies, the system design round isn&#x27;t about drawing boxes -- it&#x27;s about writing a doc. With that in mind, &lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;@irtizahafiz&quot;&gt;Irtiza&lt;&#x2F;a&gt;&#x27;s videos helped me shift my mental model for these interviews. In each video, he ends up with a Markdown file with all his discussions, basically.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;coding&quot;&gt;Coding&lt;&#x2F;h2&gt;
+&lt;p&gt;No mystery here: &lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;@NeetCode&quot;&gt;Neetcode&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;figure&gt;
+    &lt;div&gt;
+   &lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https:&#x2F;&#x2F;www.youtube-nocookie.com&#x2F;embed&#x2F;mBNrRy2_hVs&quot; webkitallowfullscreen
+      mozallowfullscreen allowfullscreen&gt;
+   &lt;&#x2F;iframe&gt;
+&lt;&#x2F;div&gt;
+
+    &lt;figcaption&gt;The dreaded dynamic programming questions&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;p&gt;He solves Leetcode problems, which is all you&#x27;ll need.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;behavioral&quot;&gt;Behavioral&lt;&#x2F;h2&gt;
+&lt;p&gt;I&#x27;ve only ever watched one video from &lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;@JeffSu&quot;&gt;Jeff Su&lt;&#x2F;a&gt;, but it made the whole difference for me:&lt;&#x2F;p&gt;
+&lt;figure&gt;
+    &lt;div&gt;
+   &lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https:&#x2F;&#x2F;www.youtube-nocookie.com&#x2F;embed&#x2F;gZ2354BH0a0&quot; webkitallowfullscreen
+      mozallowfullscreen allowfullscreen&gt;
+   &lt;&#x2F;iframe&gt;
+&lt;&#x2F;div&gt;
+
+    &lt;figcaption&gt;Ever heard about the CARL method?&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;p&gt;In this video, he covers an alternative to the famous STAR method. He describes why the CARL method is better, and after testing it out, I can confirm he was right.&lt;&#x2F;p&gt;
+&lt;p&gt;Finally, &lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;@jeffhsipepi&#x2F;videos&quot;&gt;Jeff Sipe&lt;&#x2F;a&gt;&#x27;s videos also were key for me to understand the importance of the subjective&#x2F;subconcious parts of this round.&lt;&#x2F;p&gt;
+&lt;figure&gt;
+    &lt;div&gt;
+   &lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https:&#x2F;&#x2F;www.youtube-nocookie.com&#x2F;embed&#x2F;TWFs3dxfiOc&quot; webkitallowfullscreen
+      mozallowfullscreen allowfullscreen&gt;
+   &lt;&#x2F;iframe&gt;
+&lt;&#x2F;div&gt;
+
+    &lt;figcaption&gt;Don&#x27;t say something was &quot;difficult&quot; -- say &quot;challenging&quot;. This is the kind of tips Jeff gives&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
+&lt;p&gt;Hope this post was helpful!&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>A memory-efficient data structure for geolocation history (rev2)</title>
+          <pubDate>Sat, 05 Nov 2022 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://denisidoro.github.io/posts/data-structure-geolocation-history-rev2/</link>
+          <guid>https://denisidoro.github.io/posts/data-structure-geolocation-history-rev2/</guid>
+          <description xml:base="https://denisidoro.github.io/posts/data-structure-geolocation-history-rev2/">&lt;p&gt;In this blog post I&#x27;ll cover how I built a memory-efficient data structure for storing location history data.&lt;&#x2F;p&gt;
 &lt;p&gt;Some Rust details will also be explained.&lt;&#x2F;p&gt;
 &lt;p&gt;This article is a rewrite of my &lt;a href=&quot;https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;data-structure-geolocation-history&#x2F;&quot;&gt;previous one&lt;&#x2F;a&gt;, after taking into account &lt;a href=&quot;https:&#x2F;&#x2F;www.reddit.com&#x2F;r&#x2F;rust&#x2F;comments&#x2F;yil0i8&#x2F;blog_post_a_memoryefficient_data_structure_for&quot;&gt;feedback from Reddit&lt;&#x2F;a&gt; and further researching the topic.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;motivation&quot;&gt;Motivation&lt;&#x2F;h2&gt;
@@ -97,15 +170,15 @@
 &lt;p&gt;It&#x27;s cheaper to just duplicate data for missing timestamps. The duplication of data is surely unfortunate, but having to spend 24 bits for every minute of data is worse.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;the-plan&quot;&gt;The plan&lt;&#x2F;h2&gt;
 &lt;p&gt;Suppose our data looks like this:&lt;&#x2F;p&gt;
-&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th align=&quot;center&quot;&gt;Timestamp&lt;&#x2F;th&gt;&lt;th align=&quot;center&quot;&gt;Latitude&lt;&#x2F;th&gt;&lt;th align=&quot;center&quot;&gt;Longitude&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
-&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;2022-10-15 16h13&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;26.1234&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;43.5678&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
-&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;2022-10-15 16h14&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;26.1235&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;43.5677&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
-&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;2022-10-15 16h15&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;26.1236&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;43.5678&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th style=&quot;text-align: center&quot;&gt;Timestamp&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: center&quot;&gt;Latitude&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: center&quot;&gt;Longitude&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td style=&quot;text-align: center&quot;&gt;2022-10-15 16h13&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;26.1234&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;43.5678&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td style=&quot;text-align: center&quot;&gt;2022-10-15 16h14&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;26.1235&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;43.5677&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td style=&quot;text-align: center&quot;&gt;2022-10-15 16h15&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;26.1236&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;43.5678&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
 &lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
 &lt;p&gt;We could delta-encode it so that all points (except the first one) are just the difference from the previous value:&lt;&#x2F;p&gt;
-&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th align=&quot;center&quot;&gt;Timestamp&lt;&#x2F;th&gt;&lt;th align=&quot;center&quot;&gt;Latitude&lt;&#x2F;th&gt;&lt;th align=&quot;center&quot;&gt;Longitude&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
-&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;+1 min&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;+0.0001&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;-0.0001&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
-&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;+1 min&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;+0.0001&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;+0.0001&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th style=&quot;text-align: center&quot;&gt;Timestamp&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: center&quot;&gt;Latitude&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: center&quot;&gt;Longitude&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td style=&quot;text-align: center&quot;&gt;+1 min&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;+0.0001&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;-0.0001&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td style=&quot;text-align: center&quot;&gt;+1 min&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;+0.0001&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;+0.0001&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
 &lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
 &lt;p&gt;The data clearly becomes easier to reason about and is arguably &amp;quot;smaller&amp;quot;.&lt;&#x2F;p&gt;
 &lt;p&gt;But when using an &lt;code&gt;f32&lt;&#x2F;code&gt; to represent a number, it doesn&#x27;t matter if it&#x27;s &lt;code&gt;26.1234&lt;&#x2F;code&gt; or &lt;code&gt;0.0001&lt;&#x2F;code&gt;: they will both occupy 32 bits.  So we need a way to make small numbers occupy less memory.&lt;&#x2F;p&gt;
@@ -268,13 +341,14 @@ total size: 485 KB
 &lt;p&gt;That said, as &lt;a href=&quot;https:&#x2F;&#x2F;www.reddit.com&#x2F;r&#x2F;rust&#x2F;comments&#x2F;yil0i8&#x2F;blog_post_a_memoryefficient_data_structure_for&quot;&gt;mentioned on Reddit&lt;&#x2F;a&gt;, &lt;a href=&quot;https:&#x2F;&#x2F;blog.logrocket.com&#x2F;rust-compression-libraries&#x2F;&quot;&gt;general-purpose compression algorithms&lt;&#x2F;a&gt; achieve similar results and simplify our code a lot. Querying is relatively more expensive, though.&lt;&#x2F;p&gt;
 &lt;p&gt;But, depending on your needs, perhaps you can just &lt;code&gt;gzip&lt;&#x2F;code&gt; everything and you&#x27;re good to go!&lt;&#x2F;p&gt;
 </description>
-        </item>
-        <item>
-            <title>A memory-efficient data structure for geolocation history</title>
-            <pubDate>Mon, 31 Oct 2022 00:00:00 +0000</pubDate>
-            <link>https://denisidoro.github.io/posts/data-structure-geolocation-history/</link>
-            <guid>https://denisidoro.github.io/posts/data-structure-geolocation-history/</guid>
-            <description>&lt;p&gt;&lt;em&gt;Note: please check &lt;a href=&quot;https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;data-structure-geolocation-history-rev2&#x2F;&quot;&gt;this other post&lt;&#x2F;a&gt; instead, which is a more recent revision on this topic.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+      </item>
+      <item>
+          <title>A memory-efficient data structure for geolocation history</title>
+          <pubDate>Mon, 31 Oct 2022 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://denisidoro.github.io/posts/data-structure-geolocation-history/</link>
+          <guid>https://denisidoro.github.io/posts/data-structure-geolocation-history/</guid>
+          <description xml:base="https://denisidoro.github.io/posts/data-structure-geolocation-history/">&lt;p&gt;&lt;em&gt;Note: please check &lt;a href=&quot;https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;data-structure-geolocation-history-rev2&#x2F;&quot;&gt;this other post&lt;&#x2F;a&gt; instead, which is a more recent revision on this topic.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
 &lt;p&gt;In this blog post I&#x27;ll cover how I built a memory-efficient data structure for storing location history data.&lt;&#x2F;p&gt;
 &lt;p&gt;Some Rust details will also be explained.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;motivation&quot;&gt;Motivation&lt;&#x2F;h3&gt;
@@ -448,19 +522,20 @@ sum size: 2872 KB
 &lt;p&gt;Timestamps could be represented with 24 bits, as mentioned above. 32 bits for each coordinate is unnecessary.&lt;&#x2F;p&gt;
 &lt;p&gt;We could use a &lt;code&gt;u64&lt;&#x2F;code&gt; for everything instead: with some bit shifting, 24 bits could be reserved for the timestamp and each coordinate could use 20 bits.&lt;&#x2F;p&gt;
 &lt;p&gt;This would decrease the size of these data points by &lt;code&gt;1-64&#x2F;(32*3)&lt;&#x2F;code&gt; = 33%.&lt;&#x2F;p&gt;
-&lt;p&gt;In addition, I wonder if we could use &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Quadtree#:%7E:text=A%20quadtree%20is%20a%20tree,into%20four%20quadrants%20or%20regions.&quot;&gt;QuadTrees&lt;&#x2F;a&gt; somehow...&lt;&#x2F;p&gt;
+&lt;p&gt;In addition, I wonder if we could use &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Quadtree#:~:text=A%20quadtree%20is%20a%20tree,into%20four%20quadrants%20or%20regions.&quot;&gt;QuadTrees&lt;&#x2F;a&gt; somehow...&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h3&gt;
 &lt;p&gt;This journey was clearly over-engineered.&lt;&#x2F;p&gt;
 &lt;p&gt;But I learned a lot as part of the process and I ended up with results very efficient memory-wise.&lt;&#x2F;p&gt;
 &lt;p&gt;Instead of asking &amp;quot;why?&amp;quot;, I asked &amp;quot;why not?&amp;quot; 😂  &lt;&#x2F;p&gt;
 </description>
-        </item>
-        <item>
-            <title>Faster monorepo workflow with materialized views</title>
-            <pubDate>Mon, 13 Dec 2021 00:00:00 +0000</pubDate>
-            <link>https://denisidoro.github.io/posts/faster-monorepo-workflow-with-materialized-views/</link>
-            <guid>https://denisidoro.github.io/posts/faster-monorepo-workflow-with-materialized-views/</guid>
-            <description>&lt;h3 id=&quot;context&quot;&gt;Context&lt;&#x2F;h3&gt;
+      </item>
+      <item>
+          <title>Faster monorepo workflow with materialized views</title>
+          <pubDate>Mon, 13 Dec 2021 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://denisidoro.github.io/posts/faster-monorepo-workflow-with-materialized-views/</link>
+          <guid>https://denisidoro.github.io/posts/faster-monorepo-workflow-with-materialized-views/</guid>
+          <description xml:base="https://denisidoro.github.io/posts/faster-monorepo-workflow-with-materialized-views/">&lt;h3 id=&quot;context&quot;&gt;Context&lt;&#x2F;h3&gt;
 &lt;p&gt;Monorepos have their pros and cons. &lt;&#x2F;p&gt;
 &lt;p&gt;A plethora of in-depth articles have already been written on this subject so I won&#x27;t bother writing yet another one. &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;joelparkerhenderson&#x2F;monorepo-vs-polyrepo&quot;&gt;This one&lt;&#x2F;a&gt; summarizes the trade-offs very well.&lt;&#x2F;p&gt;
 &lt;p&gt;In this post, I propose a solution for improving the dev experience for monorepos, by using microrepos as materialized views for subprojects and a bot as orchestrator.&lt;&#x2F;p&gt;
@@ -605,13 +680,14 @@ git merge newfeature
 &lt;p&gt;I hope that this will motivate someone out there willing to implement a system ready for real-world scenarios. &lt;&#x2F;p&gt;
 &lt;p&gt;In case you do, I&#x27;d really appreciate if you could add a link to this post somewhere in your README.md file! :) &lt;&#x2F;p&gt;
 </description>
-        </item>
-        <item>
-            <title>Working around Google Photos limitation</title>
-            <pubDate>Mon, 07 Jun 2021 00:00:00 +0000</pubDate>
-            <link>https://denisidoro.github.io/posts/working-around-google-photos-limitation/</link>
-            <guid>https://denisidoro.github.io/posts/working-around-google-photos-limitation/</guid>
-            <description>&lt;h3 id=&quot;context&quot;&gt;Context&lt;&#x2F;h3&gt;
+      </item>
+      <item>
+          <title>Working around Google Photos limitation</title>
+          <pubDate>Mon, 07 Jun 2021 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://denisidoro.github.io/posts/working-around-google-photos-limitation/</link>
+          <guid>https://denisidoro.github.io/posts/working-around-google-photos-limitation/</guid>
+          <description xml:base="https://denisidoro.github.io/posts/working-around-google-photos-limitation/">&lt;h3 id=&quot;context&quot;&gt;Context&lt;&#x2F;h3&gt;
 &lt;p&gt;As of June 1, 2021, Google Photos &lt;a href=&quot;https:&#x2F;&#x2F;www.theverge.com&#x2F;2020&#x2F;11&#x2F;11&#x2F;21560810&#x2F;google-photos-unlimited-cap-free-uploads-15gb-ending&quot;&gt;started limiting&lt;&#x2F;a&gt; the storage for new photos and videos to 15GB&#x2F;account.&lt;&#x2F;p&gt;
 &lt;p&gt;15GB isn&#x27;t much nowadays, so I looked for alternatives. &lt;&#x2F;p&gt;
 &lt;p&gt;Signing up for paid storage is an option which I discarded: &lt;&#x2F;p&gt;
@@ -629,13 +705,13 @@ git merge newfeature
 &lt;h3 id=&quot;alternatives&quot;&gt;Alternatives&lt;&#x2F;h3&gt;
 &lt;p&gt;Whatever the solution would turn out to be, I wanted it to last at least 3.5 years. If we assume 10 photos&#x2F;day in average, we&#x27;re talking about ~13k photos here.&lt;&#x2F;p&gt;
 &lt;p&gt;I ended up creating&#x2F;reusing the following accounts:&lt;&#x2F;p&gt;
-&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th align=&quot;center&quot;&gt;Provider&lt;&#x2F;th&gt;&lt;th align=&quot;center&quot;&gt;Available storage&lt;&#x2F;th&gt;&lt;th align=&quot;center&quot;&gt;Photo size&lt;&#x2F;th&gt;&lt;th align=&quot;center&quot;&gt;Trust?&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
-&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;photos.google.com&quot;&gt;Google Photos&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;6GB&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;450KB&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;Yes&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
-&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;box.com&quot;&gt;Box&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;7GB&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;550KB&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;Yes&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
-&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pcloud.com&quot;&gt;pCloud&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;10GB&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;750KB&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;No&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
-&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;degoo.com&quot;&gt;Degoo&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;100GB&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;7MB&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;No&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
-&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;terabox.com&quot;&gt;Terabox&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;1TB&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;irrelevant&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;No&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
-&lt;tr&gt;&lt;td align=&quot;center&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;telegram.org&quot;&gt;Telegram&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;∞&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;irrelevant&lt;&#x2F;td&gt;&lt;td align=&quot;center&quot;&gt;Yes&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th style=&quot;text-align: center&quot;&gt;Provider&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: center&quot;&gt;Available storage&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: center&quot;&gt;Photo size&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: center&quot;&gt;Trust?&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td style=&quot;text-align: center&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;photos.google.com&quot;&gt;Google Photos&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;6GB&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;450KB&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;Yes&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td style=&quot;text-align: center&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;box.com&quot;&gt;Box&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;7GB&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;550KB&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;Yes&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td style=&quot;text-align: center&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;pcloud.com&quot;&gt;pCloud&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;10GB&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;750KB&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;No&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td style=&quot;text-align: center&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;degoo.com&quot;&gt;Degoo&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;100GB&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;7MB&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;No&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td style=&quot;text-align: center&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;terabox.com&quot;&gt;Terabox&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;1TB&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;irrelevant&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;No&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td style=&quot;text-align: center&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;telegram.org&quot;&gt;Telegram&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;∞&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;irrelevant&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: center&quot;&gt;Yes&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
 &lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
 &lt;p&gt;I&#x27;ve never heard about &lt;a href=&quot;https:&#x2F;&#x2F;pcloud.com&quot;&gt;pCloud&lt;&#x2F;a&gt;, &lt;a href=&quot;https:&#x2F;&#x2F;degoo.com&quot;&gt;Degoo&lt;&#x2F;a&gt; or &lt;a href=&quot;https:&#x2F;&#x2F;terabox.com&quot;&gt;Terabox&lt;&#x2F;a&gt; before so I&#x27;m not uploading my photos in a &amp;quot;human-readable&amp;quot; format to these services.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;solution&quot;&gt;Solution&lt;&#x2F;h3&gt;
@@ -685,13 +761,14 @@ every day at 3am, if wifi is connected:
 &lt;p&gt;The Tasker tasks aren&#x27;t public because they rely on a very specific setup (and because I&#x27;ve never met anyone in person who uses Tasker - or Termux, for that matter).&lt;&#x2F;p&gt;
 &lt;p&gt;In the unexpected scenario I get requests to do it, I&#x27;ll share them in &lt;a href=&quot;https:&#x2F;&#x2F;taskernet.com&#x2F;shares&#x2F;&quot;&gt;Taskernet&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 </description>
-        </item>
-        <item>
-            <title>Using a spreadsheet as a timeseries database for finance</title>
-            <pubDate>Wed, 12 May 2021 00:00:00 +0000</pubDate>
-            <link>https://denisidoro.github.io/posts/spreadsheet-tsdb-finance/</link>
-            <guid>https://denisidoro.github.io/posts/spreadsheet-tsdb-finance/</guid>
-            <description>&lt;h3 id=&quot;context&quot;&gt;Context&lt;&#x2F;h3&gt;
+      </item>
+      <item>
+          <title>Using a spreadsheet as a timeseries database for finance</title>
+          <pubDate>Wed, 12 May 2021 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://denisidoro.github.io/posts/spreadsheet-tsdb-finance/</link>
+          <guid>https://denisidoro.github.io/posts/spreadsheet-tsdb-finance/</guid>
+          <description xml:base="https://denisidoro.github.io/posts/spreadsheet-tsdb-finance/">&lt;h3 id=&quot;context&quot;&gt;Context&lt;&#x2F;h3&gt;
 &lt;p&gt;I have already tried using personal finance apps but there&#x27;s always a feature missing or an inconsistency in results. &lt;&#x2F;p&gt;
 &lt;p&gt;Unhappy with the experience, I created a simple spreadsheet half a decade ago. It lacked features and quickly became unmaintainable.&lt;&#x2F;p&gt;
 &lt;p&gt;I decided to build my own tool instead. I started with a React (Native) Clojurescript web&#x2F;mobile app. I never finished it. &lt;&#x2F;p&gt;
@@ -817,13 +894,14 @@ foo = configSheet.getValue(&amp;#x27;A2&amp;#x27;)
 &lt;p&gt;Please reach out to me if you&#x27;re interested in it, though. Maybe I can come up with something! 👍&lt;&#x2F;p&gt;
 &lt;p&gt;In the meantime, I highly recommend &lt;a href=&quot;https:&#x2F;&#x2F;dlombelloplanilhas.com&#x2F;&quot;&gt;dlombello&#x27;s spreadsheets&lt;&#x2F;a&gt;, which should fit most people&#x27;s needs.&lt;&#x2F;p&gt;
 </description>
-        </item>
-        <item>
-            <title>Creating templates for CLIs</title>
-            <pubDate>Wed, 13 Jan 2021 00:00:00 +0000</pubDate>
-            <link>https://denisidoro.github.io/posts/cli-templates/</link>
-            <guid>https://denisidoro.github.io/posts/cli-templates/</guid>
-            <description>&lt;h3 id=&quot;inspiration&quot;&gt;Inspiration&lt;&#x2F;h3&gt;
+      </item>
+      <item>
+          <title>Creating templates for CLIs</title>
+          <pubDate>Wed, 13 Jan 2021 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://denisidoro.github.io/posts/cli-templates/</link>
+          <guid>https://denisidoro.github.io/posts/cli-templates/</guid>
+          <description xml:base="https://denisidoro.github.io/posts/cli-templates/">&lt;h3 id=&quot;inspiration&quot;&gt;Inspiration&lt;&#x2F;h3&gt;
 &lt;p&gt;I&#x27;ve been using &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;yarpc&#x2F;yab&quot;&gt;yab&lt;&#x2F;a&gt; —a curl-like CLI— recently and I was surprised by how elegantly it solves a common problem.&lt;&#x2F;p&gt;
 &lt;p&gt;yab calls can get quite verbose. As an example, to get a &lt;code&gt;Customer&lt;&#x2F;code&gt; by its &lt;code&gt;id&lt;&#x2F;code&gt; from a &lt;code&gt;customer&lt;&#x2F;code&gt; microservice:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;sh&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;yab customer Customer::get \
@@ -914,13 +992,14 @@ endpoint &amp;#x27;create post&amp;#x27; --userId 12
 &lt;p&gt;Creating templates may speed up day-to-day tasks and improve knowledge sharing —either with other team members or with your future self.&lt;&#x2F;p&gt;
 &lt;p&gt;By the way, if you have any feature requests for navi, feel free to leave an issue &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;navi&#x2F;issues&quot;&gt;here&lt;&#x2F;a&gt;!&lt;&#x2F;p&gt;
 </description>
-        </item>
-        <item>
-            <title>Mind maps</title>
-            <pubDate>Tue, 17 Nov 2020 00:00:00 +0000</pubDate>
-            <link>https://denisidoro.github.io/posts/mind-maps/</link>
-            <guid>https://denisidoro.github.io/posts/mind-maps/</guid>
-            <description>&lt;p&gt;Since high school I&#x27;ve never had a paper notebook. Don&#x27;t get me wrong: I&#x27;m not one or these people with very good memory and don&#x27;t need any notes whatsoever. On the contrary.&lt;&#x2F;p&gt;
+      </item>
+      <item>
+          <title>Mind maps</title>
+          <pubDate>Tue, 17 Nov 2020 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://denisidoro.github.io/posts/mind-maps/</link>
+          <guid>https://denisidoro.github.io/posts/mind-maps/</guid>
+          <description xml:base="https://denisidoro.github.io/posts/mind-maps/">&lt;p&gt;Since high school I&#x27;ve never had a paper notebook. Don&#x27;t get me wrong: I&#x27;m not one or these people with very good memory and don&#x27;t need any notes whatsoever. On the contrary.&lt;&#x2F;p&gt;
 &lt;p&gt;The thing is I&#x27;ve never seen much value in note taking. At least in the traditional way, with paragraphs and blocks of text. I can&#x27;t memorize these chunks of text and, if I want to dive deep into a subject, I&#x27;m much better off reading text books or browsing Wikipedia articles. &lt;&#x2F;p&gt;
 &lt;p&gt;In fact, I&#x27;ve never trusted my own notes. Maybe I got it wrong in the first place. Maybe the way I wrote is ambiguous. Ultimately, the bigger the notes, more likely they can lead me to wrong conclusions. &lt;&#x2F;p&gt;
 &lt;h3 id=&quot;the-need&quot;&gt;The need&lt;&#x2F;h3&gt;
@@ -978,13 +1057,14 @@ endpoint &amp;#x27;create post&amp;#x27; --userId 12
 &lt;p&gt;The app is capable of downloading mind map definitions from the web so it should work for everyone. Please refer to help section for more info.&lt;&#x2F;p&gt;
 &lt;p&gt;Do you have suggestions for this tool? If so please open an issue in its git repo! &lt;&#x2F;p&gt;
 </description>
-        </item>
-        <item>
-            <title>On data-driven programming</title>
-            <pubDate>Wed, 02 Sep 2020 00:00:00 +0000</pubDate>
-            <link>https://denisidoro.github.io/posts/data-driven-programming/</link>
-            <guid>https://denisidoro.github.io/posts/data-driven-programming/</guid>
-            <description>&lt;figure class=&quot;medium-cover&quot;&gt;
+      </item>
+      <item>
+          <title>On data-driven programming</title>
+          <pubDate>Wed, 02 Sep 2020 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://denisidoro.github.io/posts/data-driven-programming/</link>
+          <guid>https://denisidoro.github.io/posts/data-driven-programming/</guid>
+          <description xml:base="https://denisidoro.github.io/posts/data-driven-programming/">&lt;figure class=&quot;medium-cover&quot;&gt;
 
     &lt;img alt=&quot;Image for post&quot; class=&quot;t u v gh aj&quot; src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;11014&#x2F;0*43gbACYn_imJxYko&quot; srcSet=&quot; https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;0*43gbACYn_imJxYko 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;0*43gbACYn_imJxYko 552w,
     https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;0*43gbACYn_imJxYko 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;0*43gbACYn_imJxYko 700w&quot; sizes=&quot;700px&quot; &#x2F;&gt;
@@ -1017,8 +1097,8 @@ endpoint &amp;#x27;create post&amp;#x27; --userId 12
 &lt;&#x2F;ul&gt;
 &lt;p&gt;Let’s take a &lt;a href=&quot;https:&#x2F;&#x2F;kubernetes.io&#x2F;&quot;&gt;Kubernetes&lt;&#x2F;a&gt; config as an example:&lt;&#x2F;p&gt;
 &lt;figure&gt;
-    &lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;10a79e0d5b5591a5da733f07bcd25233.js&quot;&gt;&lt;&#x2F;script&gt;
+    &lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;10a79e0d5b5591a5da733f07bcd25233&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 
     &lt;figcaption&gt;
@@ -1069,8 +1149,8 @@ endpoint &amp;#x27;create post&amp;#x27; --userId 12
 &lt;p&gt;We’ll need to refactor packages a little bit so that, by convention, a given set of files will be considered as data, in contrast to implementation detail code. It seems like a small price to pay, though.&lt;&#x2F;p&gt;
 &lt;p&gt;In &lt;a href=&quot;https:&#x2F;&#x2F;kotlinlang.org&#x2F;&quot;&gt;Kotlin&lt;&#x2F;a&gt; it would be &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@fabiomirgo&#x2F;kotlins-power-build-a-dsl-1fcf215b7bb0&quot;&gt;straightforward&lt;&#x2F;a&gt; to come up with a file such as this one:&lt;&#x2F;p&gt;
 &lt;figure&gt;
-    &lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;5932b86b92fc520c57fd7e07730f59eb.js&quot;&gt;&lt;&#x2F;script&gt;
+    &lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;5932b86b92fc520c57fd7e07730f59eb&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 
     &lt;figcaption&gt;In IntelliJ, if you typed BillingAddress, an Intellisense window would show us all possible fields. If we forgot the street field, the editor would suggest us to add it.&lt;&#x2F;figcaption&gt;
@@ -1083,13 +1163,14 @@ endpoint &amp;#x27;create post&amp;#x27; --userId 12
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;on-data-driven-programming-925e450525e3&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 
 &lt;&#x2F;div&gt;</description>
-        </item>
-        <item>
-            <title>Quick prototyping with a Golang REPL</title>
-            <pubDate>Tue, 02 Jun 2020 00:00:00 +0000</pubDate>
-            <link>https://denisidoro.github.io/posts/golang-repl/</link>
-            <guid>https://denisidoro.github.io/posts/golang-repl/</guid>
-            <description>&lt;p&gt;I miss a REPL when coding in Golang. It turns out we can have a Go REPL connected to our IDE of choice.&lt;&#x2F;p&gt;
+      </item>
+      <item>
+          <title>Quick prototyping with a Golang REPL</title>
+          <pubDate>Tue, 02 Jun 2020 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://denisidoro.github.io/posts/golang-repl/</link>
+          <guid>https://denisidoro.github.io/posts/golang-repl/</guid>
+          <description xml:base="https://denisidoro.github.io/posts/golang-repl/">&lt;p&gt;I miss a REPL when coding in Golang. It turns out we can have a Go REPL connected to our IDE of choice.&lt;&#x2F;p&gt;
 &lt;p&gt;After developing in &lt;a href=&quot;https:&#x2F;&#x2F;clojure.org&#x2F;&quot;&gt;Clojure&lt;&#x2F;a&gt; for some time, I miss a &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Read%E2%80%93eval%E2%80%93print_loop&quot;&gt;REPL&lt;&#x2F;a&gt; when coding in &lt;a href=&quot;https:&#x2F;&#x2F;golang.org&#x2F;&quot;&gt;Golang&lt;&#x2F;a&gt;. It turns out we can have a Go REPL connected to our IDE of choice.&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
 
@@ -1124,30 +1205,31 @@ endpoint &amp;#x27;create post&amp;#x27; --userId 12
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;quick-prototyping-with-a-golang-repl-547703885bd8&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 
 &lt;&#x2F;div&gt;</description>
-        </item>
-        <item>
-            <title>Using dictionaries in shell scripts</title>
-            <pubDate>Mon, 23 Sep 2019 00:00:00 +0000</pubDate>
-            <link>https://denisidoro.github.io/posts/dictionaries-in-shell-scripts/</link>
-            <guid>https://denisidoro.github.io/posts/dictionaries-in-shell-scripts/</guid>
-            <description>&lt;p&gt;Sometimes you need to script in bash. And it’ll probably be a pain in the neck. Dictionaries to the rescue!&lt;&#x2F;p&gt;
+      </item>
+      <item>
+          <title>Using dictionaries in shell scripts</title>
+          <pubDate>Mon, 23 Sep 2019 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://denisidoro.github.io/posts/dictionaries-in-shell-scripts/</link>
+          <guid>https://denisidoro.github.io/posts/dictionaries-in-shell-scripts/</guid>
+          <description xml:base="https://denisidoro.github.io/posts/dictionaries-in-shell-scripts/">&lt;p&gt;Sometimes you need to script in bash. And it’ll probably be a pain in the neck. Dictionaries to the rescue!&lt;&#x2F;p&gt;
 &lt;p&gt;Anyway, chances are that, if you have ever written some scripts, you have already come up with something like this:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;5d98ee3cdf10c08c400a399798d4e63c.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;5d98ee3cdf10c08c400a399798d4e63c&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;Bash doesn’t allow returning two values so we need to return a string which represents multidimensional data, using &lt;code&gt;;&lt;&#x2F;code&gt; as delimiter.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;can-we-do-better&quot;&gt;Can we do better?&lt;&#x2F;h3&gt;
 &lt;p&gt;I think so!&lt;&#x2F;p&gt;
 &lt;p&gt;With a set of scripts such as &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;navi&#x2F;blob&#x2F;7be9353a41d5ae1e56ef60d4761863e73cef3d89&#x2F;src&#x2F;dict.sh&quot;&gt;this one&lt;&#x2F;a&gt;, we can write:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;070d7b1ac6cf8676465e4d3f85795b03.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;070d7b1ac6cf8676465e4d3f85795b03&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;We’re using textual data to represent a dictionary&#x2F;map in this case.&lt;&#x2F;p&gt;
 &lt;p&gt;The script isn’t smaller, but that’s not our main objective. We’re trying to achieve legibility.&lt;&#x2F;p&gt;
 &lt;p&gt;If you only read &lt;code&gt;cut -d&#x27;;&#x27; -f1&lt;&#x2F;code&gt; you have no idea what&#x27;s going on unless you debug the code. If you read &lt;code&gt;dict::get foo&lt;&#x2F;code&gt; at least you can expect it to return something foo-like.&lt;&#x2F;p&gt;
 &lt;p&gt;Also, it composes very nicely:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;6843d26ac9ed1fc38333f772844ceda1.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;6843d26ac9ed1fc38333f772844ceda1&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;There are more examples &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;navi&#x2F;blob&#x2F;7be9353a41d5ae1e56ef60d4761863e73cef3d89&#x2F;test&#x2F;dict_test.sh&quot;&gt;here&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;why-not-json-or-yaml&quot;&gt;Why not JSON? Or YAML?&lt;&#x2F;h3&gt;
@@ -1159,13 +1241,14 @@ endpoint &amp;#x27;create post&amp;#x27; --userId 12
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;dictionaries-in-shell-scripts-61d34e1c91c6&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 
 &lt;&#x2F;div&gt;</description>
-        </item>
-        <item>
-            <title>Writing multi-module, monolithic apps with graph APIs</title>
-            <pubDate>Mon, 01 Jul 2019 00:00:00 +0000</pubDate>
-            <link>https://denisidoro.github.io/posts/monolithic-apps-graph-apis/</link>
-            <guid>https://denisidoro.github.io/posts/monolithic-apps-graph-apis/</guid>
-            <description>&lt;figure class=&quot;medium-cover&quot;&gt;
+      </item>
+      <item>
+          <title>Writing multi-module, monolithic apps with graph APIs</title>
+          <pubDate>Mon, 01 Jul 2019 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://denisidoro.github.io/posts/monolithic-apps-graph-apis/</link>
+          <guid>https://denisidoro.github.io/posts/monolithic-apps-graph-apis/</guid>
+          <description xml:base="https://denisidoro.github.io/posts/monolithic-apps-graph-apis/">&lt;figure class=&quot;medium-cover&quot;&gt;
 
     &lt;img alt=&quot;Image for post&quot; class=&quot;t u v gh aj&quot; src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;11014&#x2F;0*sbUufEe2m6a0hwbN&quot; srcSet=&quot; https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;0*sbUufEe2m6a0hwbN 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;0*sbUufEe2m6a0hwbN 552w,
     https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;0*sbUufEe2m6a0hwbN 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;0*sbUufEe2m6a0hwbN 700w&quot; sizes=&quot;700px&quot; &#x2F;&gt;
@@ -1204,21 +1287,21 @@ endpoint &amp;#x27;create post&amp;#x27; --userId 12
 &lt;p&gt;What if we could have looser dependencies? What if no one needed to know how to surgically compose different modules to deliver a single response? With Graph APIs we can.&lt;&#x2F;p&gt;
 &lt;p&gt;For &lt;a href=&quot;https:&#x2F;&#x2F;clojure.org&#x2F;&quot;&gt;Clojure&lt;&#x2F;a&gt;, you can use the awesome &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;wilkerlucio&#x2F;pathom&quot;&gt;Pathom library&lt;&#x2F;a&gt;, which will do all the heavy work for you.&lt;&#x2F;p&gt;
 &lt;p&gt;To implement my example, the bank module could register a resolver like the one below (I’m stripping away some boilerplate for readability):&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;e259a93747d73caeb584feb07820f925.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;e259a93747d73caeb584feb07820f925&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;For the second module:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;c6803b999adae0fb703268b7bc5cd2be.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;c6803b999adae0fb703268b7bc5cd2be&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;Finally, for the last module:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;0860d8729e08705a6785f296032494c9.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;0860d8729e08705a6785f296032494c9&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;I now have a decentralized system. The graph parser knows by itself that, for each element in &lt;code&gt;:bank&#x2F;investments&lt;&#x2F;code&gt;, it needs to go from &lt;code&gt;:investment&#x2F;name&lt;&#x2F;code&gt; to &lt;code&gt;:investment&#x2F;id&lt;&#x2F;code&gt; then &lt;code&gt;:investment&#x2F;history&lt;&#x2F;code&gt; and how to resolve it.&lt;&#x2F;p&gt;
 &lt;p&gt;As for the namespace organization, each module has the following structure:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;64a9111749ced25ac06a6ebba0e6c0a1.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;64a9111749ced25ac06a6ebba0e6c0a1&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;logic&#x2F;&lt;&#x2F;code&gt; contains pure functions&lt;&#x2F;li&gt;
@@ -1229,8 +1312,8 @@ endpoint &amp;#x27;create post&amp;#x27; --userId 12
 &lt;&#x2F;ul&gt;
 &lt;h3 id=&quot;module-definition&quot;&gt;Module definition&lt;&#x2F;h3&gt;
 &lt;p&gt;An example of &lt;code&gt;definition.clj&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;f44af804265590d3aa5e51689146076a&amp;#x2F;raw&amp;#x2F;5b16fe38fbbdfbf7d0d77ad27c5dcd67ac6a07cb&amp;#x2F;definition.clj.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;f44af804265590d3aa5e51689146076a&amp;#x2F;raw&amp;#x2F;5b16fe38fbbdfbf7d0d77ad27c5dcd67ac6a07cb&amp;#x2F;definition.clj&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;:http&lt;&#x2F;code&gt; and &lt;code&gt;:bank&lt;&#x2F;code&gt; have immutable data that can be propagated to other components&lt;&#x2F;li&gt;
@@ -1239,8 +1322,8 @@ endpoint &amp;#x27;create post&amp;#x27; --userId 12
 &lt;&#x2F;ul&gt;
 &lt;p&gt;Finally, I have a &lt;code&gt;[defmethod](https:&#x2F;&#x2F;clojuredocs.org&#x2F;clojure.core&#x2F;defmethod)&lt;&#x2F;code&gt; that’s able to reduce a config vector into a final, single config. For &lt;code&gt;:http&lt;&#x2F;code&gt;, for example, it merges all the bookmarks; for &lt;code&gt;:resolvers&lt;&#x2F;code&gt; it concatenates all vectors; for &lt;code&gt;:entry-point&lt;&#x2F;code&gt;, it keeps the last one.&lt;&#x2F;p&gt;
 &lt;p&gt;In the end, to start the system, I call:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;5a1a4b9b7db59a54e1d9afc2c6f34001&amp;#x2F;raw&amp;#x2F;75b2f2e804988c0c49cb3560ef82eabcd39db059&amp;#x2F;boot.clj.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;5a1a4b9b7db59a54e1d9afc2c6f34001&amp;#x2F;raw&amp;#x2F;75b2f2e804988c0c49cb3560ef82eabcd39db059&amp;#x2F;boot.clj&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;&lt;code&gt;(:entry-point rest-server.definition&#x2F;config)&lt;&#x2F;code&gt;, for instance, is what spawns the server listening on port 80. If I want to use the system as a CLI, there&#x27;s no need to spawn the server and curl it. I could simply swap the last config with &lt;code&gt;cli.definition&#x2F;config&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;splitting-into-microservices-libraries&quot;&gt;Splitting into microservices&#x2F;libraries&lt;&#x2F;h3&gt;
@@ -1273,13 +1356,14 @@ endpoint &amp;#x27;create post&amp;#x27; --userId 12
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;writing-multi-module-monolithic-apps-with-graph-apis-1c095cdaccdf&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 
 &lt;&#x2F;div&gt;</description>
-        </item>
-        <item>
-            <title>Using Grafana for personal financial management</title>
-            <pubDate>Thu, 04 Apr 2019 00:00:00 +0000</pubDate>
-            <link>https://denisidoro.github.io/posts/grafana-personal-finance/</link>
-            <guid>https://denisidoro.github.io/posts/grafana-personal-finance/</guid>
-            <description>&lt;figure class=&quot;medium-image&quot;&gt;
+      </item>
+      <item>
+          <title>Using Grafana for personal financial management</title>
+          <pubDate>Thu, 04 Apr 2019 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://denisidoro.github.io/posts/grafana-personal-finance/</link>
+          <guid>https://denisidoro.github.io/posts/grafana-personal-finance/</guid>
+          <description xml:base="https://denisidoro.github.io/posts/grafana-personal-finance/">&lt;figure class=&quot;medium-image&quot;&gt;
 
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*tfGEp0dvIJ1_L3-D0rJSdw.jpeg&quot;
@@ -1308,14 +1392,14 @@ endpoint &amp;#x27;create post&amp;#x27; --userId 12
 &lt;p&gt;It could be done with some Excel wizardry, I suppose. But I didn’t want to learn that much of Excel.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;file-syntax&quot;&gt;File syntax&lt;&#x2F;h3&gt;
 &lt;p&gt;I’ve decided to use the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;edn-format&#x2F;edn&quot;&gt;edn format&lt;&#x2F;a&gt;, because I was determined to code the system in &lt;a href=&quot;https:&#x2F;&#x2F;clojure.org&#x2F;&quot;&gt;Clojure&lt;&#x2F;a&gt;. Here is some simplified, mock data:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;d9c38c04feb8e69c27d706adf435043a.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;d9c38c04feb8e69c27d706adf435043a&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;It has as little information as possible yet it still is human-readable. Nice!&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;internalizing-data&quot;&gt;Internalizing data&lt;&#x2F;h3&gt;
 &lt;p&gt;The first step was to convert the file contents to internal models with namespaced keys. In particular, I converted date strings to a numeric format so that I could apply traditional math over it. After some maps and reduces, we have a collection of elements such as:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;8ffe9d8009d712a500ba1fbe79c8e93c.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;8ffe9d8009d712a500ba1fbe79c8e93c&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;Initially, I had written functions for integrals, derivatives, curve aggregation and so on. But I was reinventing the wheel. Now, I’m leveraging the robustness of time-series ecosystems.&lt;&#x2F;p&gt;
 &lt;p&gt;The competitors were &lt;a href=&quot;https:&#x2F;&#x2F;prometheus.io&#x2F;&quot;&gt;Prometheus&lt;&#x2F;a&gt;, &lt;a href=&quot;https:&#x2F;&#x2F;www.influxdata.com&#x2F;&quot;&gt;InfluxDB&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;graphiteapp.org&#x2F;&quot;&gt;Graphite&lt;&#x2F;a&gt;. As of the time of writing, there’s no way to fetch past data into Prometheus. InfluxDB has too much SQL for my taste. Graphite was the chosen one, then.&lt;&#x2F;p&gt;
@@ -1374,8 +1458,8 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
 
 &lt;&#x2F;figure&gt;
 &lt;p&gt;Grafana has support for &lt;a href=&quot;https:&#x2F;&#x2F;grafana.com&#x2F;plugins&#x2F;grafana-simple-json-datasource&quot;&gt;JSON APIs as data source&lt;&#x2F;a&gt;. Its serialization format is different from Graphite’s but I only had to write yet another pure, adapter function to get a result like this:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;f2cb104d0c47aec5e93b81d84568ef67.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;f2cb104d0c47aec5e93b81d84568ef67&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;h3 id=&quot;extras&quot;&gt;Extras&lt;&#x2F;h3&gt;
 &lt;p&gt;After finishing all the groundwork, it became easy peasy to add new features, such as consuming external APIs for displaying stock values or currency history, to name a few.&lt;&#x2F;p&gt;
@@ -1408,13 +1492,14 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;using-grafana-for-personal-financial-management-ac0e4d0cb43&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 
 &lt;&#x2F;div&gt;</description>
-        </item>
-        <item>
-            <title>On microservice splitting and code refactoring</title>
-            <pubDate>Sun, 06 Jan 2019 00:00:00 +0000</pubDate>
-            <link>https://denisidoro.github.io/posts/microservice-splitting-code-refactoring/</link>
-            <guid>https://denisidoro.github.io/posts/microservice-splitting-code-refactoring/</guid>
-            <description>&lt;figure class=&quot;medium-cover&quot;&gt;
+      </item>
+      <item>
+          <title>On microservice splitting and code refactoring</title>
+          <pubDate>Sun, 06 Jan 2019 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://denisidoro.github.io/posts/microservice-splitting-code-refactoring/</link>
+          <guid>https://denisidoro.github.io/posts/microservice-splitting-code-refactoring/</guid>
+          <description xml:base="https://denisidoro.github.io/posts/microservice-splitting-code-refactoring/">&lt;figure class=&quot;medium-cover&quot;&gt;
 
     &lt;img alt=&quot;Image for post&quot; class=&quot;t u v gh aj&quot; src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;11014&#x2F;0*YzywaYKyaA6w-HcY&quot; srcSet=&quot; https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;0*YzywaYKyaA6w-HcY 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;0*YzywaYKyaA6w-HcY 552w,
     https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;0*YzywaYKyaA6w-HcY 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;0*YzywaYKyaA6w-HcY 700w&quot; sizes=&quot;700px&quot; &#x2F;&gt;
@@ -1451,23 +1536,23 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
 &lt;p&gt;Does &lt;code&gt;stockHistory&lt;&#x2F;code&gt; have to import &lt;code&gt;stockScraper&lt;&#x2F;code&gt; a lot? Can&#x27;t it be minimized? Remember that when splitting this will translate into HTTP calls or message streaming. Try to at least isolate this dependency into a single namespace, which will be the precursor of the API between the two. This step is the most subjective, because it can quickly introduce overheads in the codebase for an MVP. You must consider the trade-offs.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;3-isolate-implementation-details-into-higher-level-components&quot;&gt;3. Isolate implementation details into higher level components&lt;&#x2F;h3&gt;
 &lt;p&gt;Let’s now implement the handler for the endpoint that returns information about all the companies a customer has stocks from. One common approach is the following (we’re exposing components via dependency injection and middlewares):&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;d77a550d25bd6a77d35b5b57d40cf4b8.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;d77a550d25bd6a77d35b5b57d40cf4b8&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;After splitting our service, not all data will be available via the &lt;code&gt;db&lt;&#x2F;code&gt; argument, of course. We&#x27;ll need to make some HTTP calls. &lt;code&gt;customerCompaniesHandler&lt;&#x2F;code&gt; will have to get an HTTP component and pass it to &lt;code&gt;getCustomerCompanies&lt;&#x2F;code&gt;, which will propagate it to the domain-specific helper functions and so on...&lt;&#x2F;p&gt;
 &lt;p&gt;But why does the handler have to know this in the first place? We have divided our application into layers and, more importantly, we have already separated our code into &lt;code&gt;companyStore&lt;&#x2F;code&gt;, &lt;code&gt;stockStore&lt;&#x2F;code&gt; and other namespaces. Yet, we clearly have an implementation detail leak such that all our higher level, integration API code has to know about low level dependency management. These layers should be agnostic to where we store the &lt;code&gt;company&lt;&#x2F;code&gt; entity...&lt;&#x2F;p&gt;
 &lt;p&gt;Ideally, our handler should only know that it has to fetch data that depends on the &lt;code&gt;stock&lt;&#x2F;code&gt; and &lt;code&gt;company&lt;&#x2F;code&gt; entities. What if we created a component that abstracts this away, per entity? Let&#x27;s call one of them as &lt;code&gt;CompanyRepository&lt;&#x2F;code&gt; (you can come up with the name you like):&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;335efcab949ddaa3f40c78a9fec4666e.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;335efcab949ddaa3f40c78a9fec4666e&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;You can skip the interface&#x2F;protocol definition if you’re not into that. The important thing is to avoid leaking lower level components.&lt;&#x2F;p&gt;
 &lt;p&gt;After adding this component to our dependency graph, our code would become:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;36dd706464e5cbb223fd6debdfba24a9.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;36dd706464e5cbb223fd6debdfba24a9&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;For the service split, we could create:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;36dd706464e5cbb223fd6debdfba24a9.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;36dd706464e5cbb223fd6debdfba24a9&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;The only thing we need to do is update the dependency graph! All the rest of the code remains the same.&lt;&#x2F;p&gt;
 &lt;p&gt;As a plus, we can move &lt;code&gt;CompanyDbRepository&lt;&#x2F;code&gt; to &lt;code&gt;companyStore&lt;&#x2F;code&gt;. Code reuse!&lt;&#x2F;p&gt;
@@ -1489,13 +1574,14 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;microservice-size-and-splitting-dd9fc98a262e&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 
 &lt;&#x2F;div&gt;</description>
-        </item>
-        <item>
-            <title>Moving from Medium</title>
-            <pubDate>Mon, 01 Oct 2018 00:00:00 +0000</pubDate>
-            <link>https://denisidoro.github.io/posts/moving-from-medium/</link>
-            <guid>https://denisidoro.github.io/posts/moving-from-medium/</guid>
-            <description>&lt;p&gt;I plan to stop posting on &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&quot;&gt;Medium&lt;&#x2F;a&gt; and start posting on &lt;a href=&quot;https:&#x2F;&#x2F;denisidoro.github.io&#x2F;&quot;&gt;my own blog&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+      </item>
+      <item>
+          <title>Moving from Medium</title>
+          <pubDate>Mon, 01 Oct 2018 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://denisidoro.github.io/posts/moving-from-medium/</link>
+          <guid>https://denisidoro.github.io/posts/moving-from-medium/</guid>
+          <description xml:base="https://denisidoro.github.io/posts/moving-from-medium/">&lt;p&gt;I plan to stop posting on &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&quot;&gt;Medium&lt;&#x2F;a&gt; and start posting on &lt;a href=&quot;https:&#x2F;&#x2F;denisidoro.github.io&#x2F;&quot;&gt;my own blog&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;It uses zola under the hood and will allow me to write posts faster and with more features.&lt;&#x2F;p&gt;
 &lt;p&gt;Hopefully I&#x27;ll be able to post more frequently.&lt;&#x2F;p&gt;
 &lt;p&gt;The website includes an RSS feed as well.&lt;&#x2F;p&gt;
@@ -1506,13 +1592,14 @@ citigroup.rf.cdb_paribas 1564325312 1097.44
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;new-posts-moving-from-medium-f4e9ae4acc19&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 
 &lt;&#x2F;div&gt;</description>
-        </item>
-        <item>
-            <title>Using Clojure + GraalVM for shell scripting</title>
-            <pubDate>Fri, 14 Sep 2018 00:00:00 +0000</pubDate>
-            <link>https://denisidoro.github.io/posts/clojure-graalvm-shell-scripting/</link>
-            <guid>https://denisidoro.github.io/posts/clojure-graalvm-shell-scripting/</guid>
-            <description>&lt;figure class=&quot;medium-image&quot;&gt;
+      </item>
+      <item>
+          <title>Using Clojure + GraalVM for shell scripting</title>
+          <pubDate>Fri, 14 Sep 2018 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://denisidoro.github.io/posts/clojure-graalvm-shell-scripting/</link>
+          <guid>https://denisidoro.github.io/posts/clojure-graalvm-shell-scripting/</guid>
+          <description xml:base="https://denisidoro.github.io/posts/clojure-graalvm-shell-scripting/">&lt;figure class=&quot;medium-image&quot;&gt;
 
     &lt;img alt=&quot;Image for post&quot; class=&quot;medium-image&quot;
         src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;2160&#x2F;1*gJm3BZcNrKoPOa2QO69p3Q.png&quot;
@@ -1577,13 +1664,14 @@ native-binary 0.01s user 0.01s system 79% cpu 0.019 total
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;using-clojure-graalvm-for-shell-scripting-da0bcc8955d4&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 
 &lt;&#x2F;div&gt;</description>
-        </item>
-        <item>
-            <title>Save 15min a day: tips for faster development</title>
-            <pubDate>Tue, 07 Aug 2018 00:00:00 +0000</pubDate>
-            <link>https://denisidoro.github.io/posts/tips-for-faster-development/</link>
-            <guid>https://denisidoro.github.io/posts/tips-for-faster-development/</guid>
-            <description>&lt;figure class=&quot;medium-cover&quot;&gt;
+      </item>
+      <item>
+          <title>Save 15min a day: tips for faster development</title>
+          <pubDate>Tue, 07 Aug 2018 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://denisidoro.github.io/posts/tips-for-faster-development/</link>
+          <guid>https://denisidoro.github.io/posts/tips-for-faster-development/</guid>
+          <description xml:base="https://denisidoro.github.io/posts/tips-for-faster-development/">&lt;figure class=&quot;medium-cover&quot;&gt;
 
     &lt;img alt=&quot;Image for post&quot; class=&quot;t u v gh aj&quot; src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;11014&#x2F;0*v2N2qF1dh5l_Gqgr&quot; srcSet=&quot; https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;0*v2N2qF1dh5l_Gqgr 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;0*v2N2qF1dh5l_Gqgr 552w,
     https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;0*v2N2qF1dh5l_Gqgr 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;0*v2N2qF1dh5l_Gqgr 700w&quot; sizes=&quot;700px&quot; &#x2F;&gt;
@@ -1618,8 +1706,8 @@ This is a simple, tedious and time-consuming way to do it.&lt;&#x2F;p&gt;
 cdw mobile
 &lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;But we still can do much better. An improved version of this could be achieved using the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;junegunn&#x2F;fzf&quot;&gt;&lt;strong&gt;fzf command&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;. fzf is a fuzzy-finder that allows you to interactively choose an input from &lt;em&gt;stdin&lt;&#x2F;em&gt;. I use it for everything and folder browsing isn’t an exception.&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;5485fe0f1d51922559366775f2f2904d.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;5485fe0f1d51922559366775f2f2904d&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;So, in a single command we get for free: listing, a nice interface and matching by substrings. We also added another arity to our command that _cd_s to the best match directly. Nice, isn’t it?&lt;&#x2F;p&gt;
 &lt;p&gt;A more generic approach would be using the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;clvv&#x2F;fasd&quot;&gt;&lt;strong&gt;fasd command&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;. Fasd keeps track of every folder you &lt;em&gt;cd&lt;&#x2F;em&gt; into and scores them by frecency: a metric based on frequency and recency, so it knows where you probably wanna go to.&lt;br &#x2F;&gt;
@@ -1811,20 +1899,20 @@ If it’s common for you to think that ‘’it would be nice to have a script f
 However, if you have a catalyst, the equilibrium state will be on the right side. In other words, if it becomes cheaper or easier to write unit scripts, then you’ll spend less energy performing the tasks.&lt;&#x2F;p&gt;
 &lt;p&gt;The following practices help me write shell scripts without a hiccup:&lt;&#x2F;p&gt;
 &lt;p&gt;Use &lt;strong&gt;set -euo pipefail&lt;&#x2F;strong&gt;. This way you won’t have tricky surprises such as using undefined variables or having failed intermediate commands.&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;fd18de88ee0a3450905af4a3ce2697be.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;fd18de88ee0a3450905af4a3ce2697be&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;&lt;strong&gt;Namespace your functions&lt;&#x2F;strong&gt;. Let’s understand why:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;161df2dfeeccc03cde546e24b17bf1a6.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;161df2dfeeccc03cde546e24b17bf1a6&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;What is &lt;code&gt;is_valid&lt;&#x2F;code&gt;? We don’t even know where it comes from. If we search for it in the whole project there will be possibly multiple results. Had we namespaced our functions the story would be different. &lt;br &#x2F;&gt;
 If instead it was named as &lt;code&gt;json::is_valid&lt;&#x2F;code&gt;, we wouldn’t even need to go to its definition to understand it. But if we wanted to, it would be easy. Also, refactoring without an IDE is easy like this because there’s a single match so a search and replace will safely do the job.&lt;br &#x2F;&gt;
  &lt;br &#x2F;&gt;
 Using &lt;a href=&quot;http:&#x2F;&#x2F;docopt.org&#x2F;&quot;&gt;&lt;strong&gt;docopt&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt; is a must-have, so that you don’t spend time parsing arguments:&lt;&#x2F;p&gt;
 &lt;figure&gt;
-    &lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;9ab91e30c9ae277072d1740b710e6d43.js&quot;&gt;&lt;&#x2F;script&gt;
+    &lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;9ab91e30c9ae277072d1740b710e6d43&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 
     &lt;figcaption&gt;With docopt, you don’t need to write parsers. Instead, you just write the script documentation&lt;&#x2F;figcaption&gt;
@@ -1841,8 +1929,10 @@ Use Python, Ruby or NodeJS.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;misc&quot;&gt;Misc&lt;&#x2F;h3&gt;
 &lt;p&gt;Use a &lt;strong&gt;window manager&lt;&#x2F;strong&gt;. Seriously, the time saved by not resizing, moving, minimizing and maximizing windows is huge. Let’s see a simple demonstration of what it can do:&lt;&#x2F;p&gt;
 &lt;figure&gt;
-    &lt;div class=&quot;youtube&quot;&gt;
-    &lt;iframe src=&quot;https:&#x2F;&#x2F;www.youtube-nocookie.com&#x2F;embed&#x2F;U17CLayt_aA&quot; webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;&#x2F;iframe&gt;
+    &lt;div&gt;
+   &lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https:&#x2F;&#x2F;www.youtube-nocookie.com&#x2F;embed&#x2F;U17CLayt_aA&quot; webkitallowfullscreen
+      mozallowfullscreen allowfullscreen&gt;
+   &lt;&#x2F;iframe&gt;
 &lt;&#x2F;div&gt;
 
     &lt;figcaption&gt;A demonstration showcasing bspwm&lt;&#x2F;figcaption&gt;
@@ -1901,13 +1991,14 @@ If you’re lazy, you’ll get uncomfortable with time-demanding processes and i
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;save-15min-a-day-tips-for-faster-development-67a31f3498bf&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 
 &lt;&#x2F;div&gt;</description>
-        </item>
-        <item>
-            <title>Writing multi-platform mobile apps with React Native and KotlinJS</title>
-            <pubDate>Mon, 23 Apr 2018 00:00:00 +0000</pubDate>
-            <link>https://denisidoro.github.io/posts/react-native-kotlinjs/</link>
-            <guid>https://denisidoro.github.io/posts/react-native-kotlinjs/</guid>
-            <description>&lt;figure class=&quot;medium-cover&quot;&gt;
+      </item>
+      <item>
+          <title>Writing multi-platform mobile apps with React Native and KotlinJS</title>
+          <pubDate>Mon, 23 Apr 2018 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://denisidoro.github.io/posts/react-native-kotlinjs/</link>
+          <guid>https://denisidoro.github.io/posts/react-native-kotlinjs/</guid>
+          <description xml:base="https://denisidoro.github.io/posts/react-native-kotlinjs/">&lt;figure class=&quot;medium-cover&quot;&gt;
 
     &lt;img alt=&quot;Image for post&quot; class=&quot;t u v gh aj&quot; src=&quot;https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;11014&#x2F;0*EnXaEGp3rgRz7NS4.&quot; srcSet=&quot; https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;552&#x2F;0*EnXaEGp3rgRz7NS4. 276w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1104&#x2F;0*EnXaEGp3rgRz7NS4. 552w,
     https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1280&#x2F;0*EnXaEGp3rgRz7NS4. 640w, https:&#x2F;&#x2F;miro.medium.com&#x2F;max&#x2F;1400&#x2F;0*EnXaEGp3rgRz7NS4. 700w&quot; sizes=&quot;700px&quot; &#x2F;&gt;
@@ -1932,8 +2023,8 @@ An example repository can be found &lt;a href=&quot;https:&#x2F;&#x2F;github.com
 &lt;h3 id=&quot;hello-world-in-kotlin&quot;&gt;Hello world in Kotlin&lt;&#x2F;h3&gt;
 &lt;p&gt;After cloning the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;denisidoro&#x2F;korn&quot;&gt;example repository&lt;&#x2F;a&gt; and following the README, you can simply edit the render() function to immediately see the result on the device.&lt;&#x2F;p&gt;
 &lt;p&gt;For example, writing the following code…&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;64a189c08b57e50440c7e5bc9bcdc1a2.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;64a189c08b57e50440c7e5bc9bcdc1a2&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;…would render the following output:&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
@@ -1953,20 +2044,20 @@ An example repository can be found &lt;a href=&quot;https:&#x2F;&#x2F;github.com
 &lt;p&gt;Thanks to the Kotlin language features, we can write the view using a builder DSL similar to &lt;a href=&quot;https:&#x2F;&#x2F;reactjs.org&#x2F;docs&#x2F;jsx-in-depth.html&quot;&gt;JSX&lt;&#x2F;a&gt;, instead of manually calling React.createElement(…, React.createElement(…)).&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;creating-our-first-component&quot;&gt;Creating our first component&lt;&#x2F;h3&gt;
 &lt;p&gt;Let’s say you have the following view architecture and you want to make the code for headers reusable:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;3264c01ad43aa051893d6937a22aa850.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;3264c01ad43aa051893d6937a22aa850&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;For this task, you could create a Header component:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;bbe3b31572c52acfecc76f2ecc50bd03.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;bbe3b31572c52acfecc76f2ecc50bd03&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;And call it from the render() function as such:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;bd46d12af1fd4188393bdde48f2c02a1.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;bd46d12af1fd4188393bdde48f2c02a1&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;Alternatively, if you want the extend the DSL so that you can call this component directly, just create an extension function:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;2ab29ea9159c3f55285bd52ac8e5ac95.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;2ab29ea9159c3f55285bd52ac8e5ac95&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;h3 id=&quot;managing-state&quot;&gt;Managing state&lt;&#x2F;h3&gt;
 &lt;p&gt;React doesn’t dictate how state management should be. For the sake of this example, let’s write our own simplified, naive implementation of &lt;a href=&quot;https:&#x2F;&#x2F;redux.js.org&quot;&gt;Redux&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
@@ -1977,39 +2068,39 @@ An example repository can be found &lt;a href=&quot;https:&#x2F;&#x2F;github.com
 &lt;li&gt;reducers: return an updated state based on the requested action&lt;&#x2F;li&gt;
 &lt;&#x2F;ul&gt;
 &lt;p&gt;Here is the full implementation:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;c60df8ce463f92e03d74926ad6bd2328.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;c60df8ce463f92e03d74926ad6bd2328&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;Evidently, on a real world application, you should prevent race conditions and implement the subscriptions in an atomic fashion, possibly using &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;reactivex&#x2F;rxjs&quot;&gt;RxJS&lt;&#x2F;a&gt;. But that’s good for now.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;a-less-contrived-example&quot;&gt;A less contrived example&lt;&#x2F;h3&gt;
 &lt;p&gt;Now let’s write a simple application which consists of a header, and two rating widgets, for giving scores to two different programming languages.&lt;&#x2F;p&gt;
 &lt;p&gt;First we create the models:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;c9b8b14b9f43500ad243339fe78fb792.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;c9b8b14b9f43500ad243339fe78fb792&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;Then the actions that can be dispatched:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;fddebcf58c3b6330213b74868cd8fec8.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;fddebcf58c3b6330213b74868cd8fec8&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;Later on, we define the reducer:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;c3c46f8e78e30d476e6ca9b17c46995e.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;c3c46f8e78e30d476e6ca9b17c46995e&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;Then we define a view model, mapping state to view abstractions:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;f7bf0931eaa4acc382386faf804a3fc4.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;f7bf0931eaa4acc382386faf804a3fc4&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;We connect everything with a store:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;f308d63f310d6f52cfd85e7a0d706263.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;f308d63f310d6f52cfd85e7a0d706263&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;Finally, we create a stateless, dumb component:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;bc52bf9cc2c899cde5f0ad4b383190bc.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;bc52bf9cc2c899cde5f0ad4b383190bc&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;And another component that keeps track of the state:&lt;&#x2F;p&gt;
-&lt;div &gt;
-    &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;cefc050a3e2e5798c53ddd387d3ae94f.js&quot;&gt;&lt;&#x2F;script&gt;
+&lt;div&gt;
+   &lt;script src=&quot;https:&amp;#x2F;&amp;#x2F;gist.github.com&amp;#x2F;denisidoro&amp;#x2F;cefc050a3e2e5798c53ddd387d3ae94f&quot;&gt;&lt;&#x2F;script&gt;
 &lt;&#x2F;div&gt;
 &lt;p&gt;And the final result is:&lt;&#x2F;p&gt;
 &lt;figure class=&quot;medium-image&quot;&gt;
@@ -2036,6 +2127,6 @@ An example repository can be found &lt;a href=&quot;https:&#x2F;&#x2F;github.com
     &lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@den.isidoro&#x2F;writing-multi-platform-mobile-apps-with-react-native-and-kotlin-50f486b53462&quot; target=&quot;_blank&quot;&gt;Medium&lt;&#x2F;a&gt;.
 
 &lt;&#x2F;div&gt;</description>
-        </item>
+      </item>
     </channel>
 </rss>
