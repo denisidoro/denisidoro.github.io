@@ -124,22 +124,22 @@
         
 	  <p>Sometimes you need to script in bash. And it’ll probably be a pain in the neck. Dictionaries to the rescue!</p>
 <p>Anyway, chances are that, if you have ever written some scripts, you have already come up with something like this:</p>
-<div >
-    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;5d98ee3cdf10c08c400a399798d4e63c.js"></script>
+<div>
+   <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;5d98ee3cdf10c08c400a399798d4e63c"></script>
 </div>
 <p>Bash doesn’t allow returning two values so we need to return a string which represents multidimensional data, using <code>;</code> as delimiter.</p>
 <h3 id="can-we-do-better">Can we do better?</h3>
 <p>I think so!</p>
 <p>With a set of scripts such as <a href="https://github.com/denisidoro/navi/blob/7be9353a41d5ae1e56ef60d4761863e73cef3d89/src/dict.sh">this one</a>, we can write:</p>
-<div >
-    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;070d7b1ac6cf8676465e4d3f85795b03.js"></script>
+<div>
+   <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;070d7b1ac6cf8676465e4d3f85795b03"></script>
 </div>
 <p>We’re using textual data to represent a dictionary/map in this case.</p>
 <p>The script isn’t smaller, but that’s not our main objective. We’re trying to achieve legibility.</p>
 <p>If you only read <code>cut -d';' -f1</code> you have no idea what's going on unless you debug the code. If you read <code>dict::get foo</code> at least you can expect it to return something foo-like.</p>
 <p>Also, it composes very nicely:</p>
-<div >
-    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;6843d26ac9ed1fc38333f772844ceda1.js"></script>
+<div>
+   <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;6843d26ac9ed1fc38333f772844ceda1"></script>
 </div>
 <p>There are more examples <a href="https://github.com/denisidoro/navi/blob/7be9353a41d5ae1e56ef60d4761863e73cef3d89/test/dict_test.sh">here</a>.</p>
 <h3 id="why-not-json-or-yaml">Why not JSON? Or YAML?</h3>
@@ -176,20 +176,6 @@
   
   <div class="post-nav thin">
 	
-	<a class="next-post" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;golang-repl&#x2F;">
-	  <span class="post-nav-label">
-		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left">
-		  <line x1="19" y1="12" x2="5" y2="12"></line>
-		  <polyline points="12 19 5 12 12 5"></polyline>
-		</svg>&nbsp;Newer</span><br>
-		<span>Quick prototyping with a Golang REPL</span>
-	</a>
-	
-	
-	<a class="prev-post" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;monolithic-apps-graph-apis&#x2F;">
-	  <span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br>
-	  <span>Writing multi-module, monolithic apps with graph APIs</span>
-	</a>
 	
   </div>
 
@@ -203,7 +189,7 @@
 
 
       <footer id="site-footer" class="section-inner thin animated fadeIn faster">
-         <!--<p>&copy; 2022 <a href="https:&#x2F;&#x2F;denisidoro.github.io">Denis Isidoro</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>-->
+         <!--<p>&copy; 2024 <a href="https:&#x2F;&#x2F;denisidoro.github.io">Denis Isidoro</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>-->
          <p>Made with <a href="https://www.getzola.org" target="_blank" rel="noopener">Zola</a> &#183; Theme <a
                href="https://github.com/VersBinarii/hermit_zola" target="_blank" rel="noopener">Hermit_Zola</a>
             

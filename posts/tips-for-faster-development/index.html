@@ -157,8 +157,8 @@ This is a simple, tedious and time-consuming way to do it.</p>
 cdw mobile
 </code></pre>
 <p>But we still can do much better. An improved version of this could be achieved using the <a href="https://github.com/junegunn/fzf"><strong>fzf command</strong></a>. fzf is a fuzzy-finder that allows you to interactively choose an input from <em>stdin</em>. I use it for everything and folder browsing isn’t an exception.</p>
-<div >
-    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;5485fe0f1d51922559366775f2f2904d.js"></script>
+<div>
+   <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;5485fe0f1d51922559366775f2f2904d"></script>
 </div>
 <p>So, in a single command we get for free: listing, a nice interface and matching by substrings. We also added another arity to our command that _cd_s to the best match directly. Nice, isn’t it?</p>
 <p>A more generic approach would be using the <a href="https://github.com/clvv/fasd"><strong>fasd command</strong></a>. Fasd keeps track of every folder you <em>cd</em> into and scores them by frecency: a metric based on frequency and recency, so it knows where you probably wanna go to.<br />
@@ -350,20 +350,20 @@ If it’s common for you to think that ‘’it would be nice to have a script f
 However, if you have a catalyst, the equilibrium state will be on the right side. In other words, if it becomes cheaper or easier to write unit scripts, then you’ll spend less energy performing the tasks.</p>
 <p>The following practices help me write shell scripts without a hiccup:</p>
 <p>Use <strong>set -euo pipefail</strong>. This way you won’t have tricky surprises such as using undefined variables or having failed intermediate commands.</p>
-<div >
-    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;fd18de88ee0a3450905af4a3ce2697be.js"></script>
+<div>
+   <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;fd18de88ee0a3450905af4a3ce2697be"></script>
 </div>
 <p><strong>Namespace your functions</strong>. Let’s understand why:</p>
-<div >
-    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;161df2dfeeccc03cde546e24b17bf1a6.js"></script>
+<div>
+   <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;161df2dfeeccc03cde546e24b17bf1a6"></script>
 </div>
 <p>What is <code>is_valid</code>? We don’t even know where it comes from. If we search for it in the whole project there will be possibly multiple results. Had we namespaced our functions the story would be different. <br />
 If instead it was named as <code>json::is_valid</code>, we wouldn’t even need to go to its definition to understand it. But if we wanted to, it would be easy. Also, refactoring without an IDE is easy like this because there’s a single match so a search and replace will safely do the job.<br />
  <br />
 Using <a href="http://docopt.org/"><strong>docopt</strong></a> is a must-have, so that you don’t spend time parsing arguments:</p>
 <figure>
-    <div >
-    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;9ab91e30c9ae277072d1740b710e6d43.js"></script>
+    <div>
+   <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;9ab91e30c9ae277072d1740b710e6d43"></script>
 </div>
 
     <figcaption>With docopt, you don’t need to write parsers. Instead, you just write the script documentation</figcaption>
@@ -380,8 +380,10 @@ Use Python, Ruby or NodeJS.</p>
 <h3 id="misc">Misc</h3>
 <p>Use a <strong>window manager</strong>. Seriously, the time saved by not resizing, moving, minimizing and maximizing windows is huge. Let’s see a simple demonstration of what it can do:</p>
 <figure>
-    <div class="youtube">
-    <iframe src="https://www.youtube-nocookie.com/embed/U17CLayt_aA" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    <div>
+   <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/U17CLayt_aA" webkitallowfullscreen
+      mozallowfullscreen allowfullscreen>
+   </iframe>
 </div>
 
     <figcaption>A demonstration showcasing bspwm</figcaption>
@@ -469,20 +471,6 @@ If you’re lazy, you’ll get uncomfortable with time-demanding processes and i
   
   <div class="post-nav thin">
 	
-	<a class="next-post" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;clojure-graalvm-shell-scripting&#x2F;">
-	  <span class="post-nav-label">
-		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left">
-		  <line x1="19" y1="12" x2="5" y2="12"></line>
-		  <polyline points="12 19 5 12 12 5"></polyline>
-		</svg>&nbsp;Newer</span><br>
-		<span>Using Clojure + GraalVM for shell scripting</span>
-	</a>
-	
-	
-	<a class="prev-post" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;react-native-kotlinjs&#x2F;">
-	  <span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br>
-	  <span>Writing multi-platform mobile apps with React Native and KotlinJS</span>
-	</a>
 	
   </div>
 
@@ -496,7 +484,7 @@ If you’re lazy, you’ll get uncomfortable with time-demanding processes and i
 
 
       <footer id="site-footer" class="section-inner thin animated fadeIn faster">
-         <!--<p>&copy; 2022 <a href="https:&#x2F;&#x2F;denisidoro.github.io">Denis Isidoro</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>-->
+         <!--<p>&copy; 2024 <a href="https:&#x2F;&#x2F;denisidoro.github.io">Denis Isidoro</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>-->
          <p>Made with <a href="https://www.getzola.org" target="_blank" rel="noopener">Zola</a> &#183; Theme <a
                href="https://github.com/VersBinarii/hermit_zola" target="_blank" rel="noopener">Hermit_Zola</a>
             

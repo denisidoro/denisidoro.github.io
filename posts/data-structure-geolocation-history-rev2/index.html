@@ -206,15 +206,15 @@
 <p>It's cheaper to just duplicate data for missing timestamps. The duplication of data is surely unfortunate, but having to spend 24 bits for every minute of data is worse.</p>
 <h2 id="the-plan">The plan</h2>
 <p>Suppose our data looks like this:</p>
-<table><thead><tr><th align="center">Timestamp</th><th align="center">Latitude</th><th align="center">Longitude</th></tr></thead><tbody>
-<tr><td align="center">2022-10-15 16h13</td><td align="center">26.1234</td><td align="center">43.5678</td></tr>
-<tr><td align="center">2022-10-15 16h14</td><td align="center">26.1235</td><td align="center">43.5677</td></tr>
-<tr><td align="center">2022-10-15 16h15</td><td align="center">26.1236</td><td align="center">43.5678</td></tr>
+<table><thead><tr><th style="text-align: center">Timestamp</th><th style="text-align: center">Latitude</th><th style="text-align: center">Longitude</th></tr></thead><tbody>
+<tr><td style="text-align: center">2022-10-15 16h13</td><td style="text-align: center">26.1234</td><td style="text-align: center">43.5678</td></tr>
+<tr><td style="text-align: center">2022-10-15 16h14</td><td style="text-align: center">26.1235</td><td style="text-align: center">43.5677</td></tr>
+<tr><td style="text-align: center">2022-10-15 16h15</td><td style="text-align: center">26.1236</td><td style="text-align: center">43.5678</td></tr>
 </tbody></table>
 <p>We could delta-encode it so that all points (except the first one) are just the difference from the previous value:</p>
-<table><thead><tr><th align="center">Timestamp</th><th align="center">Latitude</th><th align="center">Longitude</th></tr></thead><tbody>
-<tr><td align="center">+1 min</td><td align="center">+0.0001</td><td align="center">-0.0001</td></tr>
-<tr><td align="center">+1 min</td><td align="center">+0.0001</td><td align="center">+0.0001</td></tr>
+<table><thead><tr><th style="text-align: center">Timestamp</th><th style="text-align: center">Latitude</th><th style="text-align: center">Longitude</th></tr></thead><tbody>
+<tr><td style="text-align: center">+1 min</td><td style="text-align: center">+0.0001</td><td style="text-align: center">-0.0001</td></tr>
+<tr><td style="text-align: center">+1 min</td><td style="text-align: center">+0.0001</td><td style="text-align: center">+0.0001</td></tr>
 </tbody></table>
 <p>The data clearly becomes easier to reason about and is arguably &quot;smaller&quot;.</p>
 <p>But when using an <code>f32</code> to represent a number, it doesn't matter if it's <code>26.1234</code> or <code>0.0001</code>: they will both occupy 32 bits.  So we need a way to make small numbers occupy less memory.</p>
@@ -405,11 +405,6 @@ total size: 485 KB
   <div class="post-nav thin">
 	
 	
-	<a class="prev-post" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;data-structure-geolocation-history&#x2F;">
-	  <span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br>
-	  <span>A memory-efficient data structure for geolocation history</span>
-	</a>
-	
   </div>
 
   
@@ -422,7 +417,7 @@ total size: 485 KB
 
 
       <footer id="site-footer" class="section-inner thin animated fadeIn faster">
-         <!--<p>&copy; 2022 <a href="https:&#x2F;&#x2F;denisidoro.github.io">Denis Isidoro</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>-->
+         <!--<p>&copy; 2024 <a href="https:&#x2F;&#x2F;denisidoro.github.io">Denis Isidoro</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>-->
          <p>Made with <a href="https://www.getzola.org" target="_blank" rel="noopener">Zola</a> &#183; Theme <a
                href="https://github.com/VersBinarii/hermit_zola" target="_blank" rel="noopener">Hermit_Zola</a>
             

@@ -161,21 +161,21 @@
 <p>What if we could have looser dependencies? What if no one needed to know how to surgically compose different modules to deliver a single response? With Graph APIs we can.</p>
 <p>For <a href="https://clojure.org/">Clojure</a>, you can use the awesome <a href="https://github.com/wilkerlucio/pathom">Pathom library</a>, which will do all the heavy work for you.</p>
 <p>To implement my example, the bank module could register a resolver like the one below (I’m stripping away some boilerplate for readability):</p>
-<div >
-    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;e259a93747d73caeb584feb07820f925.js"></script>
+<div>
+   <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;e259a93747d73caeb584feb07820f925"></script>
 </div>
 <p>For the second module:</p>
-<div >
-    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;c6803b999adae0fb703268b7bc5cd2be.js"></script>
+<div>
+   <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;c6803b999adae0fb703268b7bc5cd2be"></script>
 </div>
 <p>Finally, for the last module:</p>
-<div >
-    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;0860d8729e08705a6785f296032494c9.js"></script>
+<div>
+   <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;0860d8729e08705a6785f296032494c9"></script>
 </div>
 <p>I now have a decentralized system. The graph parser knows by itself that, for each element in <code>:bank/investments</code>, it needs to go from <code>:investment/name</code> to <code>:investment/id</code> then <code>:investment/history</code> and how to resolve it.</p>
 <p>As for the namespace organization, each module has the following structure:</p>
-<div >
-    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;64a9111749ced25ac06a6ebba0e6c0a1.js"></script>
+<div>
+   <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;64a9111749ced25ac06a6ebba0e6c0a1"></script>
 </div>
 <ul>
 <li><code>logic/</code> contains pure functions</li>
@@ -186,8 +186,8 @@
 </ul>
 <h3 id="module-definition">Module definition</h3>
 <p>An example of <code>definition.clj</code>:</p>
-<div >
-    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;f44af804265590d3aa5e51689146076a&#x2F;raw&#x2F;5b16fe38fbbdfbf7d0d77ad27c5dcd67ac6a07cb&#x2F;definition.clj.js"></script>
+<div>
+   <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;f44af804265590d3aa5e51689146076a&#x2F;raw&#x2F;5b16fe38fbbdfbf7d0d77ad27c5dcd67ac6a07cb&#x2F;definition.clj"></script>
 </div>
 <ul>
 <li><code>:http</code> and <code>:bank</code> have immutable data that can be propagated to other components</li>
@@ -196,8 +196,8 @@
 </ul>
 <p>Finally, I have a <code>[defmethod](https://clojuredocs.org/clojure.core/defmethod)</code> that’s able to reduce a config vector into a final, single config. For <code>:http</code>, for example, it merges all the bookmarks; for <code>:resolvers</code> it concatenates all vectors; for <code>:entry-point</code>, it keeps the last one.</p>
 <p>In the end, to start the system, I call:</p>
-<div >
-    <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;5a1a4b9b7db59a54e1d9afc2c6f34001&#x2F;raw&#x2F;75b2f2e804988c0c49cb3560ef82eabcd39db059&#x2F;boot.clj.js"></script>
+<div>
+   <script src="https:&#x2F;&#x2F;gist.github.com&#x2F;denisidoro&#x2F;5a1a4b9b7db59a54e1d9afc2c6f34001&#x2F;raw&#x2F;75b2f2e804988c0c49cb3560ef82eabcd39db059&#x2F;boot.clj"></script>
 </div>
 <p><code>(:entry-point rest-server.definition/config)</code>, for instance, is what spawns the server listening on port 80. If I want to use the system as a CLI, there's no need to spawn the server and curl it. I could simply swap the last config with <code>cli.definition/config</code>.</p>
 <h3 id="splitting-into-microservices-libraries">Splitting into microservices/libraries</h3>
@@ -257,20 +257,6 @@
   
   <div class="post-nav thin">
 	
-	<a class="next-post" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;dictionaries-in-shell-scripts&#x2F;">
-	  <span class="post-nav-label">
-		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left">
-		  <line x1="19" y1="12" x2="5" y2="12"></line>
-		  <polyline points="12 19 5 12 12 5"></polyline>
-		</svg>&nbsp;Newer</span><br>
-		<span>Using dictionaries in shell scripts</span>
-	</a>
-	
-	
-	<a class="prev-post" href="https:&#x2F;&#x2F;denisidoro.github.io&#x2F;posts&#x2F;grafana-personal-finance&#x2F;">
-	  <span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br>
-	  <span>Using Grafana for personal financial management</span>
-	</a>
 	
   </div>
 
@@ -284,7 +270,7 @@
 
 
       <footer id="site-footer" class="section-inner thin animated fadeIn faster">
-         <!--<p>&copy; 2022 <a href="https:&#x2F;&#x2F;denisidoro.github.io">Denis Isidoro</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>-->
+         <!--<p>&copy; 2024 <a href="https:&#x2F;&#x2F;denisidoro.github.io">Denis Isidoro</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>-->
          <p>Made with <a href="https://www.getzola.org" target="_blank" rel="noopener">Zola</a> &#183; Theme <a
                href="https://github.com/VersBinarii/hermit_zola" target="_blank" rel="noopener">Hermit_Zola</a>
             
